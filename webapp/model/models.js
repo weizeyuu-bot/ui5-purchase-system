@@ -168,7 +168,12 @@ sap.ui.define([
                         phone: "13800000001",
                         registrationDate: "2026-02-01",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "系统管理",
+                        role: "系统管理员",
+                        lastLogin: "2026-03-20 10:30:15",
+                        loginCount: 128,
+                        createdBy: "系统"
                     },
                     {
                         username: "user1",
@@ -176,7 +181,12 @@ sap.ui.define([
                         phone: "13800000002",
                         registrationDate: "2026-02-15",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "采购部",
+                        role: "采购员",
+                        lastLogin: "2026-03-20 09:45:30",
+                        loginCount: 45,
+                        createdBy: "admin"
                     },
                     {
                         username: "user2",
@@ -184,7 +194,12 @@ sap.ui.define([
                         phone: "13800000003",
                         registrationDate: "2026-02-20",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "采购部",
+                        role: "采购经理",
+                        lastLogin: "2026-03-20 08:20:00",
+                        loginCount: 67,
+                        createdBy: "admin"
                     },
                     {
                         username: "user3",
@@ -192,7 +207,12 @@ sap.ui.define([
                         phone: "13800000004",
                         registrationDate: "2026-03-01",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "财务部",
+                        role: "财务人员",
+                        lastLogin: "2026-03-20 14:15:00",
+                        loginCount: 32,
+                        createdBy: "admin"
                     },
                     {
                         username: "user4",
@@ -200,7 +220,12 @@ sap.ui.define([
                         phone: "13800000005",
                         registrationDate: "2026-03-05",
                         status: "不活跃",
-                        statusState: "Warning"
+                        statusState: "Warning",
+                        department: "供应链部",
+                        role: "供应链协调员",
+                        lastLogin: "2026-03-15 16:30:00",
+                        loginCount: 18,
+                        createdBy: "admin"
                     },
                     {
                         username: "user5",
@@ -208,7 +233,12 @@ sap.ui.define([
                         phone: "13800000006",
                         registrationDate: "2026-03-10",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "采购部",
+                        role: "采购员",
+                        lastLogin: "2026-03-20 11:00:30",
+                        loginCount: 22,
+                        createdBy: "admin"
                     },
                     {
                         username: "user6",
@@ -216,7 +246,12 @@ sap.ui.define([
                         phone: "13800000007",
                         registrationDate: "2026-03-12",
                         status: "活跃",
-                        statusState: "Success"
+                        statusState: "Success",
+                        department: "财务部",
+                        role: "财务经理",
+                        lastLogin: "2026-03-20 13:45:15",
+                        loginCount: 58,
+                        createdBy: "admin"
                     },
                     {
                         username: "user7",
@@ -224,7 +259,12 @@ sap.ui.define([
                         phone: "13800000008",
                         registrationDate: "2026-03-15",
                         status: "禁用",
-                        statusState: "Error"
+                        statusState: "Error",
+                        department: "市场部",
+                        role: "市场专员",
+                        lastLogin: "2026-03-18 15:20:00",
+                        loginCount: 12,
+                        createdBy: "admin"
                     }
                 ],
                 statistics: {

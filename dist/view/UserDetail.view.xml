@@ -5,32 +5,80 @@
     xmlns:layout="sap.ui.layout">
     <Page title="{i18n>userDetailTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding sapUiLargeMargin">
-            <Title text="{i18n>userDetailTitle}" level="H1" class="sapUiLargeMargin" />
-            <Form>
-                <layout:Grid defaultSpan="L6 M6 S12">
-                    <FormContainer>
-                        <FormElement label="{i18n>username}">
-                            <Text text="{userDetail>username}" />
-                        </FormElement>
-                        <FormElement label="{i18n>userEmail}">
-                            <Text text="{userDetail>email}" />
-                        </FormElement>
-                        <FormElement label="{i18n>userPhone}">
-                            <Text text="{userDetail>phone}" />
-                        </FormElement>
-                        <FormElement label="{i18n>registrationDate}">
-                            <Text text="{userDetail>registrationDate}" />
-                        </FormElement>
-                        <FormElement label="{i18n>status}">
-                            <Text text="{userDetail>status}" />
-                        </FormElement>
-                        <FormElement label="{i18n>lastLogin}">
-                            <Text text="{userDetail>lastLogin}" />
-                        </FormElement>
-                    </FormContainer>
-                </layout:Grid>
-            </Form>
-            <Button text="{i18n>back}" icon="sap-icon://nav-back" type="Emphasized" press="onNavBack" class="sapUiLargeMarginTop" />
+            <!-- Header -->
+            <VBox class="sapUiSmallMarginBottom">
+                <Title text="{i18n>userDetailTitle}" level="H1" />
+                <HBox spacing="1rem" class="sapUiSmallMarginTop">
+                    <ObjectStatus 
+                        text="{userDetail>status}"
+                        state="{userDetail>statusState}" />
+                    <Text text="ID: {userDetail>username}" class="sapUiSmallMargin" />
+                </HBox>
+            </VBox>
+
+            <!-- Basic Information Panel -->
+            <Panel headerText="{i18n>basicInformation}" class="sapUiLargeMarginBottom">
+                <Form editable="false">
+                    <layout:GridContainer>
+                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
+                            <FormContainer>
+                                <FormElement label="{i18n>username}">
+                                    <Text text="{userDetail>username}" />
+                                </FormElement>
+                                <FormElement label="{i18n>userEmail}">
+                                    <Text text="{userDetail>email}" />
+                                </FormElement>
+                                <FormElement label="{i18n>userPhone}">
+                                    <Text text="{userDetail>phone}" />
+                                </FormElement>
+                                <FormElement label="{i18n>department}">
+                                    <Text text="{userDetail>department}" />
+                                </FormElement>
+                            </FormContainer>
+                            <FormContainer>
+                                <FormElement label="{i18n>role}">
+                                    <Text text="{userDetail>role}" />
+                                </FormElement>
+                                <FormElement label="{i18n>status}">
+                                    <ObjectStatus 
+                                        text="{userDetail>status}"
+                                        state="{userDetail>statusState}" />
+                                </FormElement>
+                                <FormElement label="{i18n>registrationDate}">
+                                    <Text text="{userDetail>registrationDate}" />
+                                </FormElement>
+                                <FormElement label="{i18n>createdBy}">
+                                    <Text text="{userDetail>createdBy}" />
+                                </FormElement>
+                            </FormContainer>
+                        </layout:Grid>
+                    </layout:GridContainer>
+                </Form>
+            </Panel>
+
+            <!-- Login Information Panel -->
+            <Panel headerText="{i18n>loginInformation}" class="sapUiLargeMarginBottom">
+                <Form editable="false">
+                    <layout:GridContainer>
+                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
+                            <FormContainer>
+                                <FormElement label="{i18n>lastLogin}">
+                                    <Text text="{userDetail>lastLogin}" />
+                                </FormElement>
+                                <FormElement label="{i18n>loginCount}">
+                                    <Text text="{userDetail>loginCount}" />
+                                </FormElement>
+                            </FormContainer>
+                        </layout:Grid>
+                    </layout:GridContainer>
+                </Form>
+            </Panel>
+
+            <!-- Action Buttons -->
+            <HBox spacing="1rem" class="sapUiLargeMarginTop">
+                <Button text="{i18n>editButton}" icon="sap-icon://edit" type="Emphasized" press="onEditUser" />
+                <Button text="{i18n>back}" icon="sap-icon://nav-back" press="onNavBack" />
+            </HBox>
         </VBox>
     </Page>
 </mvc:View>

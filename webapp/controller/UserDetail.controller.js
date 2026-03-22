@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
-    "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox"
+], function (Controller, JSONModel, MessageToast, MessageBox) {
     "use strict";
 
     return Controller.extend("myapp.controller.UserDetail", {
@@ -27,6 +28,11 @@ sap.ui.define([
                 MessageToast.show("未找到用户：" + sUsername);
                 this.getOwnerComponent().getRouter().navTo("RouteUserManagement");
             }
+        },
+
+        onEditUser: function () {
+            var oUser = this.getView().getModel("userDetail").getData();
+            MessageToast.show("编辑用户: " + oUser.username + " 功能开发中");
         },
 
         onNavBack: function () {
