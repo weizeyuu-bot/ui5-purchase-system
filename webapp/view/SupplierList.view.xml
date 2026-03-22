@@ -1,0 +1,79 @@
+<mvc:View
+    controllerName="myapp.controller.SupplierList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="{i18n>supplierListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <subHeader>
+            <Toolbar>
+                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Table id="supplierTable" class="supplierTable" items="{suppliers>/suppliers}">
+                <columns>
+                    <Column>
+                        <Text text="{i18n>supplierId}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>supplierName}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>supplierTaxNumber}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>supplierAddress}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>supplierContact}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>supplierEmail}" />
+                    </Column>
+                    <Column>
+                        <Text text="Actions" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press="onItemPress">
+                        <cells>
+                            <Text text="{suppliers>id}" />
+                            <Text text="{suppliers>name}" />
+                            <Text text="{suppliers>taxNumber}" />
+                            <Text text="{suppliers>address}" />
+                            <Text text="{suppliers>contact}" />
+                            <Text text="{suppliers>email}" />
+                            <HBox>
+                                <Button text="{i18n>viewButton}" press="onViewPress" />
+                                <Button text="{i18n>editButton}" press="onEditPress" />
+                                <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <Dialog id="supplierDialog" title="{i18n>supplierListTitle}" type="Standard">
+            <content>
+                <VBox spacing="1rem" class="sapUiContentPadding">
+                    <Label text="供应商名称" required="true" />
+                    <Input id="supplierNameInput" value="{oNewSupplier>/name}" />
+                    <Label text="税号" required="true" />
+                    <Input id="supplierTaxInput" value="{oNewSupplier>/taxNumber}" />
+                    <Label text="地址" />
+                    <Input id="supplierAddressInput" value="{oNewSupplier>/address}" />
+                    <Label text="联系人" />
+                    <Input id="supplierContactInput" value="{oNewSupplier>/contact}" />
+                    <Label text="邮箱" />
+                    <Input id="supplierEmailInput" value="{oNewSupplier>/email}" />
+                </VBox>
+            </content>
+            <beginButton>
+                <Button text="保存" press="onDialogSave" type="Emphasized" />
+            </beginButton>
+            <endButton>
+                <Button text="取消" press="onDialogCancel" />
+            </endButton>
+        </Dialog>
+    </Page>
+</mvc:View>

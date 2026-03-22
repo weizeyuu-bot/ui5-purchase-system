@@ -1,0 +1,27 @@
+<mvc:View
+    controllerName="myapp.controller.FormConfig"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Page title="表单配置" showNavButton="true" navButtonPress="onNavBack">
+        <VBox class="sapUiContentPadding" width="100%">
+            <Text text="表单配置列表" class="sapUiTinyMarginBottom" />
+            <Table items="{process>/formConfigs}">
+                <columns>
+                    <Column><Text text="表单ID" /></Column>
+                    <Column><Text text="表单名称" /></Column>
+                    <Column><Text text="字段" /></Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{process>id}" />
+                            <Text text="{process>name}" />
+                            <Text text="{= ${process>fields}.join(', ') }" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </VBox>
+    </Page>
+</mvc:View>

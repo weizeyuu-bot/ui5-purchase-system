@@ -1,0 +1,438 @@
+/* ====================================== */
+/* CSS for control sap.ui.commons/Button  */
+/* Quartz Light theme                     */
+/* ====================================== */
+
+.sapUiBtnS {
+	font-family: var(--sapFontFamily);
+	font-size: @sapUiDesktopFontSize;
+	padding: 0 7px 1px;
+	height: 22px;
+	outline: none;
+}
+
+.sapUiBtnS.sapUiBtnNorm {
+	border-radius: 2px;
+}
+
+.sapUiBtnS.sapUiBtnLite {
+	padding: 0 8px 1px;
+	font-weight: bold;
+}
+
+.sapUiBtnS > .sapUiBtnTxt { /* the additional span introduced when there is an icon next to the button label */
+	margin-top: 0;
+}
+
+.sapUiBtnS > .sapUiBtnIcoL { /* padding between icon and text */
+	padding-right: 8px;
+}
+
+.sapUiBtnS > .sapUiBtnIcoR { /* padding between icon and text */
+	padding-left: 8px;
+}
+
+/* button state */
+.sapUiBtnS.sapUiBtnStd:focus,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus {
+	background-color: var(--sapButton_Background);
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnStd:focus:hover,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus:hover {
+	background-color: var(--sapButton_Hover_Background);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:focus,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus {
+	background-color: var(--sapButton_Background);
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:not(.sapUiBtnEmph):focus:hover,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus:hover {
+	background-color: var(--sapButton_Hover_Background);
+}
+
+/* button focus state for Dialog */
+.sapUiDlgBtns > .sapUiBtnS.sapUiBtnStd:focus,
+.sapUiUx3ActionBarItemRight > .sapUiBtnS.sapUiBtnStd:focus,
+.sapUiUx3TPBtnRow > .sapUiBtnS.sapUiBtnStd:focus,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiDlgBtns > .sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus,
+.sapUiUx3ActionBarItemRight > .sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus,
+.sapUiUx3TPBtnRow > .sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus {
+	outline: 2px dotted var(--sapContent_ContrastFocusColor);
+}
+
+.sapUiDlgBtns > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:focus,
+.sapUiUx3ActionBarItemRight > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:focus,
+.sapUiUx3TPBtnRow > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:focus,
+/* extra css class for the focus styling of the FileUploader */
+.sapUiDlgBtns > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus,
+.sapUiUx3ActionBarItemRight > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus,
+.sapUiUx3TPBtnRow > .sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus {
+	outline: 2px dotted var(--sapContent_ContrastFocusColor);
+}
+
+/* button disabled */
+.sapUiBtnS.sapUiBtnDsbl,
+.sapUiBtnS.sapUiBtnDsbl:focus {
+	color: var(--sapButton_TextColor);
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnDsbl,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnDsbl:focus {
+	border-color: var(--sapButton_BorderColor);
+	background-color: var(--sapButton_Background);
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnDsbl > img.sapUiBtnIco { /* make disabled icon look "reduced" */
+	opacity: 0.5;
+}
+
+/* pixel-perfect vertical alignment of text and images with varying height at the same time as
+   perfect alignment inside the Button as per the spec is a pain.
+   Welcome to pain: */
+html[data-sap-ui-browser^="cr"] .sapUiBtnS > .sapUiBtnIcoL,
+html[data-sap-ui-browser^="cr"] .sapUiBtnS > .sapUiBtnIcoR,
+html[data-sap-ui-browser^="cr"] .sapUiBtnS > .sapUiBtnTxt {
+/* fine for safari 5.1. in safari 5.0 is is moved by 1px. */
+	margin-top: 1px;
+}
+
+html[data-sap-ui-browser^="cr"] .sapUiBtnS.sapUiBtnIconOnly > .sapUiBtnIco {
+	margin-top: -1px;
+}
+
+/* End of pain */
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd {
+	color: var(--sapButton_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd:hover,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd:focus {
+	color: var(--sapButton_Lite_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnDsbl > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnDsbl:hover > span.sapUiBtnIco {
+	color: var(--sapButton_IconColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd:focus {
+	background-color: transparent;
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd:hover {
+	background-color: darken(@sapUiButtonHoverBackground,5);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnDsbl {
+	color: var(--sapButton_Lite_TextColor);
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnStd:hover,
+/* extra css class for the hover styling of the FileUploader */
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdHover,
+.sapUiBtnS.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus {
+	color: var(--sapButton_Hover_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:hover,
+/* extra css class for the hover styling of the FileUploader */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdHover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd.sapUiBtnStdFocus {
+	box-shadow: none;
+}
+
+.sapUiBtnS.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnAct:focus,
+.sapUiBtnS.sapUiBtnAct:hover,
+.sapUiBtnS.sapUiBtnStd:active,
+.sapUiBtnS.sapUiBtnStd.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject:active,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:active,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept:active,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:active {
+	color: var(--sapContent_ContrastTextColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAct:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAct:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnStd:active {
+	box-shadow: none;
+}
+
+/* emphasized button */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph {
+	background-color: var(--sapButton_Emphasized_Background);
+	color: var(--sapButton_Emphasized_TextColor);
+	text-shadow: 0 1px 0 var(--sapButton_Emphasized_TextShadow);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnStd:hover {
+	background-image: none;
+	color: var(--sapButton_Emphasized_TextColor);
+	text-shadow: 0 1px 0 var(--sapButton_Emphasized_TextShadow);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnAct:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnAct:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnStd:active {
+	background-image: none;
+	color: var(--sapButton_Emphasized_TextColor);
+	text-shadow: 0 1px 0 var(--sapButton_Emphasized_TextShadow);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnDsbl {
+	color: var(--sapButton_Emphasized_TextColor);
+	text-shadow: 0 1px 0 var(--sapButton_Emphasized_TextShadow);
+	opacity: 0.25;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph.sapUiBtnDsbl > .sapUiBtnIco {
+	/*no opacity on icon because whole button has one*/
+	opacity: 1;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnEmph,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnEmph > span.sapUiBtnIco {
+	color: var(--sapButton_Emphasized_Background);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiBtnDsbl,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph.sapUiBtnDsbl > span.sapUiBtnIco {
+	color: var(--sapButton_Emphasized_Background);
+	opacity: 0.5;
+}
+
+/* accept button */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept {
+	background-color: var(--sapButton_Accept_Background);
+	color: var(--sapButton_Accept_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnAccept,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnAccept > span.sapUiBtnIco {
+	color: var(--sapField_SuccessColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnAccept:focus {
+	background-color: transparent;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnAccept:hover,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAct.sapUiBtnAccept:hover {
+	background-color: var(--sapButton_Accept_Hover_Background);
+	color: var(--sapButton_Accept_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd {
+	box-shadow: none;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:hover {
+	background-image: none;
+	box-shadow: none;
+}
+
+.sapUiBtnS.sapUiBtnAccept.sapUiBtnStd:focus:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:focus:hover {
+	background-color: var(--sapButton_Accept_Hover_Background);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnAct:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnAct:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:active {
+	background-image: none;
+}
+
+.sapUiBtnS.sapUiBtnAccept.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnStd:focus {
+	background-color: var(--sapButton_Accept_Background);
+	outline: 1px dotted var(--sapContent_ContrastFocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnAccept.sapUiBtnLite.sapUiBtnStd:focus {
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnDsbl {
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept.sapUiBtnDsbl > .sapUiBtnIco {
+	/*no opacity on icon because whole button has one*/
+	opacity: 1;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept.sapUiBtnDsbl,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept.sapUiBtnDsbl > span.sapUiBtnIco {
+	color: var(--sapField_SuccessColor);
+	opacity: 0.5;
+}
+
+/* reject button */
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject {
+	background-color: var(--sapButton_Reject_Background);
+	color: var(--sapButton_Reject_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnReject,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnReject > span.sapUiBtnIco {
+	color: var(--sapField_InvalidColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnReject:focus {
+	background-color: transparent;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnReject:hover,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAct.sapUiBtnReject:hover {
+	background-color: var(--sapButton_Reject_Hover_Background);
+	color: var(--sapButton_Reject_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd {
+	box-shadow: none;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:hover {
+	background-image: none;
+	box-shadow: none;
+}
+
+.sapUiBtnS.sapUiBtnReject.sapUiBtnStd:focus:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:focus:hover {
+	background-color: var(--sapButton_Reject_Hover_Background);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnAct,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnAct:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnAct:hover,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:active {
+	background-image: none;
+}
+
+.sapUiBtnS.sapUiBtnReject.sapUiBtnStd:focus,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnStd:focus {
+	background-color: var(--sapButton_Reject_Background);
+	outline: 1px dotted var(--sapContent_ContrastFocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnReject.sapUiBtnLite.sapUiBtnStd:focus {
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnDsbl {
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject.sapUiBtnDsbl > .sapUiBtnIco {
+	/*no opacity on icon because whole button has one*/
+	opacity: 1;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnReject.sapUiBtnDsbl,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnReject.sapUiBtnDsbl > span.sapUiBtnIco {
+	color: var(--sapField_InvalidColor);
+	opacity: 0.5;
+}
+
+.sapUiBtn > span.sapUiBtnIco {
+	font-size: 16px;
+	margin-top: 1px;
+}
+
+.sapUiBtnS.sapUiBtnNorm > span.sapUiBtnIco {
+	color: var(--sapButton_IconColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph:focus > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnEmph:active > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnEmph:active > span.sapUiBtnIco {
+	color: var(--sapButton_Emphasized_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnEmph:focus {
+	background-color: transparent;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnEmph:hover,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnStd.sapUiBtnEmph:active {
+	background-color: var(--sapButton_Emphasized_Hover_Background);
+	color: var(--sapHighlightTextColor);
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept:focus > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnAccept:active > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnAccept:active > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject:focus > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnReject:active > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnReject:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnLite.sapUiBtnReject:active > span.sapUiBtnIco {
+	color: var(--sapButton_IconColor);
+}
+
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdHover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnStd:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnStd:focus > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnStd.sapUiBtnStdFocus > span.sapUiBtnIco {
+	color: var(--sapButton_Hover_TextColor);
+}
+
+.sapUiBtnS.sapUiBtnAct > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnAct:focus > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnAct:hover > span.sapUiBtnIco,
+.sapUiBtnS.sapUiBtnStd:active > span.sapUiBtnIco {
+	color: var(--sapContent_ContrastTextColor);
+}
+
+html[data-sap-ui-browser^="cr"] .sapUiBtnS.sapUiBtnIconOnly > span.sapUiBtnIco {
+	margin-top: 1px;
+}
+
+.sapUiBtnS.sapUiBtnNorm.sapUiBtnDsbl > span.sapUiBtnIco { /* make disabled icon look "reduced" */
+	opacity: 0.5;
+}
+
+.sapUiBtnS.sapUiBtnLite.sapUiBtnDsbl > span.sapUiBtnIco { /* switch back for lite button: make disabled icon look "reduced" */
+	opacity: 0.5;
+}

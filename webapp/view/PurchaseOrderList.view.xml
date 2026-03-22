@@ -1,0 +1,83 @@
+<mvc:View
+    controllerName="myapp.controller.PurchaseOrderList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <subHeader>
+            <Toolbar>
+                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Table id="poTable" class="supplierTable" items="{purchaseOrders>/purchaseOrders}">
+                <columns>
+                    <Column>
+                        <Text text="{i18n>poId}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poVendor}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poDate}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poStatus}" />
+                    </Column>
+                    <Column>
+                        <Text text="物料" />
+                    </Column>
+                    <Column>
+                        <Text text="供应商" />
+                    </Column>
+                    <Column>
+                        <Text text="Actions" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press="onItemPress">
+                        <cells>
+                            <Text text="{purchaseOrders>id}" />
+                            <Text text="{purchaseOrders>vendor}" />
+                            <Text text="{purchaseOrders>date}" />
+                            <Text text="{purchaseOrders>status}" />
+                            <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
+                            <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
+                            <HBox>
+                                <Button text="查看" press="onViewPress" />
+                                <Button text="编辑" press="onEditPress" />
+                                <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <Dialog id="poDialog" title="采购订单管理" type="Standard">
+            <content>
+                <VBox spacing="1rem" class="sapUiContentPadding">
+                    <Label text="订单号" required="true" />
+                    <Input id="poNumberInput" value="{oNewPO>/orderNumber}" />
+                    <Label text="供应商代码" />
+                    <Input id="poSupplierIdInput" value="{oNewPO>/supplierId}" />
+                    <Label text="物料代码" />
+                    <Input id="poMaterialIdInput" value="{oNewPO>/materialId}" />
+                    <Label text="供应商名称" />
+                    <Input id="poVendorInput" value="{oNewPO>/vendor}" />
+                    <Label text="订购数量" />
+                    <Input id="poQtyInput" value="{oNewPO>/quantity}" type="Number" />
+                    <Label text="金额" />
+                    <Input id="poAmountInput" value="{oNewPO>/amount}" type="Number" />
+                    <Label text="状态" />
+                    <Input id="poStatusInput" value="{oNewPO>/status}" />
+                </VBox>
+            </content>
+            <beginButton>
+                <Button text="保存" press="onDialogSave" type="Emphasized" />
+            </beginButton>
+            <endButton>
+                <Button text="取消" press="onDialogCancel" />
+            </endButton>
+        </Dialog>
+    </Page>
+</mvc:View>

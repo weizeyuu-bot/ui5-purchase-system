@@ -1,0 +1,113 @@
+/* ================================= */
+/* CSS for control sap.m/GenericTag  */
+/* Fiori 3 theme                     */
+/* ================================= */
+
+@_sap_m_GenericTag_BorderWidth: 0.375rem;
+@_sap_m_GenericTag_IconPaddingRight: 0.375rem;
+@_sap_m_GenericTag_PaddingLeft: 0.375rem;
+
+.sapMGenericTag {
+
+	.sapMGenericTagWrap {
+		padding: 0 0 0 @_sap_m_GenericTag_PaddingLeft;
+		border-radius: var(--sapButton_BorderCornerRadius);
+		border-left-width: @_sap_m_GenericTag_BorderWidth;
+
+		.sapMGenericTagText {
+			margin-right: 0.375rem;
+		}
+
+		.sapMGenericTagValue {
+			margin-left: 0.75rem;
+			margin-right: 0.375rem;
+			padding-left: 0;
+		}
+
+		.sapMGenericTagErrorIcon {
+			margin-right: 0.375rem;
+		}
+	}
+}
+
+.sapMGenericTagWrap {
+
+	.sapMGenericTagError & {
+		border-color: var(--sapNegativeElementColor);
+
+		.sapMGenericTagIcon {
+			color: var(--sapNegativeElementColor);
+		}
+	}
+
+	.sapMGenericTagWarning & {
+		border-color: var(--sapCriticalElementColor);
+
+		.sapMGenericTagIcon {
+			color: var(--sapCriticalElementColor);
+		}
+	}
+
+	.sapMGenericTagSuccess & {
+		border-color: var(--sapPositiveElementColor);
+
+		.sapMGenericTagIcon {
+			color: var(--sapPositiveElementColor);
+		}
+	}
+
+	.sapMGenericTagInformation & {
+		border-color: var(--sapInformativeElementColor);
+
+		.sapMGenericTagIcon {
+			color: var(--sapInformativeElementColor);
+		}
+	}
+
+	.sapMGenericTagNone & {
+		border-color: var(--sapNeutralElementColor);
+
+		.sapMGenericTagIcon {
+			color: var(--sapNeutralElementColor);
+		}
+	}
+
+	&:hover {
+		background: var(--sapList_Hover_Background);
+	}
+
+	.sapMGenericTagActive & {
+		background: var(--sapList_Active_Background);
+
+		.sapMGenericTagIcon {
+			color: var(--sapList_Active_TextColor);
+		}
+	}
+}
+
+html.sap-desktop .sapMGenericTag {
+
+	&::before {
+		border: 1px solid var(--sapContent_FocusColor);
+	}
+
+	&::after {
+		border: 1px dotted var(--sapContent_ContrastFocusColor);
+	}
+}
+
+.sapUiSizeCozy {
+
+	.sapMGenericTag {
+		margin: 0.5625rem 0;
+
+		.sapMGenericTagWrap {
+			height: 1.625rem;
+		}
+	}
+}
+
+html.sap-phone .sapMGenericTag {
+	margin-top: 0.5625rem;
+	margin-bottom: 0.5625rem;
+}

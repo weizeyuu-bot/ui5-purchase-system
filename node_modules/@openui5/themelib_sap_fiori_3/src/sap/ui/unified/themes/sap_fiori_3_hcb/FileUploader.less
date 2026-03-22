@@ -1,0 +1,127 @@
+/* ============================================ */
+/* CSS for control sap.ui.unified/FileUploader  */
+/* Quartz High Contrast Black theme             */
+/* ============================================ */
+
+.sapUiFup,
+.sapUiFup.sapMBarChild {
+	height: 2.75rem;
+}
+
+.sapUiFup.sapMInputBase.sapUiFupButtonOnly .sapMInputBaseContentWrapper {
+	height: var(--sapElement_Height);
+	border-radius: var(--sapButton_BorderCornerRadius);
+}
+
+.sapMFocus.sapMInputBase.sapUiFupButtonOnly .sapMInputBaseContentWrapper:not(.sapMInputBaseDisabledWrapper) {
+	&::before {
+		border: 0.125rem dotted var(--sapContent_FocusColor);
+		border-radius: 0.25rem;
+	}
+}
+
+.sapUiFup.sapMBarChild.sapMInputBase.sapUiFupButtonOnly > .sapMInputBaseContentWrapper {
+	margin: 0;
+	height: 100%;
+	display: inline-flex;
+	align-items: center;
+	border-radius: var(--sapButton_BorderCornerRadius);
+}
+
+.sapUiFup {
+	&.sapUiFupButtonOnly.sapMInputBase:not(.sapMFocus) .sapMInputBaseContentWrapper:not(.sapMInputBaseReadonlyWrapper):not(.sapMInputBaseContentWrapperState) {
+		&:not(.sapMInputBaseDisabledWrapper):hover {
+			border-color: initial;
+		}
+
+		&.sapMInputBaseDisabledWrapper {
+			opacity: var(--sapContent_DisabledOpacity);
+		}
+	}
+
+	.sapMInputBaseContentWrapper {
+		.sapUiFupBrowseIcon,
+		.sapUiFupClearIcon {
+			line-height: 1.25rem;
+			width: 2rem;
+		}
+
+		.sapMBtnInner {
+			border-radius: 0;
+			border: 0;
+		}
+
+		.sapUiFupVisual .sapUiFupPlaceholder > div {
+			font-style: normal;
+		}
+	}
+
+	&.sapMFocus.sapMInputBase.sapUiFupButtonOnly .sapMInputBaseContentWrapper:not(.sapMInputBaseDisabledWrapper)::before {
+		top: 1px;
+		left: 1px;
+		right: 1px;
+		bottom: 1px;
+	}
+}
+
+.sapUiSizeCompact{
+	.sapUiFup,
+	.sapUiFup.sapMBarChild {
+		height: 2rem;
+	}
+	.sapUiFup.sapMInputBase.sapUiFupButtonOnly > .sapMInputBaseContentWrapper {
+		height: var(--sapElement_Compact_Height);
+	}
+	.sapUiFup {
+		.sapMInputBaseContentWrapper {
+			height: var(--sapElement_Compact_Height);
+
+			.sapUiFupBrowseIcon,
+			.sapUiFupClearIcon {
+				height: 1.375rem;
+				line-height: 1.25rem;
+				width: 2rem;
+			}
+
+			.sapMBtn {
+				height: var(--sapElement_Compact_Height);
+				margin: 0;
+
+				.sapMBtnContent {
+					line-height: 1.375rem;
+				}
+			}
+		}
+	}
+}
+
+/* increase outline offset */
+.sapMIBar-CTX .sapUiFup .sapMBtnInner:focus.sapMFocusable {
+	outline-offset: -.125rem;
+}
+
+.sapUiFup .sapMBtn:focus {
+	outline: none;
+}
+
+html.sap-desktop .sapUiFup .sapMFocusable:focus,
+html.sap-desktop .sapUiFup .sapMFocusable:active {
+	outline: 1px dotted var(--sapContent_FocusColor);
+	outline-offset: -1px;
+}
+
+.sapMFooter-CTX .sapUiFup .sapMBtnInner:focus.sapMFocusable,
+.sapMFooter-CTX .sapUiFup .sapMBtnInner:active.sapMFocusable,
+.sapUiFup .sapMBtnInner:active.sapMBtnAccept,
+html.sap-desktop .sapUiFup .sapMBtnInner:active.sapMBtnAccept,
+.sapUiFup .sapMBtnInner:active.sapMBtnReject,
+html.sap-desktop .sapUiFup .sapMBtnInner:active.sapMBtnReject,
+.sapUiFup .sapMBtnInner:active.sapMBtnEmphasized,
+html.sap-desktop .sapUiFup .sapMBtnInner:active.sapMBtnEmphasized {
+	outline-color: var(--sapContent_ContrastFocusColor);
+	outline-offset: -.125rem;
+}
+
+.sapMFooter-CTX .sapUiFup .sapMBtnInner:active.sapMFocusable {
+	background-color: var(--sapButton_Active_Background);
+}
