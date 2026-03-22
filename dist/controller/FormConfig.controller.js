@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller"],function(e){"use strict";return e.extend("myapp.controller.FormConfig",{onInit:function(){var e=this.getOwnerComponent().getModel("process");if(e){this.getView().setModel(e,"process")}},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("RouteHome")}})});
+//# sourceMappingURL=FormConfig.controller.js.map

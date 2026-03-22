@@ -1,0 +1,76 @@
+<mvc:View
+    controllerName="myapp.controller.InvoiceList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="{i18n>invoiceListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <subHeader>
+            <Toolbar>
+                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Table id="invoiceTable" class="supplierTable" items="{invoices>/invoices}">
+                <columns>
+                    <Column>
+                        <Text text="{i18n>invoiceId}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>invoiceDate}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>invoiceAmount}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>invoiceStatus}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poId}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>deliveryId}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press="onItemPress">
+                        <cells>
+                            <Text text="{invoices>id}" />
+                            <Text text="{invoices>date}" />
+                            <Text text="{invoices>amount}" />
+                            <Text text="{invoices>status}" />
+                            <Link text="{invoices>purchaseOrderId}" press="onNavigateToPurchaseOrder" />
+                            <Link text="{invoices>deliveryPlanId}" press="onNavigateToDeliveryPlan" />
+                            <HBox>
+                                <Button text="查看" press="onViewPress" />
+                                <Button text="编辑" press="onEditPress" />
+                                <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <Dialog id="invoiceDialog" title="开票管理" type="Standard">
+            <content>
+                <VBox spacing="1rem" class="sapUiContentPadding">
+                    <Label text="发票号" required="true" />
+                    <Input id="invNumberInput" value="{oNewInvoice>/invoiceNumber}" />
+                    <Label text="采购订单" />
+                    <Input id="invPOInput" value="{oNewInvoice>/purchaseOrderId}" />
+                    <Label text="送货计划" />
+                    <Input id="invDPInput" value="{oNewInvoice>/deliveryPlanId}" />
+                    <Label text="金额" />
+                    <Input id="invAmountInput" value="{oNewInvoice>/amount}" type="Number" />
+                    <Label text="状态" />
+                    <Input id="invStatusInput" value="{oNewInvoice>/status}" />
+                </VBox>
+            </content>
+            <beginButton>
+                <Button text="保存" press="onDialogSave" type="Emphasized" />
+            </beginButton>
+            <endButton>
+                <Button text="取消" press="onDialogCancel" />
+            </endButton>
+        </Dialog>
+    </Page>
+</mvc:View>

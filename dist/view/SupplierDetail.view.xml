@@ -1,0 +1,32 @@
+<mvc:View
+    controllerName="myapp.controller.SupplierDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form">
+    <Page title="{i18n>supplierDetailTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <VBox class="detailForm">
+                <f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                    <f:content>
+                        <Label text="{i18n>supplierId}" />
+                        <Input value="{suppliers>id}" editable="false" />
+                        <Label text="{i18n>supplierName}" />
+                        <Input value="{suppliers>name}" />
+                        <Label text="{i18n>supplierTaxNumber}" />
+                        <Input value="{suppliers>taxNumber}" />
+                        <Label text="{i18n>supplierAddress}" />
+                        <Input value="{suppliers>address}" />
+                        <Label text="{i18n>supplierContact}" />
+                        <Input value="{suppliers>contact}" />
+                        <Label text="{i18n>supplierEmail}" />
+                        <Input value="{suppliers>email}" />
+                    </f:content>
+                </f:SimpleForm>
+                <HBox justifyContent="End" class="sapUiSmallMarginTop">
+                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" />
+                    <Button text="{i18n>cancelButton}" press="onCancel" />
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

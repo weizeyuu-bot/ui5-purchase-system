@@ -1,0 +1,56 @@
+/* =========================================== */
+/* CSS for control sap.ui.commons/InPlaceEdit  */
+/* Quartz Dark theme                           */
+/* =========================================== */
+
+.sapUiIpe {
+	font-family: var(--sapFontFamily);
+	font-size: @sapUiDesktopFontSize;
+	height: 22px;
+}
+
+.sapUiIpe:not(.sapUiIpeEdit) {
+	/* to fade success color out if removed after some seconds */
+	transition: background-color 1s linear;
+}
+
+.sapUiIpeUndo {
+	background-color: var(--sapList_SelectionBackgroundColor);
+}
+
+.sapUiIpeUndo > .sapUiIpeCont > .sapUiTfBrd {
+	border-right: none;
+	outline: none; /* hide webkit outline*/
+}
+
+/* since focusout handling is delayed simulate focus on TextField */
+.sapUiIpeFocus > .sapUiIpeCont > .sapUiTfBrd {
+	border-color: var(--sapHighlightColor);
+}
+
+.sapUiIpeCombo:hover,
+.sapUiIpeFocus.sapUiIpeCombo,
+.sapUiIpeFocus > .sapUiIpeCombo {
+	background-image: url('img/combobox/ComboBoxArrow_regular.png');
+	background-position: center right;
+	background-repeat: no-repeat;
+	padding-right: 20px;
+}
+
+.sapUiIpeEdit.sapUiIpeFocus > .sapUiIpeCombo {
+	background-image: none;
+	padding-right: 0;
+}
+
+/* Revert/Edit Button */
+.sapUiIpe > .sapUiBtnS.sapUiBtnLite,
+.sapUiIpeCont > .sapUiBtnS.sapUiBtnLite {
+	width: 22px;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.sapUiIpe > .sapUiBtnS.sapUiBtnStd.sapUiBtnLite:not(:hover) > span.sapUiBtnIco,
+.sapUiIpeCont > .sapUiBtnS.sapUiBtnStd.sapUiBtnLite:not(:hover) > span.sapUiBtnIco {
+	color: var(--sapButton_IconColor);
+}

@@ -1,0 +1,2 @@
+sap.ui.getCore().attachInit(function(){sap.ui.require(["sap/ui/core/ComponentContainer"],function(n){new n({name:"myapp",settings:{id:"myapp"}}).placeAt("content")})});
+//# sourceMappingURL=index.js.map

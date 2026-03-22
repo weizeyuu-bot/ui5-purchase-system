@@ -1,0 +1,102 @@
+<mvc:View
+    controllerName="myapp.controller.UserManagement"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout">
+    <Page title="{i18n>userManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <VBox class="sapUiContentPadding sapUiLargeMargin">
+            <!-- Title -->
+            <Title text="{i18n>userManagementTitle}" level="H1" class="sapUiLargeMargin" />
+            
+            <!-- Search Bar -->
+            <HBox spacing="1rem" class="sapUiLargeMargin sapUiMediumMarginBottom">
+                <SearchField 
+                    placeholder="{i18n>searchUsers}" 
+                    width="300px"
+                    search="onSearch" />
+                <Button 
+                    text="{i18n>addButton}" 
+                    icon="sap-icon://add" 
+                    press="onAddUser"
+                    type="Emphasized" />
+            </HBox>
+
+            <!-- Users Table -->
+            <Table 
+                items="{users>/registeredUsers}"
+                mode="SingleSelectMaster"
+                class="sapUiLargeMargin">
+                <columns>
+                    <Column width="150px">
+                        <Text text="{i18n>username}" />
+                    </Column>
+                    <Column width="200px">
+                        <Text text="{i18n>userEmail}" />
+                    </Column>
+                    <Column width="150px">
+                        <Text text="{i18n>userPhone}" />
+                    </Column>
+                    <Column width="100px">
+                        <Text text="{i18n>registrationDate}" />
+                    </Column>
+                    <Column width="100px">
+                        <Text text="{i18n>status}" />
+                    </Column>
+                    <Column width="120px">
+                        <Text text="{i18n>actions}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{users>username}" />
+                            <Text text="{users>email}" />
+                            <Text text="{users>phone}" />
+                            <Text text="{users>registrationDate}" />
+                            <ObjectStatus 
+                                text="{users>status}"
+                                state="{users>statusState}" />
+                            <HBox spacing="0.5rem">
+                                <Button 
+                                    icon="sap-icon://detail-view"
+                                    text="{i18n>viewButton}" 
+                                    type="Transparent"
+                                    press="onOpenUserDetail" />
+                                <Button 
+                                    icon="sap-icon://edit" 
+                                    type="Transparent"
+                                    press="onEditUser" />
+                                <Button 
+                                    icon="sap-icon://delete" 
+                                    type="Transparent"
+                                    press="onDeleteUser" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+
+            <!-- User Statistics -->
+            <Panel headerText="{i18n>userStatistics}" class="sapUiLargeMargin">
+                <layout:Grid spacing="2" defaultSpan="L3 M6 S12">
+                    <VBox class="statItem">
+                        <Text text="{i18n>totalUsers}" class="statLabel" />
+                        <Text text="{users>/statistics/totalUsers}" class="statNumber" />
+                    </VBox>
+                    <VBox class="statItem">
+                        <Text text="{i18n>activeUsers}" class="statLabel" />
+                        <Text text="{users>/statistics/activeUsers}" class="statNumber" />
+                    </VBox>
+                    <VBox class="statItem">
+                        <Text text="{i18n>inactiveUsers}" class="statLabel" />
+                        <Text text="{users>/statistics/inactiveUsers}" class="statNumber" />
+                    </VBox>
+                    <VBox class="statItem">
+                        <Text text="{i18n>thisMonthNewUsers}" class="statLabel" />
+                        <Text text="{users>/statistics/thisMonthNewUsers}" class="statNumber" />
+                    </VBox>
+                </layout:Grid>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

@@ -1,0 +1,160 @@
+<mvc:View
+    controllerName="myapp.controller.Home"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core">
+    <Page title="{i18n>homeTitle}" showNavButton="false">
+        <headerContent>
+            <Button text="退出" type="Reject" press="onLogout" />
+        </headerContent>
+        <HBox class="homeMainContainer">
+            <!-- Left Menu Panel -->
+            <VBox class="homeMenuPanel" width="200px">
+                <List selectionMode="None" class="navigationList">
+                    <StandardListItem 
+                        title="{i18n>menuSuppliers}" 
+                        icon="sap-icon://tag" 
+                        type="Navigation" 
+                        press="onNavigateToSuppliers" />
+                    <StandardListItem 
+                        title="{i18n>menuMaterials}" 
+                        icon="sap-icon://product" 
+                        type="Navigation" 
+                        press="onNavigateToMaterials" />
+                    <StandardListItem 
+                        title="{i18n>menuPurchaseOrders}" 
+                        icon="sap-icon://documents" 
+                        type="Navigation" 
+                        press="onNavigateToPurchaseOrders" />
+                    <StandardListItem 
+                        title="{i18n>menuDeliveryPlans}" 
+                        icon="sap-icon://shipping-status" 
+                        type="Navigation" 
+                        press="onNavigateToDeliveryPlans" />
+                    <StandardListItem 
+                        title="{i18n>menuInvoices}" 
+                        icon="sap-icon://receipt" 
+                        type="Navigation" 
+                        press="onNavigateToInvoices" />
+                    <StandardListItem 
+                        title="{i18n>menuProfile}" 
+                        icon="sap-icon://employee" 
+                        type="Navigation" 
+                        press="onNavigateToProfile" />
+                    <StandardListItem 
+                        title="{i18n>menuUserManagement}" 
+                        icon="sap-icon://group" 
+                        type="Navigation" 
+                        press="onNavigateToUserManagement" />
+                    <StandardListItem 
+                        id="processManagementParent" 
+                        title="流程管理" 
+                        icon="{= ${view>/processMenuExpanded} ? 'sap-icon://navigation-up-arrow' : 'sap-icon://navigation-down-arrow'}" 
+                        type="Navigation" 
+                        press="onToggleProcessMenu" 
+                        class="parentMenuItem" />
+                    <StandardListItem 
+                        title="流程分类" 
+                        icon="sap-icon://activity-individual" 
+                        type="Navigation" 
+                        visible="{= ${view>/processMenuExpanded} }" 
+                        press="onNavigateToProcessCategories" 
+                        selected="{= ${view>/processMenuSelectedKey} === 'categories'}" 
+                        class="subMenuItem" />
+                    <StandardListItem 
+                        title="表单配置" 
+                        icon="sap-icon://form" 
+                        type="Navigation" 
+                        visible="{= ${view>/processMenuExpanded} }" 
+                        press="onNavigateToProcessFormConfigs" 
+                        selected="{= ${view>/processMenuSelectedKey} === 'forms'}" 
+                        class="subMenuItem" />
+                    <StandardListItem 
+                        title="流程模型" 
+                        icon="sap-icon://process" 
+                        type="Navigation" 
+                        visible="{= ${view>/processMenuExpanded} }" 
+                        press="onNavigateToProcessModels" 
+                        selected="{= ${view>/processMenuSelectedKey} === 'models'}" 
+                        class="subMenuItem" />
+                    <StandardListItem 
+                        title="部署管理" 
+                        icon="sap-icon://sys-enter-2" 
+                        type="Navigation" 
+                        visible="{= ${view>/processMenuExpanded} }" 
+                        press="onNavigateToProcessDeployments" 
+                        selected="{= ${view>/processMenuSelectedKey} === 'deployment'}" 
+                        class="subMenuItem" />
+                    <StandardListItem 
+                        title="{i18n>menuSystemManagement}" 
+                        icon="sap-icon://settings" 
+                        type="Navigation" 
+                        press="onNavigateToSystemManagement" />
+                </List>
+            </VBox>
+
+            <!-- Main Content -->
+            <VBox class="homeContentArea" fitContainer="true">
+                <!-- Title -->
+                <Title text="{i18n>homeTitle}" level="H1" class="sapUiLargeMargin sapUiMediumMarginBegin" />
+                
+                <!-- 采购简报 -->
+                <Panel headerText="采购简报" class="sapUiLargeMargin sapUiMediumMarginBegin">
+                    <HBox class="dashboardSummaryRow" items="{dashboard>/summaryCards}">
+                        <VBox class="dashboardSummaryCard">
+                            <HBox class="dashboardSummaryItem">
+                                <core:Icon src="{dashboard>icon}" size="2rem" />
+                                <Text text="{dashboard>title}" class="sapUiSmallMarginBegin" />
+                            </HBox>
+                            <Text text="{dashboard>value}" class="kpiValue" />
+                        </VBox>
+                    </HBox>
+                </Panel>
+
+                <!-- 我的单据 -->
+                <Panel headerText="我的单据" class="sapUiLargeMargin sapUiMediumMarginBegin">
+                    <HBox class="myDocumentsRow" items="{dashboard>/myDocuments}">
+                        <VBox class="docCard" width="220px" height="100px">
+                            <Text text="{dashboard>title}" />
+                            <Text text="{dashboard>value}" class="kpiValue" />
+                            <Text text="{dashboard>subTitle}" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </HBox>
+                </Panel>
+
+                <!-- 最近活动 -->
+                <Panel headerText="{i18n>recentActivities}" class="sapUiLargeMargin sapUiMediumMarginBegin">
+                    <List items="{dashboard>/activities}">
+                        <StandardListItem 
+                            title="{dashboard>title}" 
+                            description="{dashboard>description}" 
+                            icon="{dashboard>icon}" />
+                    </List>
+                </Panel>
+
+                <!-- Top Suppliers -->
+                <Panel headerText="{i18n>topSuppliers}" class="sapUiLargeMargin sapUiMediumMarginBegin sapUiMediumMarginEnd">
+                    <Table items="{dashboard>/topSuppliers}">
+                        <columns>
+                            <Column><Text text="供应商名称" /></Column>
+                            <Column><Text text="往来次数" /></Column>
+                            <Column><Text text="订单金额" /></Column>
+                            <Column><Text text="状态" /></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{dashboard>name}" />
+                                    <Text text="{dashboard>contacts}" />
+                                    <Text text="{dashboard>value}" />
+                                    <ObjectStatus text="{dashboard>status}" state="{dashboard>state}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Panel>
+            </VBox>
+        </HBox>
+    </Page>
+</mvc:View>

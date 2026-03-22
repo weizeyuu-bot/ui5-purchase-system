@@ -1,0 +1,95 @@
+/* ============================= */
+/* CSS for control sap.m/Slider  */
+/* Quartz Dark theme             */
+/* ============================= */
+
+@_sap_m_Slider_Height: 2.75rem;
+@_sap_m_Slider_Progress: .25rem;
+@_sap_m_Slider_Track_Total_Height: @_sap_m_Slider_Progress;
+
+/* slider */
+.sapMSliderInner {
+	background: var(--sapField_BorderColor);
+}
+
+.sapMSliderProgress {
+	background: var(--sapActiveColor);
+}
+
+.sapMSliderInner:not(.sapMSliderInnerDisabled) .sapMSliderProgress:hover ~ .sapMSliderHandle,
+.sapMSliderHandle:hover {
+	background: var(--sapButton_Hover_Background);
+	border-color: var(--sapButton_Hover_BorderColor);
+}
+
+/* slider handle */
+.sapMSliderHandle {
+	background: var(--sapButton_Background);
+	border: solid 0.125rem var(--sapField_BorderColor);
+	width: 1.875rem;
+	height: 1.875rem;
+	margin-left: -0.9375rem;
+	top: (@_sap_m_Slider_Track_Total_Height - 1.875rem) / 2;
+}
+
+.sapMSliderInner:not(.sapMSliderInnerDisabled) .sapMSliderHandle {
+
+	&:hover {
+		background: var(--sapButton_Hover_Background);
+		border-color: var(--sapButton_Hover_BorderColor);
+	}
+
+	&:active {
+		background: var(--sapButton_Active_Background);
+		border-color: var(--sapButton_Active_BorderColor);
+	}
+}
+
+.sapMSliderTickLabel .sapMSliderLabel {
+	padding-top: 0.4375rem;
+	height: 1rem;
+	width: 2rem;
+	left: -1rem;
+	font-size: var(--sapFontSmallSize);
+	color: var(--sapContent_LabelColor);
+}
+
+.sapMSliderLabels {
+	height: 1rem;
+
+	.sapMSliderRangeLabel {
+		width: 2rem;
+		font-size: var(--sapFontSmallSize);
+		color: var(--sapContent_LabelColor);
+	}
+}
+
+.sapMSliderTick {
+	margin: 0.375rem 0 0 -0.0625rem;
+}
+
+/* disabled */
+.sapMSliderDisabled {
+	opacity: 0.5;
+}
+
+/* pressed */
+.sapMSliderPressed:not(.sapMSliderInnerDisabled) > .sapMSliderHandle,
+.sapMSlider .sapMSliderInner > .sapMSliderHandle.sapMSliderHandlePressed {
+	background-color: var(--sapButton_Active_Background);
+	border: 0.125rem solid var(--sapButton_Active_BorderColor);
+}
+
+.sapUiSizeCompact {
+
+	.sapMSliderHandle {
+		width: 1.5rem;
+		height: 1.5rem;
+		margin-left: -0.75rem;
+		top: (@_sap_m_Slider_Track_Total_Height - 1.5rem) / 2;
+	}
+
+	.sapMSliderTickLabel .sapMSliderLabel {
+		padding-top: 0.375rem;
+	}
+}

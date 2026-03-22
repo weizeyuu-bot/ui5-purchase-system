@@ -1,0 +1,70 @@
+<mvc:View
+    controllerName="myapp.controller.MaterialList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page title="{i18n>materialListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <subHeader>
+            <Toolbar>
+                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
+            </Toolbar>
+        </subHeader>
+        <content>
+            <Table id="materialTable" class="supplierTable" items="{materials>/materials}">
+                <columns>
+                    <Column>
+                        <Text text="{i18n>materialId}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>materialName}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>materialSpec}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>materialUnit}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>materialStock}" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press="onItemPress">
+                        <cells>
+                            <Text text="{materials>id}" />
+                            <Text text="{materials>name}" />
+                            <Text text="{materials>spec}" />
+                            <Text text="{materials>unit}" />
+                            <Text text="{materials>stock}" />
+                            <HBox>
+                                <Button text="查看" press="onViewPress" />
+                                <Button text="编辑" press="onEditPress" />
+                                <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
+                            </HBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
+        <Dialog id="materialDialog" title="物料管理" type="Standard">
+            <content>
+                <VBox spacing="1rem" class="sapUiContentPadding">
+                    <Label text="物料名称" required="true" />
+                    <Input id="materialNameInput" value="{oNewMaterial>/name}" />
+                    <Label text="规格" />
+                    <Input id="materialSpecInput" value="{oNewMaterial>/spec}" />
+                    <Label text="单位" />
+                    <Input id="materialUnitInput" value="{oNewMaterial>/unit}" />
+                    <Label text="库存" />
+                    <Input id="materialStockInput" value="{oNewMaterial>/stock}" type="Number" />
+                </VBox>
+            </content>
+            <beginButton>
+                <Button text="保存" press="onDialogSave" type="Emphasized" />
+            </beginButton>
+            <endButton>
+                <Button text="取消" press="onDialogCancel" />
+            </endButton>
+        </Dialog>
+    </Page>
+</mvc:View>

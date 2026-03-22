@@ -1,0 +1,32 @@
+/* ================================= */
+/* CSS for control sap.m/GenericTag  */
+/* Quartz High Contrast White theme  */
+/* ================================= */
+
+html.sap-desktop .sapMGenericTag {
+
+	&::before {
+		border: 1px solid var(--sapBackgroundColor);
+	}
+
+	&::after {
+		border: 1px dotted var(--sapContent_ContrastFocusColor);
+	}
+}
+
+.sapMGenericTagWrap {
+
+	&:hover {
+		background-color: var(--sapList_Hover_Background);
+		box-shadow: @sapUiShadowLevel0;
+
+		& .sapMGenericTagIcon,
+		& .sapMGenericTagValue {
+			color: var(--sapList_Active_TextColor);
+		}
+	}
+
+	.sapMGenericTagActive & {
+		background: var(--sapList_Active_Background);
+	}
+}

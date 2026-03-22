@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/m/MessageToast","sap/ui/model/json/JSONModel"],function(e,t,o){"use strict";return e.extend("myapp.controller.SystemManagement",{onInit:function(){var e=this.getOwnerComponent().getModel("system");this.getView().setModel(e,"system")},onNavBack:function(){this.getOwnerComponent().getRouter().navTo("RouteHome")},onLogLevelChange:function(e){var o=e.getSource();var n=o.getSelectedItem();if(n){var s=n.getText();t.show("筛选日志等级: "+s)}}})});
+//# sourceMappingURL=SystemManagement.controller.js.map

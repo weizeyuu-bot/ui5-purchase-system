@@ -1,0 +1,30 @@
+<mvc:View
+    controllerName="myapp.controller.MaterialDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form">
+    <Page title="{i18n>materialListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <VBox class="detailForm">
+                <f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                    <f:content>
+                        <Label text="{i18n>materialId}" />
+                        <Input value="{materials>id}" editable="false" />
+                        <Label text="{i18n>materialName}" />
+                        <Input value="{materials>name}" />
+                        <Label text="{i18n>materialSpec}" />
+                        <Input value="{materials>spec}" />
+                        <Label text="{i18n>materialUnit}" />
+                        <Input value="{materials>unit}" />
+                        <Label text="{i18n>materialStock}" />
+                        <Input value="{materials>stock}" />
+                    </f:content>
+                </f:SimpleForm>
+                <HBox justifyContent="End" class="sapUiSmallMarginTop">
+                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" />
+                    <Button text="{i18n>cancelButton}" press="onCancel" />
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

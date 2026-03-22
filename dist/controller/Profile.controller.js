@@ -1,0 +1,2 @@
+sap.ui.define(["sap/ui/core/mvc/Controller","sap/m/MessageToast"],function(e,o){"use strict";return e.extend("myapp.controller.Profile",{onNavBack:function(){this.getOwnerComponent().getRouter().navTo("RouteHome")},onSave:function(){o.show("Profile saved successfully");this.onNavBack()}})});
+//# sourceMappingURL=Profile.controller.js.map

@@ -1,0 +1,29 @@
+/* ============================= */
+/* CSS for control sap.m/Wizard  */
+/* Fiori 3 theme                 */
+/* ============================= */
+
+.sapMWizard {
+
+	.sapMWizardStepContainer {
+		margin-top: @_sap_m_Wizard_NavHeight;
+	}
+
+	&.sapMWizardBgSolid .sapMWizardStepContainer {
+		background-color: var(--sapShell_Background);
+	}
+}
+
+.sapMWizard .sapMWizardProgressNav {
+	box-shadow: @sapUiShadowHeader;
+}
+
+.sapMWizard {
+	overflow: hidden;
+}
+
+html.sap-phone .sapMWizard .sapMWizardNextButtonVisible {
+	left: 1rem;
+	bottom: 3.5rem;
+	transform: none;
+}

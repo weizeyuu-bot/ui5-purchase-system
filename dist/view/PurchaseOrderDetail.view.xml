@@ -1,0 +1,34 @@
+<mvc:View
+    controllerName="myapp.controller.PurchaseOrderDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form">
+    <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <VBox class="detailForm">
+                <f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
+                    <f:content>
+                        <Label text="{i18n>poId}" />
+                        <Input value="{purchaseOrders>id}" editable="false" />
+                        <Label text="{i18n>poVendor}" />
+                        <Input value="{purchaseOrders>vendor}" />
+                        <Label text="{i18n>poDate}" />
+                        <Input value="{purchaseOrders>date}" />
+                        <Label text="{i18n>poStatus}" />
+                        <Input value="{purchaseOrders>status}" />
+                        <Label text="物料" />
+                        <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
+                        <Label text="供应商" />
+                        <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
+                        <Label text="{i18n>deliveryId}" />
+                        <Input value="{purchaseOrders>deliveryPlanId}" editable="false" />
+                    </f:content>
+                </f:SimpleForm>
+                <HBox justifyContent="End" class="sapUiSmallMarginTop">
+                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" />
+                    <Button text="{i18n>cancelButton}" press="onCancel" />
+                </HBox>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>
