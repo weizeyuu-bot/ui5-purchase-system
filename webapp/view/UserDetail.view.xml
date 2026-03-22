@@ -20,58 +20,86 @@
             <!-- Basic Information Panel -->
             <Panel headerText="{i18n>basicInformation}" class="sapUiLargeMarginBottom">
                 <form:Form editable="false">
-                    <layout:GridContainer>
-                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <form:FormContainer>
+                    <form:layout>
+                        <form:ResponsiveGridLayout columnsL="2" columnsM="2" labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer>
+                            <form:formElements>
                                 <form:FormElement label="{i18n>username}">
-                                    <Text text="{userDetail>username}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>username}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>userEmail}">
-                                    <Text text="{userDetail>email}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>email}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>userPhone}">
-                                    <Text text="{userDetail>phone}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>phone}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>department}">
-                                    <Text text="{userDetail>department}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>department}" />
+                                    </form:fields>
                                 </form:FormElement>
-                            </form:FormContainer>
-                            <form:FormContainer>
+                            </form:formElements>
+                        </form:FormContainer>
+                        <form:FormContainer>
+                            <form:formElements>
                                 <form:FormElement label="{i18n>role}">
-                                    <Text text="{userDetail>role}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>role}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>status}">
-                                    <ObjectStatus 
-                                        text="{userDetail>status}"
-                                        state="{userDetail>statusState}" />
+                                    <form:fields>
+                                        <ObjectStatus 
+                                            text="{userDetail>status}"
+                                            state="{userDetail>statusState}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>registrationDate}">
-                                    <Text text="{userDetail>registrationDate}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>registrationDate}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>createdBy}">
-                                    <Text text="{userDetail>createdBy}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>createdBy}" />
+                                    </form:fields>
                                 </form:FormElement>
-                            </form:FormContainer>
-                        </layout:Grid>
-                    </layout:GridContainer>
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
                 </form:Form>
             </Panel>
 
             <!-- Login Information Panel -->
             <Panel headerText="{i18n>loginInformation}" class="sapUiLargeMarginBottom">
                 <form:Form editable="false">
-                    <layout:GridContainer>
-                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <form:FormContainer>
+                    <form:layout>
+                        <form:ResponsiveGridLayout columnsL="1" columnsM="1" labelSpanL="4" labelSpanM="4" emptySpanL="0" emptySpanM="0" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer>
+                            <form:formElements>
                                 <form:FormElement label="{i18n>lastLogin}">
-                                    <Text text="{userDetail>lastLogin}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>lastLogin}" />
+                                    </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>loginCount}">
-                                    <Text text="{userDetail>loginCount}" />
+                                    <form:fields>
+                                        <Text text="{userDetail>loginCount}" />
+                                    </form:fields>
                                 </form:FormElement>
-                            </form:FormContainer>
-                        </layout:Grid>
-                    </layout:GridContainer>
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
                 </form:Form>
             </Panel>
 
