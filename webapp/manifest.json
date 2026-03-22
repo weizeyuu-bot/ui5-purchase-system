@@ -183,6 +183,13 @@
           ]
         },
         {
+          "name": "RouteUserDetail",
+          "pattern": "userManagement/{username}",
+          "target": [
+            "TargetUserDetail"
+          ]
+        },
+        {
           "name": "RouteSystemManagement",
           "pattern": "systemManagement",
           "target": [
@@ -309,6 +316,12 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewName": "UserManagement"
+        },
+        "TargetUserDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewName": "UserDetail"
         },
         "TargetSystemManagement": {
           "viewType": "XML",

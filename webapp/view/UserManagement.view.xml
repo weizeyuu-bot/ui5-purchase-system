@@ -58,6 +58,11 @@
                                 state="{users>statusState}" />
                             <HBox spacing="0.5rem">
                                 <Button 
+                                    icon="sap-icon://detail-view"
+                                    text="{i18n>viewButton}" 
+                                    type="Transparent"
+                                    press="onOpenUserDetail" />
+                                <Button 
                                     icon="sap-icon://edit" 
                                     type="Transparent"
                                     press="onEditUser" />

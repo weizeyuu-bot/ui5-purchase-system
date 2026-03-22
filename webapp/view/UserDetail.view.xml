@@ -1,0 +1,36 @@
+<mvc:View
+    controllerName="myapp.controller.UserDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout">
+    <Page title="{i18n>userDetailTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <VBox class="sapUiContentPadding sapUiLargeMargin">
+            <Title text="{i18n>userDetailTitle}" level="H1" class="sapUiLargeMargin" />
+            <Form>
+                <layout:Grid defaultSpan="L6 M6 S12">
+                    <FormContainer>
+                        <FormElement label="{i18n>username}">
+                            <Text text="{userDetail>username}" />
+                        </FormElement>
+                        <FormElement label="{i18n>userEmail}">
+                            <Text text="{userDetail>email}" />
+                        </FormElement>
+                        <FormElement label="{i18n>userPhone}">
+                            <Text text="{userDetail>phone}" />
+                        </FormElement>
+                        <FormElement label="{i18n>registrationDate}">
+                            <Text text="{userDetail>registrationDate}" />
+                        </FormElement>
+                        <FormElement label="{i18n>status}">
+                            <Text text="{userDetail>status}" />
+                        </FormElement>
+                        <FormElement label="{i18n>lastLogin}">
+                            <Text text="{userDetail>lastLogin}" />
+                        </FormElement>
+                    </FormContainer>
+                </layout:Grid>
+            </Form>
+            <Button text="{i18n>back}" icon="sap-icon://nav-back" type="Emphasized" press="onNavBack" class="sapUiLargeMarginTop" />
+        </VBox>
+    </Page>
+</mvc:View>
