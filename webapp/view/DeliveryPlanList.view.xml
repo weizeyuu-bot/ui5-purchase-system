@@ -44,7 +44,7 @@
         </content>
         <Dialog id="dpDialog" title="送货计划管理" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
+                <VBox class="sapUiContentPadding">
                     <Label text="计划号" required="true" />
                     <Input id="dpPlanNumberInput" value="{oNewDP>/planNumber}" />
                     <Label text="采购订单" />

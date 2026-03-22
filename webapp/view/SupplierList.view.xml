@@ -55,7 +55,7 @@
         </content>
         <Dialog id="supplierDialog" title="{i18n>supplierListTitle}" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
+                <VBox class="sapUiContentPadding">
                     <Label text="供应商名称" required="true" />
                     <Input id="supplierNameInput" value="{oNewSupplier>/name}" />
                     <Label text="税号" required="true" />

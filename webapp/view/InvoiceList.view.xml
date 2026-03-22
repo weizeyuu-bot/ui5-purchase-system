@@ -52,7 +52,7 @@
         </content>
         <Dialog id="invoiceDialog" title="开票管理" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
+                <VBox class="sapUiContentPadding">
                     <Label text="发票号" required="true" />
                     <Input id="invNumberInput" value="{oNewInvoice>/invoiceNumber}" />
                     <Label text="采购订单" />

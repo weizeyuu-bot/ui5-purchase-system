@@ -5,7 +5,7 @@
     xmlns:layout="sap.ui.layout"
     xmlns:core="sap.ui.core">
     <Page title="流程管理" showNavButton="true" navButtonPress="onNavBack">
-        <VBox class="sapUiContentPadding" spacing="1rem">
+        <VBox class="sapUiContentPadding">
             <TabContainer id="processTabContainer" selectedKey="categories">
                 <items>
                     <TabContainerItem key="categories" name="流程分类">

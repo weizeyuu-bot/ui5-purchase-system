@@ -2,13 +2,14 @@
     controllerName="myapp.controller.UserDetail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:layout="sap.ui.layout">
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form">
     <Page title="{i18n>userDetailTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding sapUiLargeMargin">
             <!-- Header -->
             <VBox class="sapUiSmallMarginBottom">
                 <Title text="{i18n>userDetailTitle}" level="H1" />
-                <HBox spacing="1rem" class="sapUiSmallMarginTop">
+                <HBox class="sapUiSmallMarginTop">
                     <ObjectStatus 
                         text="{userDetail>status}"
                         state="{userDetail>statusState}" />
@@ -18,64 +19,64 @@
 
             <!-- Basic Information Panel -->
             <Panel headerText="{i18n>basicInformation}" class="sapUiLargeMarginBottom">
-                <Form editable="false">
+                <form:Form editable="false">
                     <layout:GridContainer>
                         <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <FormContainer>
-                                <FormElement label="{i18n>username}">
+                            <form:FormContainer>
+                                <form:FormElement label="{i18n>username}">
                                     <Text text="{userDetail>username}" />
-                                </FormElement>
-                                <FormElement label="{i18n>userEmail}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>userEmail}">
                                     <Text text="{userDetail>email}" />
-                                </FormElement>
-                                <FormElement label="{i18n>userPhone}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>userPhone}">
                                     <Text text="{userDetail>phone}" />
-                                </FormElement>
-                                <FormElement label="{i18n>department}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>department}">
                                     <Text text="{userDetail>department}" />
-                                </FormElement>
-                            </FormContainer>
-                            <FormContainer>
-                                <FormElement label="{i18n>role}">
+                                </form:FormElement>
+                            </form:FormContainer>
+                            <form:FormContainer>
+                                <form:FormElement label="{i18n>role}">
                                     <Text text="{userDetail>role}" />
-                                </FormElement>
-                                <FormElement label="{i18n>status}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>status}">
                                     <ObjectStatus 
                                         text="{userDetail>status}"
                                         state="{userDetail>statusState}" />
-                                </FormElement>
-                                <FormElement label="{i18n>registrationDate}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>registrationDate}">
                                     <Text text="{userDetail>registrationDate}" />
-                                </FormElement>
-                                <FormElement label="{i18n>createdBy}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>createdBy}">
                                     <Text text="{userDetail>createdBy}" />
-                                </FormElement>
-                            </FormContainer>
+                                </form:FormElement>
+                            </form:FormContainer>
                         </layout:Grid>
                     </layout:GridContainer>
-                </Form>
+                </form:Form>
             </Panel>
 
             <!-- Login Information Panel -->
             <Panel headerText="{i18n>loginInformation}" class="sapUiLargeMarginBottom">
-                <Form editable="false">
+                <form:Form editable="false">
                     <layout:GridContainer>
                         <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <FormContainer>
-                                <FormElement label="{i18n>lastLogin}">
+                            <form:FormContainer>
+                                <form:FormElement label="{i18n>lastLogin}">
                                     <Text text="{userDetail>lastLogin}" />
-                                </FormElement>
-                                <FormElement label="{i18n>loginCount}">
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>loginCount}">
                                     <Text text="{userDetail>loginCount}" />
-                                </FormElement>
-                            </FormContainer>
+                                </form:FormElement>
+                            </form:FormContainer>
                         </layout:Grid>
                     </layout:GridContainer>
-                </Form>
+                </form:Form>
             </Panel>
 
             <!-- Action Buttons -->
-            <HBox spacing="1rem" class="sapUiLargeMarginTop">
+            <HBox class="sapUiLargeMarginTop">
                 <Button text="{i18n>editButton}" icon="sap-icon://edit" type="Emphasized" press="onEditUser" />
                 <Button text="{i18n>back}" icon="sap-icon://nav-back" press="onNavBack" />
             </HBox>

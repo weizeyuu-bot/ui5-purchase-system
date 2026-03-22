@@ -55,7 +55,7 @@
         </content>
         <Dialog id="poDialog" title="采购订单管理" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
+                <VBox class="sapUiContentPadding">
                     <Label text="订单号" required="true" />
                     <Input id="poNumberInput" value="{oNewPO>/orderNumber}" />
                     <Label text="供应商代码" />

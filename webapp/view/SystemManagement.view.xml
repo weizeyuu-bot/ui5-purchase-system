@@ -6,7 +6,7 @@
     xmlns:core="sap.ui.core">
     <Page title="{i18n>systemManagementTitle}" icon="sap-icon://sys-enter-2" showNavButton="true" navButtonPress="onNavBack">
         <ScrollContainer vertical="true" horizontal="false" class="sapUiContentPadding">
-            <VBox spacing="1rem">
+            <VBox>
                 <!-- Title -->
                 <Title text="{i18n>systemManagementTitle}" level="H1" class="sapUiLargeMargin" />
 
@@ -100,7 +100,7 @@
 
                 <!-- System Logs -->
                 <Panel headerText="{i18n>systemLogs}" class="sapUiLargeMargin sapUiMediumMarginEnd">
-                    <HBox spacing="1rem" class="sapUiMediumMarginBottom">
+                    <HBox class="sapUiMediumMarginBottom">
                         <ComboBox 
                             items="{system>/logLevels}"
                             width="200px"
