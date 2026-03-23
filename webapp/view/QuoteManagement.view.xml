@@ -1,0 +1,103 @@
+<mvc:View
+    controllerName="myapp.controller.QuoteManagement"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Page title="{i18n>quoteManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <VBox class="sapUiContentPadding sapUiLargeMargin">
+            <Panel headerText="{i18n>quoteGlobalConfig}" class="sapUiMediumMarginBottom">
+                <HBox class="sapUiTinyMarginTop sapUiTinyMarginBottom">
+                    <VBox width="50%" class="sapUiTinyMarginEnd">
+                        <Label text="{i18n>quoteStandardDays}" />
+                        <StepInput value="{quote>/standardPaymentDays}" min="0" max="365" step="1" change="onRecalculate" />
+                    </VBox>
+                    <VBox width="50%">
+                        <Label text="{i18n>quoteAnnualRate}" />
+                        <StepInput value="{quote>/annualFundingRate}" min="0" max="100" step="0.1" displayValuePrecision="2" change="onRecalculate" />
+                    </VBox>
+                </HBox>
+            </Panel>
+
+            <HBox>
+                <VBox width="32%" class="sapUiTinyMarginEnd">
+                    <Panel headerText="{i18n>quoteInputTitle}" class="sapUiSmallMarginBottom">
+                        <VBox>
+                            <Label text="{i18n>quoteSupplier}" />
+                            <Select selectedKey="{quote>/selectedSupplierId}" items="{suppliers>/suppliers}">
+                                <items>
+                                    <core:Item key="{suppliers>id}" text="{suppliers>name}" />
+                                </items>
+                            </Select>
+
+                            <Label text="{i18n>quoteAmount}" class="sapUiSmallMarginTop" />
+                            <Input type="Number" value="{quote>/inputAmount}" />
+
+                            <Label text="{i18n>quotePaymentDays}" class="sapUiSmallMarginTop" />
+                            <Input type="Number" value="{quote>/inputPaymentDays}" />
+
+                            <Button text="{i18n>quoteAddItem}" type="Emphasized" icon="sap-icon://add" class="sapUiSmallMarginTop" press="onAddQuoteItem" />
+                        </VBox>
+                    </Panel>
+
+                    <Panel headerText="{i18n>quoteCoreFormula}">
+                        <VBox>
+                            <Text text="{i18n>quoteFormulaText}" wrapping="true" />
+                            <Text text="• 晚付款：相当于占用现金，折算成本降低。" class="sapUiTinyMarginTop" />
+                            <Text text="• 早付款：相当于损失利息，折算成本升高。" class="sapUiTinyMarginTop" />
+                        </VBox>
+                    </Panel>
+                </VBox>
+
+                <VBox width="68%">
+                    <Panel headerText="{i18n>quoteComparisonTitle}" class="sapUiSmallMarginBottom">
+                        <VBox>
+                            <HBox justifyContent="End" class="sapUiTinyMarginBottom">
+                                <ObjectStatus text="{i18n>quoteOriginalPrice}" state="Information" class="sapUiTinyMarginEnd" />
+                                <ObjectStatus text="{i18n>quoteStandardCost}" state="Success" />
+                            </HBox>
+
+                            <List items="{quote>/chartRows}" noDataText="{i18n>quoteNoData}">
+                                <CustomListItem>
+                                    <VBox class="sapUiSmallMarginTop sapUiSmallMarginBottom">
+                                        <Text text="{quote>supplierName}" class="sapUiTinyMarginBottom" />
+                                        <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                            <Text text="{= '原始: ¥' + ${quote>amount} }" width="140px" />
+                                            <ProgressIndicator percentValue="{quote>amountPct}" displayValue="{= ${quote>amountPct} + '%' }" state="Information" width="100%" />
+                                        </HBox>
+                                        <HBox alignItems="Center">
+                                            <Text text="{= '标准: ¥' + ${quote>standardCost} }" width="140px" />
+                                            <ProgressIndicator percentValue="{quote>standardPct}" displayValue="{= ${quote>standardPct} + '%' }" state="Success" width="100%" />
+                                        </HBox>
+                                    </VBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+                    </Panel>
+
+                    <Panel headerText="{i18n>quoteDetailTitle}">
+                        <Table items="{quote>/comparisonRows}" noDataText="{i18n>quoteNoData}">
+                            <columns>
+                                <Column><Text text="{i18n>quoteSupplier}" /></Column>
+                                <Column><Text text="{i18n>quoteOriginalPrice}" /></Column>
+                                <Column><Text text="{i18n>quotePaymentDays}" /></Column>
+                                <Column><Text text="{i18n>quoteAdjustment}" /></Column>
+                                <Column><Text text="{i18n>quoteStandardCost}" /></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{quote>supplierName}" />
+                                        <Text text="{= '¥' + ${quote>amount} }" />
+                                        <Text text="{= ${quote>paymentDays} + ' 天' }" />
+                                        <Text text="{= ${quote>adjustmentPct} + '%' }" />
+                                        <Text text="{= '¥' + ${quote>standardCost} }" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </Panel>
+                </VBox>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

@@ -183,6 +183,13 @@
           ]
         },
         {
+          "name": "RouteQuoteManagement",
+          "pattern": "quoteManagement",
+          "target": [
+            "TargetQuoteManagement"
+          ]
+        },
+        {
           "name": "RouteUserDetail",
           "pattern": "userManagement/{username}",
           "target": [
@@ -316,6 +323,12 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewName": "UserManagement"
+        },
+        "TargetQuoteManagement": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewName": "QuoteManagement"
         },
         "TargetUserDetail": {
           "viewType": "XML",

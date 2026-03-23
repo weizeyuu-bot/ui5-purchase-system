@@ -48,6 +48,11 @@
                         type="Navigation" 
                         press="onNavigateToUserManagement" />
                     <StandardListItem 
+                        title="{i18n>menuQuoteManagement}" 
+                        icon="sap-icon://business-objects-experience" 
+                        type="Navigation" 
+                        press="onNavigateToQuoteManagement" />
+                    <StandardListItem 
                         id="processManagementParent" 
                         title="流程管理" 
                         icon="{= ${view>/processMenuExpanded} ? 'sap-icon://navigation-up-arrow' : 'sap-icon://navigation-down-arrow'}" 

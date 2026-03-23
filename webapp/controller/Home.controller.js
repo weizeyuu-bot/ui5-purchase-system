@@ -59,6 +59,10 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("RouteUserManagement");
         },
 
+        onNavigateToQuoteManagement: function () {
+            this.getOwnerComponent().getRouter().navTo("RouteQuoteManagement");
+        },
+
         onNavigateToProcessManagement: function () {
             // 继续保留入口，兼容旧调用：仅展开流程管理一级菜单，不跳页面
             this.onToggleProcessMenu();
