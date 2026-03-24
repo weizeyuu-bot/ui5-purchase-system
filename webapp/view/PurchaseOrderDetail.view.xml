@@ -2,7 +2,8 @@
     controllerName="myapp.controller.PurchaseOrderDetail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:f="sap.ui.layout.form">
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core">
     <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <content>
             <VBox class="detailForm">
@@ -11,15 +12,46 @@
                         <Label text="{i18n>poId}" />
                         <Input value="{purchaseOrders>id}" editable="false" />
                         <Label text="{i18n>poVendor}" />
-                        <Input value="{purchaseOrders>vendor}" />
+                        <Input value="{purchaseOrders>vendor}" editable="false" />
                         <Label text="{i18n>poDate}" />
-                        <Input value="{purchaseOrders>date}" />
+                        <DatePicker value="{purchaseOrders>date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" />
                         <Label text="{i18n>poStatus}" />
-                        <Input value="{purchaseOrders>status}" />
+                        <Select selectedKey="{purchaseOrders>status}">
+                            <items>
+                                <core:Item key="已下单" text="已下单" />
+                                <core:Item key="处理中" text="处理中" />
+                                <core:Item key="已收货" text="已收货" />
+                                <core:Item key="已取消" text="已取消" />
+                            </items>
+                        </Select>
                         <Label text="物料" />
-                        <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
+                        <Select selectedKey="{purchaseOrders>materialId}" change="onPricingConditionChange" items="{materials>/materials}">
+                            <items>
+                                <core:Item key="{materials>id}" text="{= ${materials>id} + ' - ' + ${materials>name}}" />
+                            </items>
+                        </Select>
                         <Label text="供应商" />
-                        <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
+                        <Select selectedKey="{purchaseOrders>supplierId}" change="onPricingConditionChange" items="{suppliers>/suppliers}">
+                            <items>
+                                <core:Item key="{suppliers>id}" text="{= ${suppliers>id} + ' - ' + ${suppliers>name}}" />
+                            </items>
+                        </Select>
+                        <Label text="{i18n>poQuantity}" />
+                        <Input value="{purchaseOrders>quantity}" type="Number" liveChange="onPricingConditionChange" />
+                        <Label text="{i18n>poUnitPrice}" />
+                        <Input value="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>unitPrice}}" editable="false" />
+                        <Label text="{i18n>poAmount}" />
+                        <Input value="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" editable="false" />
+                        <Label text="{i18n>poPriceRecord}" />
+                        <Input value="{purchaseOrders>priceRecordId}" editable="false" />
+                        <Label text="{i18n>poPricePeriod}" />
+                        <Input value="{= ${purchaseOrders>priceValidFrom} &amp;&amp; ${purchaseOrders>priceValidTo} ? ${purchaseOrders>priceValidFrom} + ' 至 ' + ${purchaseOrders>priceValidTo} : '未匹配到有效价格'}" editable="false" />
+                        <Label text="{i18n>priceMatchStatus}" />
+                        <ObjectStatus text="{purchaseOrders>priceStatusText}" state="{purchaseOrders>priceStatusState}" />
+                        <Label text="{i18n>poLowestPrice}" />
+                        <Input value="{= ${purchaseOrders>lowestMarketSupplierName} ? ${purchaseOrders>lowestMarketSupplierName} + ' / ' + ${purchaseOrders>currency} + ' ' + ${purchaseOrders>lowestMarketPrice} : '暂无可比价格'}" editable="false" />
+                        <Label text="{i18n>poBenchmark}" />
+                        <ObjectStatus text="{purchaseOrders>priceBenchmarkText}" state="{purchaseOrders>priceBenchmarkState}" />
                         <Label text="{i18n>deliveryId}" />
                         <Input value="{purchaseOrders>deliveryPlanId}" editable="false" />
                     </f:content>

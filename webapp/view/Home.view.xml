@@ -53,6 +53,11 @@
                         type="Navigation" 
                         press="onNavigateToQuoteManagement" />
                     <StandardListItem 
+                        title="{i18n>menuPriceLibrary}" 
+                        icon="sap-icon://money-bills" 
+                        type="Navigation" 
+                        press="onNavigateToPriceLibrary" />
+                    <StandardListItem 
                         id="processManagementParent" 
                         title="流程管理" 
                         icon="{= ${view>/processMenuExpanded} ? 'sap-icon://navigation-up-arrow' : 'sap-icon://navigation-down-arrow'}" 

@@ -1,13 +1,15 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
-    "sap/m/MessageToast"
-], function (Controller, History, MessageToast) {
+    "sap/m/MessageToast",
+    "myapp/model/models"
+], function (Controller, History, MessageToast, models) {
     "use strict";
 
     return Controller.extend("myapp.controller.PurchaseOrderDetail", {
 
         onInit: function () {
+            this.getView().setModel(this.getOwnerComponent().getModel("purchaseOrders"), "purchaseOrders");
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("RoutePurchaseOrderDetail").attachPatternMatched(this._onObjectMatched, this);
         },
@@ -20,8 +22,9 @@ sap.ui.define([
                 return item.id === sOrderId;
             });
             if (oOrder) {
+                this._iOrderIndex = aOrders.indexOf(oOrder);
                 this.getView().bindElement({
-                    path: "/purchaseOrders/" + aOrders.indexOf(oOrder),
+                    path: "/purchaseOrders/" + this._iOrderIndex,
                     model: "purchaseOrders"
                 });
             }
@@ -39,8 +42,27 @@ sap.ui.define([
         },
 
         onSave: function () {
+            models.syncPurchaseOrderPricing(
+                this.getOwnerComponent().getModel("purchaseOrders"),
+                this.getOwnerComponent().getModel("priceLibrary"),
+                this.getOwnerComponent().getModel("suppliers"),
+                this.getOwnerComponent().getModel("materials")
+            );
             MessageToast.show("采购订单保存成功");
             this.onNavBack();
+        },
+
+        onPricingConditionChange: function () {
+            if (this._iOrderIndex === undefined || this._iOrderIndex < 0) {
+                return;
+            }
+
+            models.syncPurchaseOrderPricing(
+                this.getOwnerComponent().getModel("purchaseOrders"),
+                this.getOwnerComponent().getModel("priceLibrary"),
+                this.getOwnerComponent().getModel("suppliers"),
+                this.getOwnerComponent().getModel("materials")
+            );
         },
 
         onCancel: function () {

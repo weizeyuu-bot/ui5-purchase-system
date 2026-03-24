@@ -51,19 +51,167 @@ sap.ui.define([
             return new JSONModel(oData);
         },
 
+        createPriceLibraryModel: function () {
+            var oData = {
+                priceRecords: [
+                    {
+                        id: "PR001",
+                        supplierId: "SUP001",
+                        supplierName: "ABC Supplies",
+                        materialId: "MAT001",
+                        materialName: "钢材",
+                        unit: "吨",
+                        validFrom: "2026-01-01",
+                        validTo: "2026-03-31",
+                        unitPrice: 4280,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "Q1框架协议价"
+                    },
+                    {
+                        id: "PR002",
+                        supplierId: "SUP001",
+                        supplierName: "ABC Supplies",
+                        materialId: "MAT007",
+                        materialName: "玻璃",
+                        unit: "片",
+                        validFrom: "2026-02-01",
+                        validTo: "2026-04-30",
+                        unitPrice: 86,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "月度执行价"
+                    },
+                    {
+                        id: "PR003",
+                        supplierId: "SUP002",
+                        supplierName: "XYZ Corp",
+                        materialId: "MAT002",
+                        materialName: "水泥",
+                        unit: "袋",
+                        validFrom: "2026-02-15",
+                        validTo: "2026-03-31",
+                        unitPrice: 32,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "区域集采价"
+                    },
+                    {
+                        id: "PR004",
+                        supplierId: "SUP002",
+                        supplierName: "XYZ Corp",
+                        materialId: "MAT008",
+                        materialName: "螺栓",
+                        unit: "箱",
+                        validFrom: "2026-03-01",
+                        validTo: "2026-06-30",
+                        unitPrice: 145,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "季度锁价"
+                    },
+                    {
+                        id: "PR005",
+                        supplierId: "SUP003",
+                        supplierName: "Global Traders",
+                        materialId: "MAT003",
+                        materialName: "砂",
+                        unit: "吨",
+                        validFrom: "2026-03-01",
+                        validTo: "2026-03-31",
+                        unitPrice: 118,
+                        currency: "CNY",
+                        taxRate: 9,
+                        remark: "现货价"
+                    },
+                    {
+                        id: "PR006",
+                        supplierId: "SUP003",
+                        supplierName: "Global Traders",
+                        materialId: "MAT009",
+                        materialName: "管道",
+                        unit: "米",
+                        validFrom: "2026-03-10",
+                        validTo: "2026-05-31",
+                        unitPrice: 54,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "重点项目价"
+                    },
+                    {
+                        id: "PR007",
+                        supplierId: "SUP004",
+                        supplierName: "Tech Solutions",
+                        materialId: "MAT004",
+                        materialName: "电缆",
+                        unit: "卷",
+                        validFrom: "2026-03-01",
+                        validTo: "2026-04-15",
+                        unitPrice: 620,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "含运包干价"
+                    },
+                    {
+                        id: "PR008",
+                        supplierId: "SUP004",
+                        supplierName: "Tech Solutions",
+                        materialId: "MAT010",
+                        materialName: "绝缘材料",
+                        unit: "卷",
+                        validFrom: "2026-03-01",
+                        validTo: "2026-04-30",
+                        unitPrice: 210,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "框架协议价"
+                    },
+                    {
+                        id: "PR009",
+                        supplierId: "SUP005",
+                        supplierName: "Build Masters",
+                        materialId: "MAT005",
+                        materialName: "油漆",
+                        unit: "桶",
+                        validFrom: "2026-02-20",
+                        validTo: "2026-03-20",
+                        unitPrice: 265,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "阶段促销价"
+                    },
+                    {
+                        id: "PR010",
+                        supplierId: "SUP006",
+                        supplierName: "Food Essentials",
+                        materialId: "MAT006",
+                        materialName: "木方",
+                        unit: "米",
+                        validFrom: "2026-03-01",
+                        validTo: "2026-06-30",
+                        unitPrice: 18,
+                        currency: "CNY",
+                        taxRate: 13,
+                        remark: "长期合作价"
+                    }
+                ]
+            };
+            return new JSONModel(oData);
+        },
+
         createPurchaseOrderModel: function () {
             var oData = {
                 purchaseOrders: [
-                    { id: "PO001", vendor: "ABC Supplies", date: "2026-03-01", status: "已下单", materialId: "MAT001", supplierId: "SUP001" },
-                    { id: "PO002", vendor: "XYZ Corp", date: "2026-03-05", status: "已收货", materialId: "MAT002", supplierId: "SUP002" },
-                    { id: "PO003", vendor: "Global Traders", date: "2026-03-08", status: "处理中", materialId: "MAT003", supplierId: "SUP003" },
-                    { id: "PO004", vendor: "Tech Solutions", date: "2026-03-10", status: "已下单", materialId: "MAT004", supplierId: "SUP004" },
-                    { id: "PO005", vendor: "Build Masters", date: "2026-03-12", status: "已取消", materialId: "MAT005", supplierId: "SUP005" },
-                    { id: "PO006", vendor: "Food Essentials", date: "2026-03-14", status: "已下单", materialId: "MAT006", supplierId: "SUP006" },
-                    { id: "PO007", vendor: "Auto Parts Inc", date: "2026-03-15", status: "已收货", materialId: "MAT007", supplierId: "SUP001" },
-                    { id: "PO008", vendor: "Fashion Hub", date: "2026-03-17", status: "处理中", materialId: "MAT008", supplierId: "SUP002" },
-                    { id: "PO009", vendor: "Health Supplies", date: "2026-03-18", status: "已下单", materialId: "MAT009", supplierId: "SUP003" },
-                    { id: "PO010", vendor: "Office Depot", date: "2026-03-19", status: "已下单", materialId: "MAT010", supplierId: "SUP004" }
+                    { id: "PO001", vendor: "ABC Supplies", date: "2026-03-01", status: "已下单", materialId: "MAT001", supplierId: "SUP001", quantity: 12 },
+                    { id: "PO002", vendor: "XYZ Corp", date: "2026-03-05", status: "已收货", materialId: "MAT002", supplierId: "SUP002", quantity: 300 },
+                    { id: "PO003", vendor: "Global Traders", date: "2026-03-08", status: "处理中", materialId: "MAT003", supplierId: "SUP003", quantity: 80 },
+                    { id: "PO004", vendor: "Tech Solutions", date: "2026-03-10", status: "已下单", materialId: "MAT004", supplierId: "SUP004", quantity: 15 },
+                    { id: "PO005", vendor: "Build Masters", date: "2026-03-12", status: "已取消", materialId: "MAT005", supplierId: "SUP005", quantity: 40 },
+                    { id: "PO006", vendor: "Food Essentials", date: "2026-03-14", status: "已下单", materialId: "MAT006", supplierId: "SUP006", quantity: 500 },
+                    { id: "PO007", vendor: "ABC Supplies", date: "2026-03-15", status: "已收货", materialId: "MAT007", supplierId: "SUP001", quantity: 120 },
+                    { id: "PO008", vendor: "XYZ Corp", date: "2026-03-17", status: "处理中", materialId: "MAT008", supplierId: "SUP002", quantity: 30 },
+                    { id: "PO009", vendor: "Global Traders", date: "2026-03-18", status: "已下单", materialId: "MAT009", supplierId: "SUP003", quantity: 260 },
+                    { id: "PO010", vendor: "Tech Solutions", date: "2026-03-19", status: "已下单", materialId: "MAT010", supplierId: "SUP004", quantity: 22 }
                 ]
             };
             return new JSONModel(oData);
@@ -275,6 +423,169 @@ sap.ui.define([
                 }
             };
             return new JSONModel(oData);
+        },
+
+        getPriceRecordStatusInfo: function (sValidFrom, sValidTo, sToday) {
+            var iToday = Date.parse(sToday || new Date().toISOString().slice(0, 10));
+            var iValidFrom = Date.parse(sValidFrom || "");
+            var iValidTo = Date.parse(sValidTo || "");
+
+            if (Number.isNaN(iToday) || Number.isNaN(iValidFrom) || Number.isNaN(iValidTo)) {
+                return {
+                    statusText: "未知",
+                    statusState: "None"
+                };
+            }
+
+            if (iToday < iValidFrom) {
+                return {
+                    statusText: "未生效",
+                    statusState: "Information"
+                };
+            }
+
+            if (iToday > iValidTo) {
+                return {
+                    statusText: "已失效",
+                    statusState: "Error"
+                };
+            }
+
+            return {
+                statusText: "生效中",
+                statusState: "Success"
+            };
+        },
+
+        annotatePriceLibraryRecords: function (oPriceLibraryModel) {
+            if (!oPriceLibraryModel) {
+                return;
+            }
+
+            var aRecords = oPriceLibraryModel.getProperty("/priceRecords") || [];
+            aRecords.forEach(function (oRecord) {
+                var oStatus = this.getPriceRecordStatusInfo(oRecord.validFrom, oRecord.validTo);
+                oRecord.statusText = oStatus.statusText;
+                oRecord.statusState = oStatus.statusState;
+            }, this);
+
+            oPriceLibraryModel.refresh(true);
+        },
+
+        findEffectivePriceRecord: function (aPriceRecords, sSupplierId, sMaterialId, sOrderDate) {
+            var iOrderDate = Date.parse(sOrderDate || "");
+            if (!Array.isArray(aPriceRecords) || !sSupplierId || !sMaterialId || Number.isNaN(iOrderDate)) {
+                return null;
+            }
+
+            var aMatched = aPriceRecords.filter(function (oRecord) {
+                var iValidFrom = Date.parse(oRecord.validFrom || "");
+                var iValidTo = Date.parse(oRecord.validTo || "");
+                return oRecord.supplierId === sSupplierId &&
+                    oRecord.materialId === sMaterialId &&
+                    !Number.isNaN(iValidFrom) &&
+                    !Number.isNaN(iValidTo) &&
+                    iOrderDate >= iValidFrom &&
+                    iOrderDate <= iValidTo;
+            });
+
+            if (!aMatched.length) {
+                return null;
+            }
+
+            aMatched.sort(function (a, b) {
+                return Date.parse(b.validFrom) - Date.parse(a.validFrom);
+            });
+
+            return aMatched[0];
+        },
+
+        findLowestPriceRecordForMaterial: function (aPriceRecords, sMaterialId, sOrderDate) {
+            var iOrderDate = Date.parse(sOrderDate || "");
+            if (!Array.isArray(aPriceRecords) || !sMaterialId || Number.isNaN(iOrderDate)) {
+                return null;
+            }
+
+            var aMatched = aPriceRecords.filter(function (oRecord) {
+                var iValidFrom = Date.parse(oRecord.validFrom || "");
+                var iValidTo = Date.parse(oRecord.validTo || "");
+                return oRecord.materialId === sMaterialId &&
+                    !Number.isNaN(iValidFrom) &&
+                    !Number.isNaN(iValidTo) &&
+                    iOrderDate >= iValidFrom &&
+                    iOrderDate <= iValidTo;
+            });
+
+            if (!aMatched.length) {
+                return null;
+            }
+
+            aMatched.sort(function (a, b) {
+                return Number(a.unitPrice) - Number(b.unitPrice);
+            });
+
+            return aMatched[0];
+        },
+
+        syncPurchaseOrderPricing: function (oPurchaseOrderModel, oPriceLibraryModel, oSupplierModel, oMaterialModel) {
+            if (!oPurchaseOrderModel || !oPriceLibraryModel || !oSupplierModel || !oMaterialModel) {
+                return;
+            }
+
+            var aOrders = oPurchaseOrderModel.getProperty("/purchaseOrders") || [];
+            var aPrices = oPriceLibraryModel.getProperty("/priceRecords") || [];
+            var aSuppliers = oSupplierModel.getProperty("/suppliers") || [];
+            var aMaterials = oMaterialModel.getProperty("/materials") || [];
+
+            this.annotatePriceLibraryRecords(oPriceLibraryModel);
+
+            aOrders.forEach(function (oOrder) {
+                var oSupplier = aSuppliers.find(function (oItem) {
+                    return oItem.id === oOrder.supplierId;
+                });
+                var oMaterial = aMaterials.find(function (oItem) {
+                    return oItem.id === oOrder.materialId;
+                });
+                var oPrice = this.findEffectivePriceRecord(aPrices, oOrder.supplierId, oOrder.materialId, oOrder.date);
+                var oLowestPrice = this.findLowestPriceRecordForMaterial(aPrices, oOrder.materialId, oOrder.date);
+                var iQuantity = Number(oOrder.quantity || 0);
+                var iLowestPrice = oLowestPrice ? Number(oLowestPrice.unitPrice) : 0;
+
+                oOrder.vendor = oSupplier ? oSupplier.name : (oOrder.vendor || "");
+                oOrder.materialName = oMaterial ? oMaterial.name : "";
+                oOrder.unit = oMaterial ? oMaterial.unit : (oOrder.unit || "");
+                oOrder.unitPrice = oPrice ? Number(oPrice.unitPrice) : 0;
+                oOrder.currency = oPrice ? oPrice.currency : "CNY";
+                oOrder.priceRecordId = oPrice ? oPrice.id : "";
+                oOrder.priceRemark = oPrice ? oPrice.remark : "未匹配到有效价格";
+                oOrder.priceValidFrom = oPrice ? oPrice.validFrom : "";
+                oOrder.priceValidTo = oPrice ? oPrice.validTo : "";
+                oOrder.priceMatched = !!oPrice;
+                oOrder.priceStatusText = oPrice ? "已匹配" : "缺失";
+                oOrder.priceStatusState = oPrice ? "Success" : "Error";
+                oOrder.amount = oPrice ? (iQuantity * Number(oPrice.unitPrice)).toFixed(2) : "0.00";
+
+                oOrder.lowestPriceRecordId = oLowestPrice ? oLowestPrice.id : "";
+                oOrder.lowestMarketPrice = oLowestPrice ? iLowestPrice.toFixed(2) : "0.00";
+                oOrder.lowestMarketSupplierName = oLowestPrice ? oLowestPrice.supplierName : "";
+
+                if (!oPrice || !oLowestPrice) {
+                    oOrder.priceBenchmarkText = "暂无可比价格";
+                    oOrder.priceBenchmarkState = "None";
+                    return;
+                }
+
+                if (Number(oPrice.unitPrice) === iLowestPrice) {
+                    oOrder.priceBenchmarkText = "当前为最低价";
+                    oOrder.priceBenchmarkState = "Success";
+                    return;
+                }
+
+                oOrder.priceBenchmarkText = "高于最低价 " + (Number(oPrice.unitPrice) - iLowestPrice).toFixed(2);
+                oOrder.priceBenchmarkState = "Warning";
+            }, this);
+
+            oPurchaseOrderModel.refresh(true);
         },
 
         createSystemManagementModel: function () {

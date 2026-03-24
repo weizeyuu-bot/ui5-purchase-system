@@ -1,7 +1,8 @@
 <mvc:View
     controllerName="myapp.controller.PurchaseOrderList"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
     <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <subHeader>
             <Toolbar>
@@ -25,6 +26,15 @@
                         <Text text="{i18n>poStatus}" />
                     </Column>
                     <Column>
+                        <Text text="{i18n>poUnitPrice}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poAmount}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poBenchmark}" />
+                    </Column>
+                    <Column>
                         <Text text="物料" />
                     </Column>
                     <Column>
@@ -41,6 +51,9 @@
                             <Text text="{purchaseOrders>vendor}" />
                             <Text text="{purchaseOrders>date}" />
                             <Text text="{purchaseOrders>status}" />
+                            <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>unitPrice}}" />
+                            <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" />
+                            <ObjectStatus text="{purchaseOrders>priceBenchmarkText}" state="{purchaseOrders>priceBenchmarkState}" />
                             <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
                             <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
                             <HBox>
@@ -57,19 +70,46 @@
             <content>
                 <VBox class="sapUiContentPadding">
                     <Label text="订单号" required="true" />
-                    <Input id="poNumberInput" value="{oNewPO>/orderNumber}" />
+                    <Input id="poNumberInput" value="{oNewPO>/id}" editable="{= !${oNewPO>/id} || !${oNewPO>/priceRecordId}}" />
                     <Label text="供应商代码" />
-                    <Input id="poSupplierIdInput" value="{oNewPO>/supplierId}" />
+                    <Select selectedKey="{oNewPO>/supplierId}" change="onPricingConditionChange" items="{suppliers>/suppliers}">
+                        <items>
+                            <core:Item key="{suppliers>id}" text="{suppliers>name}" />
+                        </items>
+                    </Select>
                     <Label text="物料代码" />
-                    <Input id="poMaterialIdInput" value="{oNewPO>/materialId}" />
+                    <Select selectedKey="{oNewPO>/materialId}" change="onPricingConditionChange" items="{materials>/materials}">
+                        <items>
+                            <core:Item key="{materials>id}" text="{materials>name}" />
+                        </items>
+                    </Select>
                     <Label text="供应商名称" />
-                    <Input id="poVendorInput" value="{oNewPO>/vendor}" />
+                    <Input id="poVendorInput" value="{oNewPO>/vendor}" editable="false" />
+                    <Label text="下单日期" />
+                    <DatePicker value="{oNewPO>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" />
                     <Label text="订购数量" />
-                    <Input id="poQtyInput" value="{oNewPO>/quantity}" type="Number" />
+                    <Input id="poQtyInput" value="{oNewPO>/quantity}" type="Number" liveChange="onPricingConditionChange" />
+                    <Label text="单价" />
+                    <Input value="{= ${oNewPO>/currency} + ' ' + ${oNewPO>/unitPrice}}" editable="false" />
                     <Label text="金额" />
-                    <Input id="poAmountInput" value="{oNewPO>/amount}" type="Number" />
+                    <Input id="poAmountInput" value="{= ${oNewPO>/currency} + ' ' + ${oNewPO>/amount}}" editable="false" />
+                    <Label text="价格记录" />
+                    <Input value="{oNewPO>/priceRecordId}" editable="false" />
+                    <Label text="价格有效期" />
+                    <Input value="{= ${oNewPO>/priceValidFrom} &amp;&amp; ${oNewPO>/priceValidTo} ? ${oNewPO>/priceValidFrom} + ' 至 ' + ${oNewPO>/priceValidTo} : '未匹配到有效价格'}" editable="false" />
+                    <Label text="{i18n>poLowestPrice}" />
+                    <Input value="{= ${oNewPO>/lowestMarketSupplierName} ? ${oNewPO>/lowestMarketSupplierName} + ' / ' + ${oNewPO>/currency} + ' ' + ${oNewPO>/lowestMarketPrice} : '暂无可比价格'}" editable="false" />
+                    <Label text="{i18n>poBenchmark}" />
+                    <ObjectStatus text="{oNewPO>/priceBenchmarkText}" state="{oNewPO>/priceBenchmarkState}" />
                     <Label text="状态" />
-                    <Input id="poStatusInput" value="{oNewPO>/status}" />
+                    <Select selectedKey="{oNewPO>/status}">
+                        <items>
+                            <core:Item key="已下单" text="已下单" />
+                            <core:Item key="处理中" text="处理中" />
+                            <core:Item key="已收货" text="已收货" />
+                            <core:Item key="已取消" text="已取消" />
+                        </items>
+                    </Select>
                 </VBox>
             </content>
             <beginButton>

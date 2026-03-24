@@ -190,6 +190,13 @@
           ]
         },
         {
+          "name": "RoutePriceLibrary",
+          "pattern": "priceLibrary",
+          "target": [
+            "TargetPriceLibrary"
+          ]
+        },
+        {
           "name": "RouteUserDetail",
           "pattern": "userManagement/{username}",
           "target": [
@@ -329,6 +336,12 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewName": "QuoteManagement"
+        },
+        "TargetPriceLibrary": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewName": "PriceLibrary"
         },
         "TargetUserDetail": {
           "viewType": "XML",

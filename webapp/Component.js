@@ -22,6 +22,7 @@ sap.ui.define([
             this.setModel(models.createDeviceModel(), "device");
             this.setModel(models.createSupplierModel(), "suppliers");
             this.setModel(models.createMaterialModel(), "materials");
+            this.setModel(models.createPriceLibraryModel(), "priceLibrary");
             this.setModel(models.createPurchaseOrderModel(), "purchaseOrders");
             this.setModel(models.createDeliveryPlanModel(), "deliveryPlans");
             this.setModel(models.createInvoiceModel(), "invoices");
@@ -29,6 +30,13 @@ sap.ui.define([
             this.setModel(models.createProcessManagementModel(), "process");
             this.setModel(models.createUserManagementModel(), "users");
             this.setModel(models.createSystemManagementModel(), "system");
+
+            models.syncPurchaseOrderPricing(
+                this.getModel("purchaseOrders"),
+                this.getModel("priceLibrary"),
+                this.getModel("suppliers"),
+                this.getModel("materials")
+            );
 
             var oUserModel = models.createUserModel();
             this.setModel(oUserModel, "user");
