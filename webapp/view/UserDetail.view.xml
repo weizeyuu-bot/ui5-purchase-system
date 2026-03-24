@@ -12,7 +12,7 @@
                 <Title text="{i18n>userDetailTitle}" level="H1" />
                 <HBox class="sapUiSmallMarginTop">
                     <ObjectStatus 
-                        text="{users>status}"
+                        text="{ path: 'users>status', formatter: '.formatUserStatusText' }"
                         state="{users>statusState}" />
                     <Text text="ID: {users>username}" class="sapUiSmallMargin" />
                 </HBox>
@@ -60,9 +60,9 @@
                                     <form:fields>
                                         <Select selectedKey="{users>status}" enabled="{ui>/editMode}" change="onStatusChange">
                                             <items>
-                                                <core:Item key="活跃" text="活跃" />
-                                                <core:Item key="不活跃" text="不活跃" />
-                                                <core:Item key="禁用" text="禁用" />
+                                                <core:Item key="ACTIVE" text="{i18n>statusActive}" />
+                                                <core:Item key="INACTIVE" text="{i18n>statusInactive}" />
+                                                <core:Item key="DISABLED" text="{i18n>statusDisabled}" />
                                             </items>
                                         </Select>
                                     </form:fields>

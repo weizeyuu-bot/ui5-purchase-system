@@ -9,11 +9,14 @@
             <Title text="{i18n>userManagementTitle}" level="H1" class="sapUiLargeMargin" />
             
             <!-- Search Bar -->
-            <HBox spacing="1rem" class="sapUiLargeMargin sapUiMediumMarginBottom">
+            <HBox class="sapUiLargeMargin sapUiMediumMarginBottom">
                 <SearchField 
+                    id="userSearchField"
                     placeholder="{i18n>searchUsers}" 
                     width="300px"
-                    search="onSearch" />
+                    search="onSearch"
+                    liveChange="onSearch" />
+                <HBox/>
                 <Button 
                     text="{i18n>addButton}" 
                     icon="sap-icon://add" 
@@ -23,6 +26,7 @@
 
             <!-- Users Table -->
             <Table 
+                id="usersTable"
                 items="{users>/registeredUsers}"
                 mode="SingleSelectMaster"
                 class="sapUiLargeMargin">
@@ -54,9 +58,9 @@
                             <Text text="{users>phone}" />
                             <Text text="{users>registrationDate}" />
                             <ObjectStatus 
-                                text="{users>status}"
+                                text="{ path: 'users>status', formatter: '.formatUserStatusText' }"
                                 state="{users>statusState}" />
-                            <HBox spacing="0.5rem">
+                            <HBox>
                                 <Button 
                                     icon="sap-icon://detail-view"
                                     text="{i18n>viewButton}" 

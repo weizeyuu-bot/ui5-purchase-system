@@ -96,7 +96,7 @@ sap.ui.define([
 
             var that = this;
             var oUser = oContext.getObject();
-            MessageBox.confirm("确认删除用户: " + oUser.username + " ?", {
+            MessageBox.confirm(this._getText("userDeleteConfirm", [oUser.username]), {
                 onClose: function (sAction) {
                     if (sAction !== MessageBox.Action.OK) {
                         return;
@@ -110,7 +110,7 @@ sap.ui.define([
 
                     oUsersModel.setProperty("/registeredUsers", aNewUsers);
                     that._refreshUserStatistics();
-                    MessageToast.show("删除成功");
+                    MessageToast.show(that._getText("deleteSuccess"));
                 }
             });
         },
@@ -125,12 +125,12 @@ sap.ui.define([
                 phone: bEditMode ? (oUser.phone || "") : "",
                 department: bEditMode ? (oUser.department || "") : "",
                 role: bEditMode ? (oUser.role || "") : "",
-                status: bEditMode ? (oUser.status || "活跃") : "活跃"
+                status: bEditMode ? (oUser.status || "") : ""
             });
 
             if (!this._oUserDialog) {
                 this._oUserDialog = new Dialog({
-                    title: "用户信息",
+                    title: that._getText("userInfoDialogTitle"),
                     contentWidth: "460px",
                     content: [
                         new SimpleForm({
@@ -143,40 +143,42 @@ sap.ui.define([
                             columnsL: 1,
                             columnsM: 1,
                             content: [
-                                new Label({ text: "用户名" }),
+                                new Label({ text: that._getText("username") }),
                                 new Input({
                                     value: "{dialog>/username}",
                                     editable: "{= ${dialog>/mode} === 'add' }"
                                 }),
-                                new Label({ text: "邮箱" }),
+                                new Label({ text: that._getText("userEmail") }),
                                 new Input({ value: "{dialog>/email}" }),
-                                new Label({ text: "联系电话" }),
+                                new Label({ text: that._getText("userPhone") }),
                                 new Input({ value: "{dialog>/phone}" }),
-                                new Label({ text: "部门" }),
+                                new Label({ text: that._getText("department") }),
                                 new Input({ value: "{dialog>/department}" }),
-                                new Label({ text: "角色" }),
+                                new Label({ text: that._getText("role") }),
                                 new Input({ value: "{dialog>/role}" }),
-                                new Label({ text: "状态" }),
+                                new Label({ text: that._getText("status") }),
                                 new Select({
                                     selectedKey: "{dialog>/status}",
+                                    forceSelection: false,
                                     items: [
-                                        new Item({ key: "活跃", text: "活跃" }),
-                                        new Item({ key: "不活跃", text: "不活跃" }),
-                                        new Item({ key: "禁用", text: "禁用" })
+                                        new Item({ key: "", text: that._getText("pleaseSelect") }),
+                                        new Item({ key: "ACTIVE", text: that._getText("statusActive") }),
+                                        new Item({ key: "INACTIVE", text: that._getText("statusInactive") }),
+                                        new Item({ key: "DISABLED", text: that._getText("statusDisabled") })
                                     ]
                                 })
                             ]
                         })
                     ],
                     beginButton: new Button({
-                        text: "保存",
+                        text: that._getText("saveButton"),
                         type: "Emphasized",
                         press: function () {
                             that._onSaveDialogUser();
                         }
                     }),
                     endButton: new Button({
-                        text: "取消",
+                        text: that._getText("cancelButton"),
                         press: function () {
                             that._oUserDialog.close();
                         }
@@ -196,18 +198,18 @@ sap.ui.define([
             var oUsersModel = this.getView().getModel("users");
             var aUsers = oUsersModel.getProperty("/registeredUsers") || [];
 
-            if (!oData.username || !oData.email || !oData.phone || !oData.department || !oData.role) {
-                MessageToast.show("请完整填写所有字段");
+            if (!oData.username || !oData.email || !oData.phone || !oData.department || !oData.role || !oData.status) {
+                MessageToast.show(this._getText("userAllFieldsRequired"));
                 return;
             }
 
             if (!this._isValidEmail(oData.email)) {
-                MessageToast.show("邮箱格式不正确");
+                MessageToast.show(this._getText("userEmailInvalid"));
                 return;
             }
 
             if (!this._isValidPhone(oData.phone)) {
-                MessageToast.show("联系电话格式不正确");
+                MessageToast.show(this._getText("userPhoneInvalid"));
                 return;
             }
 
@@ -217,7 +219,7 @@ sap.ui.define([
 
             if (oData.mode === "add") {
                 if (iExistingIndex > -1) {
-                    MessageToast.show("用户名已存在");
+                    MessageToast.show(this._getText("usernameExists"));
                     return;
                 }
 
@@ -234,10 +236,10 @@ sap.ui.define([
                     loginCount: 0,
                     createdBy: this._getCurrentOperator()
                 });
-                MessageToast.show("新增成功");
+                MessageToast.show(this._getText("createSuccess"));
             } else {
                 if (iExistingIndex < 0) {
-                    MessageToast.show("用户不存在");
+                    MessageToast.show(this._getText("userNotFound"));
                     return;
                 }
 
@@ -250,7 +252,7 @@ sap.ui.define([
                     status: oData.status,
                     statusState: this._mapStatusToState(oData.status)
                 });
-                MessageToast.show("保存成功");
+                MessageToast.show(this._getText("saveSuccess"));
             }
 
             oUsersModel.setProperty("/registeredUsers", aUsers);
@@ -264,10 +266,10 @@ sap.ui.define([
             var oNow = new Date();
             var sMonthPrefix = oNow.getFullYear() + "-" + String(oNow.getMonth() + 1).padStart(2, "0");
             var iActive = aUsers.filter(function (oUser) {
-                return oUser.status === "活跃";
+                return oUser.status === "ACTIVE";
             }).length;
             var iInactive = aUsers.filter(function (oUser) {
-                return oUser.status === "不活跃";
+                return oUser.status === "INACTIVE";
             }).length;
             var iNewThisMonth = aUsers.filter(function (oUser) {
                 return typeof oUser.registrationDate === "string" && oUser.registrationDate.indexOf(sMonthPrefix) === 0;
@@ -288,16 +290,25 @@ sap.ui.define([
         },
 
         _mapStatusToState: function (sStatus) {
-            if (sStatus === "活跃") {
+            if (sStatus === "ACTIVE") {
                 return "Success";
             }
-            if (sStatus === "不活跃") {
+            if (sStatus === "INACTIVE") {
                 return "Warning";
             }
-            if (sStatus === "禁用") {
+            if (sStatus === "DISABLED") {
                 return "Error";
             }
             return "None";
+        },
+
+        formatUserStatusText: function (sStatus) {
+            var mKey = {
+                ACTIVE: "statusActive",
+                INACTIVE: "statusInactive",
+                DISABLED: "statusDisabled"
+            };
+            return this._getText(mKey[sStatus] || "status");
         },
 
         _todayString: function () {
@@ -311,6 +322,10 @@ sap.ui.define([
             var oUserModel = this.getOwnerComponent().getModel("user");
             var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
             return (oCurrentUser && oCurrentUser.username) || "admin";
+        },
+
+        _getText: function (sKey, aArgs) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey, aArgs);
         }
     });
 });

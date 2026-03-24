@@ -58,7 +58,7 @@
                             <Text text="{users>phone}" />
                             <Text text="{users>registrationDate}" />
                             <ObjectStatus 
-                                text="{users>status}"
+                                text="{ path: 'users>status', formatter: '.formatUserStatusText' }"
                                 state="{users>statusState}" />
                             <HBox>
                                 <Button 

@@ -84,11 +84,11 @@ sap.ui.define([
             var sTaxNumber = this.getView().byId("supplierTaxInput").getValue().trim();
 
             if (!sName) {
-                MessageBox.error("供应商名称为必填项，请填写！");
+                MessageBox.error(this._getText("supplierNameRequired"));
                 return;
             }
             if (!sTaxNumber) {
-                MessageBox.error("税号为必填项，请填写！");
+                MessageBox.error(this._getText("supplierTaxRequired"));
                 return;
             }
 
@@ -120,6 +120,10 @@ sap.ui.define([
             var iIndex = parseInt(sPath.split("/").pop(), 10);
             aSuppliers.splice(iIndex, 1);
             oModel.setProperty("/suppliers", aSuppliers);
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

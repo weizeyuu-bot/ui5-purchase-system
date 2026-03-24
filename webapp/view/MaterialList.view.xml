@@ -5,7 +5,7 @@
     <Page title="{i18n>materialListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <subHeader>
             <Toolbar>
-                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <Button icon="sap-icon://add" text="{i18n>btnAdd}" press="onAdd" type="Emphasized" />
                 <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
             </Toolbar>
         </subHeader>
@@ -37,8 +37,8 @@
                             <Text text="{materials>unit}" />
                             <Text text="{materials>stock}" />
                             <HBox>
-                                <Button text="查看" press="onViewPress" />
-                                <Button text="编辑" press="onEditPress" />
+                                <Button text="{i18n>viewButton}" press="onViewPress" />
+                                <Button text="{i18n>editButton}" press="onEditPress" />
                                 <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
                             </HBox>
                         </cells>
@@ -46,24 +46,24 @@
                 </items>
             </Table>
         </content>
-        <Dialog id="materialDialog" title="物料管理" type="Standard">
+        <Dialog id="materialDialog" title="{i18n>menuMaterials}" type="Standard">
             <content>
                 <VBox class="sapUiContentPadding">
-                    <Label text="物料名称" required="true" />
+                    <Label text="{i18n>materialName}" required="true" />
                     <Input id="materialNameInput" value="{oNewMaterial>/name}" />
-                    <Label text="规格" />
+                    <Label text="{i18n>materialSpec}" />
                     <Input id="materialSpecInput" value="{oNewMaterial>/spec}" />
-                    <Label text="单位" />
+                    <Label text="{i18n>materialUnit}" />
                     <Input id="materialUnitInput" value="{oNewMaterial>/unit}" />
-                    <Label text="库存" />
+                    <Label text="{i18n>materialStockShort}" />
                     <Input id="materialStockInput" value="{oNewMaterial>/stock}" type="Number" />
                 </VBox>
             </content>
             <beginButton>
-                <Button text="保存" press="onDialogSave" type="Emphasized" />
+                <Button text="{i18n>saveButton}" press="onDialogSave" type="Emphasized" />
             </beginButton>
             <endButton>
-                <Button text="取消" press="onDialogCancel" />
+                <Button text="{i18n>cancelButton}" press="onDialogCancel" />
             </endButton>
         </Dialog>
     </Page>

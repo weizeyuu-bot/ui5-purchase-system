@@ -21,8 +21,17 @@ sap.ui.define([
             var oSelectedItem = oComboBox.getSelectedItem();
             if (oSelectedItem) {
                 var sLevel = oSelectedItem.getText();
-                MessageToast.show("筛选日志等级: " + sLevel);
+                MessageToast.show(this.getOwnerComponent().getModel("i18n").getResourceBundle().getText("systemLogLevelFilter", [sLevel]));
             }
+        },
+
+        formatLoginStatusText: function (sStatus) {
+            var oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            var mKey = {
+                LOGGED_IN: "loginStatusLoggedIn",
+                LOGGED_OUT: "loginStatusLoggedOut"
+            };
+            return oBundle.getText(mKey[sStatus] || "loginStatus");
         }
     });
 });

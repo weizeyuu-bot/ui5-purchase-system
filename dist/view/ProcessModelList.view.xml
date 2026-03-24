@@ -3,15 +3,15 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Page title="流程模型" showNavButton="true" navButtonPress="onNavBack">
+    <Page title="{i18n>processModelTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
-            <Text text="流程模型列表" class="sapUiTinyMarginBottom" />
+            <Text text="{i18n>processModelListTitle}" class="sapUiTinyMarginBottom" />
             <Table items="{process>/processModels}">
                 <columns>
-                    <Column><Text text="模型ID" /></Column>
-                    <Column><Text text="模型名称" /></Column>
-                    <Column><Text text="版本" /></Column>
-                    <Column><Text text="状态" /></Column>
+                    <Column><Text text="{i18n>processModelId}" /></Column>
+                    <Column><Text text="{i18n>processModelName}" /></Column>
+                    <Column><Text text="{i18n>processModelVersion}" /></Column>
+                    <Column><Text text="{i18n>status}" /></Column>
                 </columns>
                 <items>
                     <ColumnListItem>
@@ -19,7 +19,7 @@
                             <Text text="{process>id}" />
                             <Text text="{process>name}" />
                             <Text text="{process>version}" />
-                            <Text text="{process>status}" />
+                            <Text text="{= ${process>status} === 'PUBLISHED' ? ${i18n>processStatusPublished} : ${process>status} === 'TESTING' ? ${i18n>processStatusTesting} : ${process>status} }" />
                         </cells>
                     </ColumnListItem>
                 </items>

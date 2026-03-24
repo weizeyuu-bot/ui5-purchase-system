@@ -3,6 +3,19 @@
 <head>
     <meta charset="utf-8">
     <title>My UI5 Application</title>
+    <script>
+        (function () {
+            var savedLang = localStorage.getItem("app-language");
+            if (savedLang) {
+                var urlParams = new URLSearchParams(window.location.search);
+                if ((urlParams.get("sap-language") || "").toUpperCase() !== savedLang.toUpperCase()) {
+                    var url = new URL(window.location.href);
+                    url.searchParams.set("sap-language", savedLang);
+                    window.location.replace(url.toString());
+                }
+            }
+        })();
+    </script>
     <script
         id="sap-ui-bootstrap"
         src="resources/sap-ui-core.js"

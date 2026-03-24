@@ -4,16 +4,16 @@
     xmlns="sap.m"
     xmlns:layout="sap.ui.layout"
     xmlns:core="sap.ui.core">
-    <Page title="流程管理" showNavButton="true" navButtonPress="onNavBack">
+    <Page title="{i18n>processManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding">
             <TabContainer id="processTabContainer" selectedKey="categories">
                 <items>
-                    <TabContainerItem key="categories" name="流程分类">
+                    <TabContainerItem key="categories" name="{i18n>processCategoriesTitle}">
                         <content>
                             <Table items="{process>/processCategories}">
                                 <columns>
-                                    <Column><Text text="分类ID" /></Column>
-                                    <Column><Text text="分类名称" /></Column>
+                                    <Column><Text text="{i18n>processCategoryId}" /></Column>
+                                    <Column><Text text="{i18n>processCategoryName}" /></Column>
                                 </columns>
                                 <items>
                                     <ColumnListItem>
@@ -26,13 +26,13 @@
                             </Table>
                         </content>
                     </TabContainerItem>
-                    <TabContainerItem key="forms" name="表单配置">
+                    <TabContainerItem key="forms" name="{i18n>formConfigTitle}">
                         <content>
                             <Table items="{process>/formConfigs}">
                             <columns>
-                                <Column><Text text="表单ID" /></Column>
-                                <Column><Text text="表单名称" /></Column>
-                                <Column><Text text="字段" /></Column>
+                                <Column><Text text="{i18n>formId}" /></Column>
+                                <Column><Text text="{i18n>formName}" /></Column>
+                                <Column><Text text="{i18n>formFields}" /></Column>
                             </columns>
                             <items>
                                 <ColumnListItem>
@@ -46,14 +46,14 @@
                         </Table>
                         </content>
                     </TabContainerItem>
-                    <TabContainerItem key="models" name="流程模型">
+                    <TabContainerItem key="models" name="{i18n>processModelTitle}">
                         <content>
                             <Table items="{process>/processModels}">
                             <columns>
-                                <Column><Text text="模型ID" /></Column>
-                                <Column><Text text="模型名称" /></Column>
-                                <Column><Text text="版本" /></Column>
-                                <Column><Text text="状态" /></Column>
+                                <Column><Text text="{i18n>processModelId}" /></Column>
+                                <Column><Text text="{i18n>processModelName}" /></Column>
+                                <Column><Text text="{i18n>processModelVersion}" /></Column>
+                                <Column><Text text="{i18n>status}" /></Column>
                             </columns>
                             <items>
                                 <ColumnListItem>
@@ -61,21 +61,21 @@
                                         <Text text="{process>id}" />
                                         <Text text="{process>name}" />
                                         <Text text="{process>version}" />
-                                        <Text text="{process>status}" />
+                                        <Text text="{= ${process>status} === 'PUBLISHED' ? ${i18n>processStatusPublished} : ${process>status} === 'TESTING' ? ${i18n>processStatusTesting} : ${process>status} }" />
                                     </cells>
                                 </ColumnListItem>
                             </items>
                         </Table>
                         </content>
                     </TabContainerItem>
-                    <TabContainerItem key="deployment" name="部署管理">
+                    <TabContainerItem key="deployment" name="{i18n>deploymentManagementTitle}">
                         <content>
                             <Table items="{process>/deployments}">
                             <columns>
-                                <Column><Text text="部署ID" /></Column>
-                                <Column><Text text="模型名称" /></Column>
-                                <Column><Text text="部署时间" /></Column>
-                                <Column><Text text="状态" /></Column>
+                                <Column><Text text="{i18n>deploymentId}" /></Column>
+                                <Column><Text text="{i18n>processModelName}" /></Column>
+                                <Column><Text text="{i18n>deploymentTime}" /></Column>
+                                <Column><Text text="{i18n>status}" /></Column>
                             </columns>
                             <items>
                                 <ColumnListItem>
@@ -83,7 +83,7 @@
                                         <Text text="{process>id}" />
                                         <Text text="{process>modelName}" />
                                         <Text text="{process>deployTime}" />
-                                        <ObjectStatus text="{process>status}" state="{= ${process>status} === '成功' ? 'Success' : ${process>status} === '失败' ? 'Error' : 'Information' }" />
+                                        <ObjectStatus text="{= ${process>status} === 'SUCCESS' ? ${i18n>deployStatusSuccess} : ${process>status} === 'FAILED' ? ${i18n>deployStatusFailed} : ${process>status} }" state="{= ${process>status} === 'SUCCESS' ? 'Success' : ${process>status} === 'FAILED' ? 'Error' : 'Information' }" />
                                     </cells>
                                 </ColumnListItem>
                             </items>

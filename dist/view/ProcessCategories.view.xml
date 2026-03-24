@@ -3,13 +3,13 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Page title="流程分类" showNavButton="true" navButtonPress="onNavBack">
+    <Page title="{i18n>processCategoriesTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
-            <Text text="流程分类列表" class="sapUiTinyMarginBottom" />
+            <Text text="{i18n>processCategoriesListTitle}" class="sapUiTinyMarginBottom" />
             <Table items="{process>/processCategories}">
                 <columns>
-                    <Column><Text text="分类编号" /></Column>
-                    <Column><Text text="分类名称" /></Column>
+                    <Column><Text text="{i18n>processCategoryId}" /></Column>
+                    <Column><Text text="{i18n>processCategoryName}" /></Column>
                 </columns>
                 <items>
                     <ColumnListItem>

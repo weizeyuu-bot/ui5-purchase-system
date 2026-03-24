@@ -1,11 +1,12 @@
 <mvc:View
     controllerName="myapp.controller.PurchaseOrderList"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
     <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <subHeader>
             <Toolbar>
-                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <Button icon="sap-icon://add" text="{i18n>btnAdd}" press="onAdd" type="Emphasized" />
                 <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
             </Toolbar>
         </subHeader>
@@ -25,13 +26,16 @@
                         <Text text="{i18n>poStatus}" />
                     </Column>
                     <Column>
-                        <Text text="物料" />
+                        <Text text="{i18n>poItemCount}" />
                     </Column>
                     <Column>
-                        <Text text="供应商" />
+                        <Text text="{i18n>poTotalQuantity}" />
                     </Column>
                     <Column>
-                        <Text text="Actions" />
+                        <Text text="{i18n>poAmount}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>actions}" />
                     </Column>
                 </columns>
                 <items>
@@ -40,12 +44,13 @@
                             <Text text="{purchaseOrders>id}" />
                             <Text text="{purchaseOrders>vendor}" />
                             <Text text="{purchaseOrders>date}" />
-                            <Text text="{purchaseOrders>status}" />
-                            <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
-                            <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
+                            <Text text="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusText' }" />
+                            <Text text="{purchaseOrders>itemCount}" />
+                            <Text text="{purchaseOrders>totalQuantity}" />
+                            <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" />
                             <HBox>
-                                <Button text="查看" press="onViewPress" />
-                                <Button text="编辑" press="onEditPress" />
+                                <Button text="{i18n>viewButton}" press="onViewPress" />
+                                <Button text="{i18n>editButton}" press="onEditPress" />
                                 <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
                             </HBox>
                         </cells>
@@ -53,30 +58,88 @@
                 </items>
             </Table>
         </content>
-        <Dialog id="poDialog" title="采购订单管理" type="Standard">
+        <Dialog id="poDialog" title="{i18n>menuPurchaseOrders}" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
-                    <Label text="订单号" required="true" />
-                    <Input id="poNumberInput" value="{oNewPO>/orderNumber}" />
-                    <Label text="供应商代码" />
-                    <Input id="poSupplierIdInput" value="{oNewPO>/supplierId}" />
-                    <Label text="物料代码" />
-                    <Input id="poMaterialIdInput" value="{oNewPO>/materialId}" />
-                    <Label text="供应商名称" />
-                    <Input id="poVendorInput" value="{oNewPO>/vendor}" />
-                    <Label text="订购数量" />
-                    <Input id="poQtyInput" value="{oNewPO>/quantity}" type="Number" />
-                    <Label text="金额" />
-                    <Input id="poAmountInput" value="{oNewPO>/amount}" type="Number" />
-                    <Label text="状态" />
-                    <Input id="poStatusInput" value="{oNewPO>/status}" />
+                <VBox class="sapUiContentPadding">
+                    <Panel headerText="{i18n>poHeaderSection}">
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="{i18n>poId}" required="true" />
+                            <Input id="poNumberInput" value="{oNewPO>/id}" />
+                            <Label text="{i18n>supplierId}" />
+                            <Select selectedKey="{oNewPO>/supplierId}" change="onPricingConditionChange" items="{oNewPO>/supplierOptions}" forceSelection="false">
+                                <items>
+                                    <core:Item key="{oNewPO>id}" text="{= ${oNewPO>id} ? ${oNewPO>id} + ' - ' + ${oNewPO>name} : ${oNewPO>name} }" />
+                                </items>
+                            </Select>
+                            <Label text="{i18n>poDate}" />
+                            <DatePicker value="{oNewPO>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" />
+                            <Label text="{i18n>status}" />
+                            <Select selectedKey="{oNewPO>/status}" forceSelection="false">
+                                <items>
+                                    <core:Item key="" text="{i18n>pleaseSelect}" />
+                                    <core:Item key="ORDERED" text="{i18n>statusOrderPlaced}" />
+                                    <core:Item key="PROCESSING" text="{i18n>statusProcessing}" />
+                                    <core:Item key="RECEIVED" text="{i18n>statusReceived}" />
+                                    <core:Item key="CANCELLED" text="{i18n>statusCancelled}" />
+                                </items>
+                            </Select>
+                            <Label text="{i18n>poItemCount}" />
+                            <Input value="{oNewPO>/itemCount}" editable="false" />
+                            <Label text="{i18n>poTotalQuantity}" />
+                            <Input value="{oNewPO>/totalQuantity}" editable="false" />
+                            <Label text="{i18n>poAmount}" />
+                            <Input id="poAmountInput" value="{= ${oNewPO>/currency} + ' ' + ${oNewPO>/amount}}" editable="false" />
+                        </VBox>
+                    </Panel>
+
+                    <Panel headerText="{i18n>poLineItemsSection}" class="sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="{i18n>poLineItemsSection}" level="H4" />
+                                <ToolbarSpacer />
+                                <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddDraftItem" />
+                            </Toolbar>
+                        </headerToolbar>
+                        <Table items="{oNewPO>/items}">
+                            <columns>
+                                <Column><Text text="{i18n>poLineNo}" /></Column>
+                                <Column><Text text="{i18n>materialId}" /></Column>
+                                <Column><Text text="{i18n>poQuantity}" /></Column>
+                                <Column><Text text="{i18n>unit}" /></Column>
+                                <Column><Text text="{i18n>poUnitPrice}" /></Column>
+                                <Column><Text text="{i18n>poAmount}" /></Column>
+                                <Column><Text text="{i18n>priceMatchStatus}" /></Column>
+                                <Column><Text text="{i18n>poBenchmark}" /></Column>
+                                <Column><Text text="{i18n>actions}" /></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{oNewPO>lineId}" />
+                                        <Select selectedKey="{oNewPO>materialId}" change="onPricingConditionChange" items="{oNewPO>/materialOptions}" forceSelection="false">
+                                            <items>
+                                                <core:Item key="{oNewPO>id}" text="{= ${oNewPO>id} ? ${oNewPO>id} + ' - ' + ${oNewPO>name} : ${oNewPO>name} }" />
+                                            </items>
+                                        </Select>
+                                        <Input value="{oNewPO>quantity}" type="Number" liveChange="onPricingConditionChange" />
+                                        <Text text="{oNewPO>unit}" />
+                                        <Text text="{= ${oNewPO>currency} + ' ' + ${oNewPO>unitPrice}}" />
+                                        <Text text="{= ${oNewPO>currency} + ' ' + ${oNewPO>amount}}" />
+                                        <ObjectStatus text="{ path: 'oNewPO>priceStatusText', formatter: '.formatPriceMatchText' }" state="{oNewPO>priceStatusState}" />
+                                        <ObjectStatus text="{oNewPO>priceBenchmarkText}" state="{oNewPO>priceBenchmarkState}" />
+                                        <Button icon="sap-icon://delete" type="Reject" press="onDeleteDraftItem" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </Panel>
                 </VBox>
             </content>
             <beginButton>
-                <Button text="保存" press="onDialogSave" type="Emphasized" />
+                <Button text="{i18n>saveButton}" press="onDialogSave" type="Emphasized" />
             </beginButton>
             <endButton>
-                <Button text="取消" press="onDialogCancel" />
+                <Button text="{i18n>cancelButton}" press="onDialogCancel" />
             </endButton>
         </Dialog>
     </Page>

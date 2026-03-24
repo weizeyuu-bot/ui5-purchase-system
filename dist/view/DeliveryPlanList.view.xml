@@ -1,11 +1,12 @@
 <mvc:View
     controllerName="myapp.controller.DeliveryPlanList"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
     <Page title="{i18n>deliveryPlanListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <subHeader>
             <Toolbar>
-                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <Button icon="sap-icon://add" text="{i18n>btnAdd}" press="onAdd" type="Emphasized" />
                 <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
             </Toolbar>
         </subHeader>
@@ -24,17 +25,25 @@
                     <Column>
                         <Text text="{i18n>poId}" />
                     </Column>
+                    <Column>
+                        <Text text="{i18n>poItemCount}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poTotalQuantity}" />
+                    </Column>
                 </columns>
                 <items>
                     <ColumnListItem type="Navigation" press="onItemPress">
                         <cells>
                             <Text text="{deliveryPlans>id}" />
                             <Text text="{deliveryPlans>date}" />
-                            <Text text="{deliveryPlans>status}" />
+                            <Text text="{ path: 'deliveryPlans>status', formatter: '.formatDeliveryStatusText' }" />
                             <Link text="{deliveryPlans>purchaseOrderId}" press="onNavigateToPurchaseOrder" />
+                            <Text text="{deliveryPlans>itemCount}" />
+                            <Text text="{deliveryPlans>totalQuantity}" />
                             <HBox>
-                                <Button text="查看" press="onViewPress" />
-                                <Button text="编辑" press="onEditPress" />
+                                <Button text="{i18n>viewButton}" press="onViewPress" />
+                                <Button text="{i18n>editButton}" press="onEditPress" />
                                 <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />
                             </HBox>
                         </cells>
@@ -42,26 +51,70 @@
                 </items>
             </Table>
         </content>
-        <Dialog id="dpDialog" title="送货计划管理" type="Standard">
+        <Dialog id="dpDialog" title="{i18n>menuDeliveryPlans}" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
-                    <Label text="计划号" required="true" />
-                    <Input id="dpPlanNumberInput" value="{oNewDP>/planNumber}" />
-                    <Label text="采购订单" />
-                    <Input id="dpPOInput" value="{oNewDP>/purchaseOrderId}" />
-                    <Label text="送货日期" />
-                    <Input id="dpDateInput" value="{oNewDP>/deliveryDate}" />
-                    <Label text="数量" />
-                    <Input id="dpQtyInput" value="{oNewDP>/quantity}" type="Number" />
-                    <Label text="状态" />
-                    <Input id="dpStatusInput" value="{oNewDP>/status}" />
+                <VBox class="sapUiContentPadding">
+                    <Panel headerText="{i18n>deliveryHeaderSection}">
+                        <VBox class="sapUiSmallMargin">
+                            <Label text="{i18n>deliveryId}" required="true" />
+                            <Input id="dpPlanNumberInput" value="{oNewDP>/planNumber}" />
+                            <Label text="{i18n>deliveryDate}" />
+                            <DatePicker value="{oNewDP>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" />
+                            <Label text="{i18n>status}" />
+                            <Select id="dpStatusInput" selectedKey="{oNewDP>/status}" forceSelection="false">
+                                <items>
+                                    <core:Item key="" text="{i18n>pleaseSelect}" />
+                                    <core:Item key="PENDING" text="{i18n>deliveryStatusPending}" />
+                                    <core:Item key="SHIPPED" text="{i18n>deliveryStatusShipped}" />
+                                    <core:Item key="IN_TRANSIT" text="{i18n>deliveryStatusInTransit}" />
+                                    <core:Item key="DELIVERED" text="{i18n>deliveryStatusDelivered}" />
+                                </items>
+                            </Select>
+                            <Label text="{i18n>poItemCount}" />
+                            <Input value="{oNewDP>/itemCount}" editable="false" />
+                            <Label text="{i18n>poTotalQuantity}" />
+                            <Input value="{oNewDP>/totalQuantity}" editable="false" />
+                        </VBox>
+                    </Panel>
+
+                    <Panel headerText="{i18n>deliveryLineItemsSection}" class="sapUiSmallMarginTop">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="{i18n>deliveryLineItemsSection}" level="H4" />
+                                <ToolbarSpacer />
+                                <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddDraftItem" />
+                            </Toolbar>
+                        </headerToolbar>
+                        <Table items="{oNewDP>/items}">
+                            <columns>
+                                <Column><Text text="{i18n>poLineNo}" /></Column>
+                                <Column><Text text="{i18n>poId}" /></Column>
+                                <Column><Text text="{i18n>poQuantity}" /></Column>
+                                <Column><Text text="{i18n>actions}" /></Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{oNewDP>lineId}" />
+                                        <Select selectedKey="{oNewDP>purchaseOrderId}" items="{oNewDP>/purchaseOrderOptions}" forceSelection="false" change="onDraftItemChange">
+                                            <items>
+                                                <core:Item key="{oNewDP>id}" text="{oNewDP>name}" />
+                                            </items>
+                                        </Select>
+                                        <Input value="{oNewDP>quantity}" type="Number" liveChange="onDraftItemChange" />
+                                        <Button icon="sap-icon://delete" type="Reject" press="onDeleteDraftItem" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </Panel>
                 </VBox>
             </content>
             <beginButton>
-                <Button text="保存" press="onDialogSave" type="Emphasized" />
+                <Button text="{i18n>saveButton}" press="onDialogSave" type="Emphasized" />
             </beginButton>
             <endButton>
-                <Button text="取消" press="onDialogCancel" />
+                <Button text="{i18n>cancelButton}" press="onDialogCancel" />
             </endButton>
         </Dialog>
     </Page>

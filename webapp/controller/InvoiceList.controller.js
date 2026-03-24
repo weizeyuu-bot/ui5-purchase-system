@@ -25,7 +25,9 @@ sap.ui.define([
             if (sQuery) {
                 var aFilters = [
                     new Filter("id", FilterOperator.Contains, sQuery),
-                    new Filter("status", FilterOperator.Contains, sQuery)
+                    new Filter("status", FilterOperator.Contains, sQuery),
+                    new Filter("purchaseOrderId", FilterOperator.Contains, sQuery),
+                    new Filter("deliveryPlanId", FilterOperator.Contains, sQuery)
                 ];
                 var oFilter = new Filter({
                     filters: aFilters,
@@ -60,7 +62,7 @@ sap.ui.define([
             var oItem = oButton.getParent().getParent();
             var sPath = oItem.getBindingContext("invoices").getPath();
             var oInvoice = this.getView().getModel("invoices").getProperty(sPath);
-            this._oNewInvoice = jQuery.extend({}, oInvoice);
+            this._oNewInvoice = this._createDraftFromInvoice(oInvoice);
             var oModel = new JSONModel(this._oNewInvoice);
             this.getView().setModel(oModel, "oNewInvoice");
             this._bIsEdit = true;
@@ -69,21 +71,93 @@ sap.ui.define([
         },
 
         onAdd: function () {
-            this._oNewInvoice = { invoiceNumber: "", purchaseOrderId: "", deliveryPlanId: "", amount: 0, status: "" };
+            this._oNewInvoice = this._createEmptyDraft();
             var oModel = new JSONModel(this._oNewInvoice);
             this.getView().setModel(oModel, "oNewInvoice");
             this._bIsEdit = false;
             this.getView().byId("invoiceDialog").open();
         },
 
+        onAddDraftItem: function () {
+            var oDraftModel = this.getView().getModel("oNewInvoice");
+            if (!oDraftModel) {
+                return;
+            }
+
+            var oDraft = oDraftModel.getData();
+            var aItems = oDraft.items || [];
+            aItems.push(this._createEmptyItem(this._buildLineId(aItems.length)));
+            oDraft.items = aItems;
+            this._syncDraftSummary(oDraft);
+            oDraftModel.refresh(true);
+        },
+
+        onDeleteDraftItem: function (oEvent) {
+            var oDraftModel = this.getView().getModel("oNewInvoice");
+            if (!oDraftModel) {
+                return;
+            }
+
+            var sPath = oEvent.getSource().getBindingContext("oNewInvoice").getPath();
+            var iItemIndex = parseInt(sPath.split("/").pop(), 10);
+            var oDraft = oDraftModel.getData();
+            var aItems = oDraft.items || [];
+
+            aItems.splice(iItemIndex, 1);
+            if (!aItems.length) {
+                aItems.push(this._createEmptyItem("10"));
+            }
+
+            aItems.forEach(function (oLine, iIndex) {
+                oLine.lineId = this._buildLineId(iIndex);
+            }, this);
+            oDraft.items = aItems;
+            this._syncDraftSummary(oDraft);
+            oDraftModel.refresh(true);
+        },
+
+        onDraftItemChange: function () {
+            var oDraftModel = this.getView().getModel("oNewInvoice");
+            if (!oDraftModel) {
+                return;
+            }
+            var oDraft = oDraftModel.getData();
+            this._syncDraftSummary(oDraft);
+            oDraftModel.refresh(true);
+        },
+
         onDialogSave: function () {
             // 验证必填项
             var sInvoiceNumber = this.getView().byId("invNumberInput").getValue().trim();
+            var aItems = this._oNewInvoice.items || [];
 
             if (!sInvoiceNumber) {
-                MessageBox.error("发票号为必填项，请填写！");
+                MessageBox.error(this._getText("invoiceIdRequired"));
                 return;
             }
+
+            if (!aItems.length || aItems.some(function (oLine) {
+                return !oLine.purchaseOrderId || !oLine.deliveryPlanId || !Number(oLine.amount || 0);
+            })) {
+                MessageBox.error(this._getText("invoiceItemRequired"));
+                return;
+            }
+
+            if (!this._oNewInvoice.status) {
+                MessageBox.error(this._getText("statusRequired"));
+                return;
+            }
+
+            this._oNewInvoice.id = sInvoiceNumber;
+            this._oNewInvoice.items = aItems.map(function (oLine, iIndex) {
+                return {
+                    lineId: this._buildLineId(iIndex),
+                    purchaseOrderId: oLine.purchaseOrderId,
+                    deliveryPlanId: oLine.deliveryPlanId,
+                    amount: Number(oLine.amount || 0)
+                };
+            }, this);
+            this._syncDraftSummary(this._oNewInvoice);
 
             var oInvoiceModel = this.getView().getModel("invoices");
             var aInvoices = oInvoiceModel.getProperty("/invoices");
@@ -91,8 +165,6 @@ sap.ui.define([
             if (this._bIsEdit) {
                 aInvoices[this._iEditIndex] = this._oNewInvoice;
             } else {
-                var sNewId = "INV" + (new Date()).getTime();
-                this._oNewInvoice.id = sNewId;
                 aInvoices.unshift(this._oNewInvoice);
             }
 
@@ -127,6 +199,102 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("RouteDeliveryPlanDetail", {
                 planId: sDP
             });
+        },
+
+        formatInvoiceStatusText: function (sStatus) {
+            var mKey = {
+                PENDING: "invoiceStatusPending",
+                INVOICED: "invoiceStatusInvoiced",
+                VOID: "invoiceStatusVoided"
+            };
+            return this._getText(mKey[sStatus] || "status");
+        },
+
+        _createDraftFromInvoice: function (oInvoice) {
+            var oDraft = JSON.parse(JSON.stringify(oInvoice || {}));
+            var aItems = Array.isArray(oDraft.items) ? oDraft.items : [];
+            if (!aItems.length) {
+                aItems.push(this._createEmptyItem("10"));
+            }
+            oDraft.invoiceNumber = oDraft.id || "";
+            oDraft.date = oDraft.date || this._todayString();
+            oDraft.status = oDraft.status || "";
+            oDraft.items = aItems;
+            oDraft.purchaseOrderOptions = this._buildPurchaseOrderOptions();
+            oDraft.deliveryPlanOptions = this._buildDeliveryPlanOptions();
+            this._syncDraftSummary(oDraft);
+            return oDraft;
+        },
+
+        _createEmptyDraft: function () {
+            var oDraft = {
+                id: "",
+                invoiceNumber: "",
+                date: this._todayString(),
+                status: "",
+                purchaseOrderId: "",
+                deliveryPlanId: "",
+                amount: "0.00",
+                itemCount: 1,
+                purchaseOrderOptions: this._buildPurchaseOrderOptions(),
+                deliveryPlanOptions: this._buildDeliveryPlanOptions(),
+                items: [this._createEmptyItem("10")]
+            };
+            this._syncDraftSummary(oDraft);
+            return oDraft;
+        },
+
+        _createEmptyItem: function (sLineId) {
+            return {
+                lineId: sLineId,
+                purchaseOrderId: "",
+                deliveryPlanId: "",
+                amount: 0
+            };
+        },
+
+        _buildLineId: function (iIndex) {
+            return String((iIndex + 1) * 10);
+        },
+
+        _syncDraftSummary: function (oDraft) {
+            var aItems = oDraft.items || [];
+            var fTotalAmount = aItems.reduce(function (fSum, oLine) {
+                return fSum + Number(oLine.amount || 0);
+            }, 0);
+
+            oDraft.itemCount = aItems.length;
+            oDraft.amount = fTotalAmount.toFixed(2);
+            oDraft.purchaseOrderId = aItems.length ? (aItems[0].purchaseOrderId || "") : "";
+            oDraft.deliveryPlanId = aItems.length ? (aItems[0].deliveryPlanId || "") : "";
+        },
+
+        _todayString: function () {
+            return new Date().toISOString().slice(0, 10);
+        },
+
+        _buildPurchaseOrderOptions: function () {
+            var aOrders = this.getOwnerComponent().getModel("purchaseOrders").getProperty("/purchaseOrders") || [];
+            return [{ id: "", name: this._getText("pleaseSelect") }].concat(aOrders.map(function (oOrder) {
+                return {
+                    id: oOrder.id,
+                    name: oOrder.id + " - " + (oOrder.vendor || "")
+                };
+            }));
+        },
+
+        _buildDeliveryPlanOptions: function () {
+            var aPlans = this.getOwnerComponent().getModel("deliveryPlans").getProperty("/deliveryPlans") || [];
+            return [{ id: "", name: this._getText("pleaseSelect") }].concat(aPlans.map(function (oPlan) {
+                return {
+                    id: oPlan.id,
+                    name: oPlan.id + " - " + (oPlan.purchaseOrderId || "")
+                };
+            }));
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

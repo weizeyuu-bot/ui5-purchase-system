@@ -59,7 +59,7 @@
                                     <Text text="{system>loginTime}" />
                                     <Text text="{system>ipAddress}" />
                                     <ObjectStatus 
-                                        text="{system>status}"
+                                        text="{ path: 'system>status', formatter: '.formatLoginStatusText' }"
                                         state="{system>statusState}" />
                                     <Text text="{system>duration}" />
                                 </cells>

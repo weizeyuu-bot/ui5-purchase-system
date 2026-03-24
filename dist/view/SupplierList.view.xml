@@ -5,7 +5,7 @@
     <Page title="{i18n>supplierListTitle}" showNavButton="true" navButtonPress="onNavBack">
         <subHeader>
             <Toolbar>
-                <Button icon="sap-icon://add" text="新增" press="onAdd" type="Emphasized" />
+                <Button icon="sap-icon://add" text="{i18n>btnAdd}" press="onAdd" type="Emphasized" />
                 <SearchField placeholder="{i18n>filterPlaceholder}" search="onSearch" width="100%" />
             </Toolbar>
         </subHeader>
@@ -31,7 +31,7 @@
                         <Text text="{i18n>supplierEmail}" />
                     </Column>
                     <Column>
-                        <Text text="Actions" />
+                        <Text text="{i18n>actions}" />
                     </Column>
                 </columns>
                 <items>
@@ -55,24 +55,24 @@
         </content>
         <Dialog id="supplierDialog" title="{i18n>supplierListTitle}" type="Standard">
             <content>
-                <VBox spacing="1rem" class="sapUiContentPadding">
-                    <Label text="供应商名称" required="true" />
+                <VBox class="sapUiContentPadding">
+                    <Label text="{i18n>supplierName}" required="true" />
                     <Input id="supplierNameInput" value="{oNewSupplier>/name}" />
-                    <Label text="税号" required="true" />
+                    <Label text="{i18n>supplierTaxNumber}" required="true" />
                     <Input id="supplierTaxInput" value="{oNewSupplier>/taxNumber}" />
-                    <Label text="地址" />
+                    <Label text="{i18n>supplierAddress}" />
                     <Input id="supplierAddressInput" value="{oNewSupplier>/address}" />
-                    <Label text="联系人" />
+                    <Label text="{i18n>supplierContact}" />
                     <Input id="supplierContactInput" value="{oNewSupplier>/contact}" />
-                    <Label text="邮箱" />
+                    <Label text="{i18n>supplierEmail}" />
                     <Input id="supplierEmailInput" value="{oNewSupplier>/email}" />
                 </VBox>
             </content>
             <beginButton>
-                <Button text="保存" press="onDialogSave" type="Emphasized" />
+                <Button text="{i18n>saveButton}" press="onDialogSave" type="Emphasized" />
             </beginButton>
             <endButton>
-                <Button text="取消" press="onDialogCancel" />
+                <Button text="{i18n>cancelButton}" press="onDialogCancel" />
             </endButton>
         </Dialog>
     </Page>

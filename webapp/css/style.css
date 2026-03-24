@@ -56,7 +56,7 @@
 /* Home page layout */
 .homeMainContainer {
     height: 100%;
-    background-color: #f5f5f5;
+    background: linear-gradient(180deg, #f6f8fb 0%, #eef3f9 100%);
 }
 
 .homeMenuPanel {
@@ -72,8 +72,93 @@
 
 .homeContentArea {
     padding: 20px;
-    background: #ffffff;
+    background: transparent;
     overflow-y: auto;
+}
+
+.homeHeroPanel {
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
+    border: 1px solid #dbe8fb;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(12, 62, 117, 0.08);
+}
+
+.dashboardHeroText {
+    color: #55657a;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.dashboardHeroMeta {
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.dashboardPanel {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 49, 86, 0.06);
+    border: 1px solid #e8eef6;
+}
+
+.dashboardSubPanel {
+    margin: 0;
+}
+
+.dashboardCardRow {
+    gap: 16px;
+}
+
+.dashboardInsightCard,
+.dashboardTodoCard {
+    width: 260px;
+    min-height: 168px;
+    padding: 18px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #e6edf7;
+    box-shadow: 0 6px 18px rgba(15, 49, 86, 0.06);
+}
+
+.dashboardTodoCard {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+}
+
+.dashboardCardLabel {
+    color: #6b7a90;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.dashboardCardValue {
+    color: #0f3557;
+    margin-top: 6px;
+}
+
+.dashboardCardDescription {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.dashboardCardIcon {
+    color: #0a6ed1;
+    background: #edf5ff;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.dashboardTwoColumnRow {
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.dashboardColumnLeft,
+.dashboardColumnRight {
+    flex: 1;
+    min-width: 360px;
+    gap: 16px;
 }
 
 .dashboardContainer {
@@ -233,6 +318,250 @@
 
 .navigationList .sapMSLIContent {
     padding-left: 16px;
+}
+
+.poDetailPage {
+    background: linear-gradient(180deg, #f6f8fb 0%, #eef3f9 100%);
+}
+
+.poDetailLayout {
+    padding: 20px;
+    gap: 16px;
+}
+
+.poDetailTopRow {
+    gap: 16px;
+    align-items: stretch;
+}
+
+.poDetailHeaderPanel {
+    flex: 1 1 760px;
+    min-width: 640px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 49, 86, 0.06);
+    border: 1px solid #e8eef6;
+    background: #ffffff;
+}
+
+.poHeaderBandPanel {
+    border-color: #d8e0ea;
+    box-shadow: 0 4px 12px rgba(15, 49, 86, 0.05);
+}
+
+.poHeaderBandToolbar {
+    background: linear-gradient(180deg, #eef3f7 0%, #e4ebf2 100%);
+    border-bottom: 1px solid #cfd8e3;
+}
+
+.poHeaderBandStatus {
+    font-weight: 600;
+}
+
+.poHeaderBandGrid {
+    padding: 14px 16px 16px;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.poHeaderField {
+    min-width: 140px;
+    gap: 6px;
+}
+
+.poHeaderFieldShort {
+    flex: 1 1 150px;
+}
+
+.poHeaderFieldMedium {
+    flex: 1.2 1 220px;
+}
+
+.poHeaderFieldWide {
+    flex: 1.6 1 320px;
+}
+
+.poHeaderFieldLabel {
+    color: #4d6178;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.poHeaderFieldInput .sapMInputBaseContentWrapper,
+.poHeaderFieldInput.sapMSelect .sapMSlt,
+.poHeaderFieldInput.sapMDatePicker .sapMInputBaseContentWrapper {
+    min-height: 2.25rem;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.poDetailSummaryColumn {
+    width: 320px;
+    min-width: 280px;
+    gap: 16px;
+}
+
+.poSummaryHeroPanel,
+.poLineItemsPanel {
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(15, 49, 86, 0.06);
+    border: 1px solid #e8eef6;
+    background: #ffffff;
+}
+
+.poSummaryHeroPanel {
+    background: linear-gradient(160deg, #ffffff 0%, #eef5ff 100%);
+    border-color: #dce9fb;
+}
+
+.poSummaryHeroContent {
+    padding: 18px;
+}
+
+.poSummaryEyebrow {
+    color: #6b7a90;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.poSummaryStatus {
+    margin-top: 8px;
+}
+
+.poSummaryTitle {
+    color: #10395f;
+}
+
+.poSummarySubtext {
+    color: #64748b;
+}
+
+.poMetricGrid {
+    gap: 12px;
+}
+
+.poMetricCard {
+    flex: 1 1 140px;
+    min-height: 110px;
+    padding: 16px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #e6edf7;
+    box-shadow: 0 6px 18px rgba(15, 49, 86, 0.05);
+}
+
+.poMetricCardWide {
+    flex-basis: 100%;
+}
+
+.poMetricLabel {
+    color: #6b7a90;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.poMetricValue {
+    margin-top: 8px;
+    color: #10395f;
+}
+
+.poLineItemsPanel {
+    margin-top: 0;
+}
+
+.poLineItemsToolbar {
+    background: linear-gradient(180deg, #eef3f7 0%, #e7edf4 100%);
+    border-bottom: 1px solid #cfd8e3;
+}
+
+.poLineItemsTable .sapMListTblHeaderRow {
+    background: linear-gradient(180deg, #dfe6ee 0%, #d4dde7 100%);
+}
+
+.poLineItemsTable .sapMListTblHeaderCell {
+    border-right: 1px solid #c4cfdb;
+    border-bottom: 1px solid #bcc8d5;
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+}
+
+.poLineItemsTable .sapMListTblHeaderCell .sapMText {
+    color: #20374f;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.poLineItemsTable .sapMListTblRow {
+    background: #ffffff;
+}
+
+.poLineItemsTable .sapMListTblRow:nth-child(even) {
+    background: #f8fafc;
+}
+
+.poLineItemsTable .sapMListTblCell {
+    border-right: 1px solid #dde5ee;
+    border-bottom: 1px solid #dde5ee;
+    vertical-align: middle;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+}
+
+.poLineItemRow:hover {
+    background: #eef5fc;
+}
+
+.poCellText {
+    color: #21374c;
+    font-size: 13px;
+}
+
+.poCellInput .sapMInputBaseContentWrapper,
+.poCellSelect.sapMSelect .sapMSlt {
+    min-height: 2.1rem;
+    border-radius: 4px;
+}
+
+.poCellNumber .sapMInputBaseInner,
+.poCellNumberText {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.poCellAmountText {
+    font-weight: 700;
+    color: #0f3557;
+}
+
+.poCellStatus {
+    justify-content: center;
+}
+
+.poRowDeleteButton {
+    min-width: 2.5rem;
+}
+
+.poDetailActionBar {
+    padding-top: 4px;
+}
+
+@media (max-width: 1100px) {
+    .poDetailHeaderPanel,
+    .poDetailSummaryColumn {
+        min-width: 100%;
+        width: 100%;
+    }
+}
+
+.navigationList .sapMGHLI {
+    font-weight: 700;
+    color: #37506e;
+    background: #f7faff;
 }
 
 .parentMenuItem .sapMSLIContent {

@@ -36,7 +36,7 @@ sap.ui.define([
             });
 
             if (iUserIndex < 0) {
-                MessageToast.show("未找到用户：" + sUsername);
+                MessageToast.show(this._getText("userNotFoundByName", [sUsername]));
                 this.getOwnerComponent().getRouter().navTo("RouteUserManagement");
                 return;
             }
@@ -73,7 +73,7 @@ sap.ui.define([
 
         onSaveUser: function () {
             if (this._iUserIndex < 0) {
-                MessageToast.show("保存失败：用户数据不存在");
+                MessageToast.show(this._getText("userSaveMissingData"));
                 return;
             }
 
@@ -81,15 +81,15 @@ sap.ui.define([
             var oUser = oUsersModel.getProperty("/registeredUsers/" + this._iUserIndex);
 
             if (!oUser.email || !oUser.phone || !oUser.department || !oUser.role) {
-                MessageToast.show("请完整填写邮箱、电话、部门和角色");
+                MessageToast.show(this._getText("userFieldsRequired"));
                 return;
             }
             if (!this._isValidEmail(oUser.email)) {
-                MessageToast.show("邮箱格式不正确");
+                MessageToast.show(this._getText("userEmailInvalid"));
                 return;
             }
             if (!this._isValidPhone(oUser.phone)) {
-                MessageToast.show("联系电话格式不正确");
+                MessageToast.show(this._getText("userPhoneInvalid"));
                 return;
             }
 
@@ -100,7 +100,7 @@ sap.ui.define([
             this._refreshUserStatistics(oUsersModel);
             this._oEditSnapshot = null;
             this.getView().getModel("ui").setProperty("/editMode", false);
-            MessageToast.show("保存成功");
+            MessageToast.show(this._getText("saveSuccess"));
         },
 
         _isValidEmail: function (sEmail) {
@@ -114,10 +114,10 @@ sap.ui.define([
         _refreshUserStatistics: function (oUsersModel) {
             var aUsers = oUsersModel.getProperty("/registeredUsers") || [];
             var iActive = aUsers.filter(function (oUser) {
-                return oUser.status === "活跃";
+                return oUser.status === "ACTIVE";
             }).length;
             var iInactive = aUsers.filter(function (oUser) {
-                return oUser.status === "不活跃";
+                return oUser.status === "INACTIVE";
             }).length;
 
             oUsersModel.setProperty("/statistics/totalUsers", aUsers.length);
@@ -135,20 +135,33 @@ sap.ui.define([
         },
 
         _mapStatusToState: function (sStatus) {
-            if (sStatus === "活跃") {
+            if (sStatus === "ACTIVE") {
                 return "Success";
             }
-            if (sStatus === "不活跃") {
+            if (sStatus === "INACTIVE") {
                 return "Warning";
             }
-            if (sStatus === "禁用") {
+            if (sStatus === "DISABLED") {
                 return "Error";
             }
             return "None";
         },
 
+        formatUserStatusText: function (sStatus) {
+            var mKey = {
+                ACTIVE: "statusActive",
+                INACTIVE: "statusInactive",
+                DISABLED: "statusDisabled"
+            };
+            return this._getText(mKey[sStatus] || "status");
+        },
+
         onNavBack: function () {
             this.getOwnerComponent().getRouter().navTo("RouteUserManagement");
+        },
+
+        _getText: function (sKey, aArgs) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey, aArgs);
         }
     });
 });

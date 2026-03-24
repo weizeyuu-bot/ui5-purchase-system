@@ -13,6 +13,19 @@ sap.ui.define([
                 password: "admin",
                 rememberMe: false
             }));
+
+            var sLangParam = new URLSearchParams(window.location.search).get("sap-language");
+            var sSavedLang = localStorage.getItem("app-language");
+            var sCurrentLang = ((sLangParam || sSavedLang || "ZH").toUpperCase().startsWith("EN")) ? "EN" : "ZH";
+            this.getView().setModel(new JSONModel({ currentLang: sCurrentLang }), "view");
+        },
+
+        onLanguageToggle: function (oEvent) {
+            var sKey = oEvent.getParameter("item").getKey();
+            localStorage.setItem("app-language", sKey);
+            var oUrl = new URL(window.location.href);
+            oUrl.searchParams.set("sap-language", sKey);
+            window.location.replace(oUrl.toString());
         },
 
         onLogin: function () {
@@ -20,11 +33,11 @@ sap.ui.define([
             var sPassword = (this.getView().getModel().getProperty("/password") || "").toString().trim();
 
             if (!sUsername || !sPassword) {
-                MessageToast.show("请输入用户名和密码");
+                MessageToast.show(this._getText("loginRequired"));
                 return;
             }
 
-            MessageToast.show("正在登录，请稍候...");
+            MessageToast.show(this._getText("loggingIn"));
             var oView = this.getView();
             var oUserModel = this.getOwnerComponent().getModel("user");
 
@@ -63,7 +76,7 @@ sap.ui.define([
                     oView.getModel().setProperty("/password", "");
                     this._navToHome();
                 } else {
-                    MessageToast.show(data.message || "用户名或密码不正确（后端验证）");
+                    MessageToast.show(data.message || this._getText("loginFailed"));
                     oView.getModel().setProperty("/password", "");
                 }
             }.bind(this))
@@ -89,9 +102,9 @@ sap.ui.define([
                 });
 
                 if (!oUser) {
-                    MessageToast.show("用户名不存在（本地备选）");
+                    MessageToast.show(this._getText("usernameNotFound"));
                 } else if (oUser.password !== sPassword) {
-                    MessageToast.show("密码错误（本地备选）");
+                    MessageToast.show(this._getText("passwordIncorrect"));
                 } else {
                     var oLocalUser = Object.assign({}, oUser, {
                         token: "local-token-" + Math.random().toString(36).slice(2),
@@ -129,7 +142,7 @@ sap.ui.define([
             });
 
             if (existingUser) {
-                MessageToast.show("用户名已存在");
+                MessageToast.show(this._getText("usernameExists"));
                 return;
             }
 
@@ -147,10 +160,14 @@ sap.ui.define([
                 localStorage.setItem("currentUser", JSON.stringify(oRegisteredUser));
                 this.getView().getModel().setProperty("/password", "");
                 this.getOwnerComponent().getRouter().navTo("RouteHome", {}, true);
-                MessageToast.show("注册成功，已自动登录");
+                MessageToast.show(this._getText("registerSuccess"));
             } else {
-                MessageToast.show("请输入用户名和密码");
+                MessageToast.show(this._getText("loginRequired"));
             }
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

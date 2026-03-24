@@ -1,8 +1,10 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/Device",
+    "sap/ui/core/routing/HashChanger",
+    "sap/m/MessageToast",
     "myapp/model/models"
-], function (UIComponent, Device, models) {
+], function (UIComponent, Device, HashChanger, MessageToast, models) {
     "use strict";
 
     return UIComponent.extend("myapp.Component", {
@@ -11,9 +13,16 @@ sap.ui.define([
         init: function () {
             UIComponent.prototype.init.apply(this, arguments);
 
+            this._iSessionTimeoutMs = 30 * 60 * 1000;
+            this._iActivityWriteThrottleMs = 10 * 1000;
+            this._iLastActivityWriteAt = 0;
+            this._aSessionEvents = ["click", "keydown", "touchstart", "mousemove", "scroll"];
+            this._fnOnUserActivity = this._onUserActivity.bind(this);
+
             this.setModel(models.createDeviceModel(), "device");
             this.setModel(models.createSupplierModel(), "suppliers");
             this.setModel(models.createMaterialModel(), "materials");
+            this.setModel(models.createPriceLibraryModel(), "priceLibrary");
             this.setModel(models.createPurchaseOrderModel(), "purchaseOrders");
             this.setModel(models.createDeliveryPlanModel(), "deliveryPlans");
             this.setModel(models.createInvoiceModel(), "invoices");
@@ -22,12 +31,59 @@ sap.ui.define([
             this.setModel(models.createUserManagementModel(), "users");
             this.setModel(models.createSystemManagementModel(), "system");
 
+            models.syncPurchaseOrderPricing(
+                this.getModel("purchaseOrders"),
+                this.getModel("priceLibrary"),
+                this.getModel("suppliers"),
+                this.getModel("materials")
+            );
+
             var oUserModel = models.createUserModel();
             this.setModel(oUserModel, "user");
+            this._normalizeSessionState();
+            this._attachSessionActivityListeners();
 
             var oRouter = this.getRouter();
             oRouter.attachBeforeRouteMatched(this._onBeforeRouteMatched, this);
+            this._syncInitialHashWithSession();
             oRouter.initialize();
+        },
+
+        exit: function () {
+            this._detachSessionActivityListeners();
+        },
+
+        _normalizeSessionState: function () {
+            var oUserModel = this.getModel("user");
+            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+
+            if (!oCurrentUser || !oCurrentUser.username || !oCurrentUser.token) {
+                return;
+            }
+
+            if (!oCurrentUser.tokenExpiry) {
+                oCurrentUser.tokenExpiry = Date.now() + this._iSessionTimeoutMs;
+                oCurrentUser.lastActivityAt = Date.now();
+                oUserModel.setProperty("/currentUser", oCurrentUser);
+                localStorage.setItem("currentUser", JSON.stringify(oCurrentUser));
+            }
+        },
+
+        _syncInitialHashWithSession: function () {
+            var sHash = HashChanger.getInstance().getHash() || "";
+            var oUserModel = this.getModel("user");
+            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+
+            if (this._isUserValid(oCurrentUser)) {
+                if (!sHash || sHash === "login") {
+                    HashChanger.getInstance().replaceHash("home");
+                }
+                return;
+            }
+
+            if (sHash !== "login") {
+                HashChanger.getInstance().replaceHash("login");
+            }
         },
 
         _onBeforeRouteMatched: function (oEvent) {
@@ -37,19 +93,79 @@ sap.ui.define([
 
             var bUserIsValid = this._isUserValid(oCurrentUser);
             if (!bUserIsValid) {
-                if (oUserModel) {
-                    oUserModel.setProperty("/currentUser", null);
-                }
-                localStorage.removeItem("currentUser");
+                this._clearCurrentUser();
                 oEvent.preventDefault();
                 this.getRouter().navTo("RouteLogin", {}, true);
                 return;
             }
 
+            this._touchSession(false);
+
             if (sRoute === "RouteApp" || sRoute === "RouteLogin") {
                 oEvent.preventDefault();
                 this.getRouter().navTo("RouteHome", {}, true);
             }
+        },
+
+        _attachSessionActivityListeners: function () {
+            var that = this;
+            this._aSessionEvents.forEach(function (sEventName) {
+                window.addEventListener(sEventName, that._fnOnUserActivity, true);
+            });
+        },
+
+        _detachSessionActivityListeners: function () {
+            var that = this;
+            if (!this._fnOnUserActivity || !this._aSessionEvents) {
+                return;
+            }
+            this._aSessionEvents.forEach(function (sEventName) {
+                window.removeEventListener(sEventName, that._fnOnUserActivity, true);
+            });
+        },
+
+        _onUserActivity: function () {
+            var oUserModel = this.getModel("user");
+            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+            if (!oCurrentUser) {
+                return;
+            }
+
+            if (!this._isUserValid(oCurrentUser)) {
+                this._clearCurrentUser();
+                MessageToast.show("登录已过期，请重新登录");
+                this.getRouter().navTo("RouteLogin", {}, true);
+                return;
+            }
+
+            this._touchSession(true);
+        },
+
+        _touchSession: function (bThrottleWrite) {
+            var oUserModel = this.getModel("user");
+            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+            if (!oCurrentUser) {
+                return;
+            }
+
+            var iNow = Date.now();
+            if (bThrottleWrite && this._iLastActivityWriteAt && iNow - this._iLastActivityWriteAt < this._iActivityWriteThrottleMs) {
+                return;
+            }
+
+            oCurrentUser.lastActivityAt = iNow;
+            oCurrentUser.tokenExpiry = iNow + this._iSessionTimeoutMs;
+            oUserModel.setProperty("/currentUser", oCurrentUser);
+            localStorage.setItem("currentUser", JSON.stringify(oCurrentUser));
+            this._iLastActivityWriteAt = iNow;
+        },
+
+        _clearCurrentUser: function () {
+            var oUserModel = this.getModel("user");
+            if (oUserModel) {
+                oUserModel.setProperty("/currentUser", null);
+            }
+            localStorage.removeItem("currentUser");
         },
 
         _isUserValid: function (oCurrentUser) {

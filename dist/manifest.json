@@ -55,7 +55,12 @@
 			"i18n": {
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
-					"bundleName": "myapp.i18n.i18n"
+					"bundleName": "myapp.i18n.i18n",
+					"supportedLocales": [
+						"en",
+						""
+					],
+					"fallbackLocale": ""
 				}
 			}
 		},
@@ -180,6 +185,20 @@
 					"pattern": "userManagement",
 					"target": [
 						"TargetUserManagement"
+					]
+				},
+				{
+					"name": "RouteQuoteManagement",
+					"pattern": "quoteManagement",
+					"target": [
+						"TargetQuoteManagement"
+					]
+				},
+				{
+					"name": "RoutePriceLibrary",
+					"pattern": "priceLibrary",
+					"target": [
+						"TargetPriceLibrary"
 					]
 				},
 				{
@@ -316,6 +335,18 @@
 					"transition": "slide",
 					"clearControlAggregation": false,
 					"viewName": "UserManagement"
+				},
+				"TargetQuoteManagement": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "QuoteManagement"
+				},
+				"TargetPriceLibrary": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "PriceLibrary"
 				},
 				"TargetUserDetail": {
 					"viewType": "XML",

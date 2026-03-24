@@ -81,7 +81,7 @@ sap.ui.define([
             var sName = this.getView().byId("materialNameInput").getValue().trim();
 
             if (!sName) {
-                MessageBox.error("物料名称为必填项，请填写！");
+                MessageBox.error(this._getText("materialNameRequired"));
                 return;
             }
 
@@ -113,6 +113,10 @@ sap.ui.define([
             var iIndex = parseInt(sPath.split("/").pop(), 10);
             aMaterials.splice(iIndex, 1);
             oModel.setProperty("/materials", aMaterials);
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

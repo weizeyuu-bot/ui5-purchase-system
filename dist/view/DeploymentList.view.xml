@@ -3,15 +3,15 @@
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Page title="部署管理" showNavButton="true" navButtonPress="onNavBack">
+    <Page title="{i18n>deploymentManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
-            <Text text="部署列表" class="sapUiTinyMarginBottom" />
+            <Text text="{i18n>deploymentListTitle}" class="sapUiTinyMarginBottom" />
             <Table items="{process>/deployments}">
                 <columns>
-                    <Column><Text text="部署ID" /></Column>
-                    <Column><Text text="模型名称" /></Column>
-                    <Column><Text text="部署时间" /></Column>
-                    <Column><Text text="状态" /></Column>
+                    <Column><Text text="{i18n>deploymentId}" /></Column>
+                    <Column><Text text="{i18n>processModelName}" /></Column>
+                    <Column><Text text="{i18n>deploymentTime}" /></Column>
+                    <Column><Text text="{i18n>status}" /></Column>
                 </columns>
                 <items>
                     <ColumnListItem>
@@ -19,7 +19,7 @@
                             <Text text="{process>id}" />
                             <Text text="{process>modelName}" />
                             <Text text="{process>deployTime}" />
-                            <Text text="{process>status}" />
+                            <ObjectStatus text="{= ${process>status} === 'SUCCESS' ? ${i18n>deployStatusSuccess} : ${process>status} === 'FAILED' ? ${i18n>deployStatusFailed} : ${process>status} }" state="{= ${process>status} === 'SUCCESS' ? 'Success' : ${process>status} === 'FAILED' ? 'Error' : 'Information' }" />
                         </cells>
                     </ColumnListItem>
                 </items>

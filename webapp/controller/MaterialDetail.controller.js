@@ -39,12 +39,16 @@ sap.ui.define([
         },
 
         onSave: function () {
-            MessageToast.show("物料保存成功");
+            MessageToast.show(this._getText("materialSaved"));
             this.onNavBack();
         },
 
         onCancel: function () {
             this.onNavBack();
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

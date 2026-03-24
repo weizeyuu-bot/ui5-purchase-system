@@ -40,12 +40,16 @@ sap.ui.define([
 
         onSave: function () {
             // In a real app, save to backend
-            MessageToast.show("Supplier saved successfully");
+            MessageToast.show(this._getText("supplierSaved"));
             this.onNavBack();
         },
 
         onCancel: function () {
             this.onNavBack();
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
     });
 });

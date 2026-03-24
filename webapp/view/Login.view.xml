@@ -4,6 +4,14 @@
     xmlns="sap.m"
     xmlns:f="sap.ui.layout.form">
     <Page title="{i18n>loginTitle}" class="sapUiContentPadding loginPage" enableScrolling="false">
+        <headerContent>
+            <SegmentedButton id="loginLangToggle" selectedKey="{view>/currentLang}" selectionChange="onLanguageToggle">
+                <items>
+                    <SegmentedButtonItem key="ZH" text="中" />
+                    <SegmentedButtonItem key="EN" text="EN" />
+                </items>
+            </SegmentedButton>
+        </headerContent>
         <content>
             <VBox class="loginViewport" justifyContent="Center" alignItems="Center" fitContainer="true" height="100%">
                 <VBox class="loginForm" justifyContent="Center" alignItems="Center">

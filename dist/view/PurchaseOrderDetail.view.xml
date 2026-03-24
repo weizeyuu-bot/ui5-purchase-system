@@ -2,30 +2,130 @@
     controllerName="myapp.controller.PurchaseOrderDetail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:f="sap.ui.layout.form">
-    <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack">
+    xmlns:core="sap.ui.core">
+    <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack" class="poDetailPage">
         <content>
-            <VBox class="detailForm">
-                <f:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="0" emptySpanL="0" emptySpanM="0" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false">
-                    <f:content>
-                        <Label text="{i18n>poId}" />
-                        <Input value="{purchaseOrders>id}" editable="false" />
-                        <Label text="{i18n>poVendor}" />
-                        <Input value="{purchaseOrders>vendor}" />
-                        <Label text="{i18n>poDate}" />
-                        <Input value="{purchaseOrders>date}" />
-                        <Label text="{i18n>poStatus}" />
-                        <Input value="{purchaseOrders>status}" />
-                        <Label text="物料" />
-                        <Link text="{purchaseOrders>materialId}" press="onNavigateToMaterial" />
-                        <Label text="供应商" />
-                        <Link text="{purchaseOrders>supplierId}" press="onNavigateToSupplier" />
-                        <Label text="{i18n>deliveryId}" />
-                        <Input value="{purchaseOrders>deliveryPlanId}" editable="false" />
-                    </f:content>
-                </f:SimpleForm>
-                <HBox justifyContent="End" class="sapUiSmallMarginTop">
-                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" />
+            <VBox class="poDetailLayout">
+                <HBox class="poDetailTopRow" wrap="Wrap" renderType="Bare">
+                    <Panel class="poDetailHeaderPanel poHeaderBandPanel">
+                        <headerToolbar>
+                            <Toolbar class="poHeaderBandToolbar">
+                                <Title text="{i18n>poHeaderSection}" level="H4" />
+                                <ToolbarSpacer />
+                                <ObjectStatus
+                                    text="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusText' }"
+                                    state="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusState' }"
+                                    class="poHeaderBandStatus" />
+                            </Toolbar>
+                        </headerToolbar>
+                        <FlexBox wrap="Wrap" renderType="Bare" class="poHeaderBandGrid">
+                            <VBox class="poHeaderField poHeaderFieldShort">
+                                <Text text="{i18n>poId}" class="poHeaderFieldLabel" />
+                                <Input value="{purchaseOrders>id}" editable="false" class="poHeaderFieldInput" />
+                            </VBox>
+                            <VBox class="poHeaderField poHeaderFieldWide">
+                                <Text text="{i18n>supplierId}" class="poHeaderFieldLabel" />
+                                <Select selectedKey="{purchaseOrders>supplierId}" change="onPricingConditionChange" items="{selectOptions>/supplierOptions}" class="poHeaderFieldInput" forceSelection="false">
+                                    <items>
+                                        <core:Item key="{selectOptions>id}" text="{= ${selectOptions>id} ? ${selectOptions>id} + ' - ' + ${selectOptions>name} : ${selectOptions>name} }" />
+                                    </items>
+                                </Select>
+                            </VBox>
+                            <VBox class="poHeaderField poHeaderFieldMedium">
+                                <Text text="{i18n>poVendor}" class="poHeaderFieldLabel" />
+                                <Input value="{purchaseOrders>vendor}" editable="false" class="poHeaderFieldInput" />
+                            </VBox>
+                            <VBox class="poHeaderField poHeaderFieldShort">
+                                <Text text="{i18n>poDate}" class="poHeaderFieldLabel" />
+                                <DatePicker value="{purchaseOrders>date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" class="poHeaderFieldInput" />
+                            </VBox>
+                            <VBox class="poHeaderField poHeaderFieldShort">
+                                <Text text="{i18n>poStatus}" class="poHeaderFieldLabel" />
+                                <Select selectedKey="{purchaseOrders>status}" class="poHeaderFieldInput">
+                                    <items>
+                                        <core:Item key="ORDERED" text="{i18n>statusOrderPlaced}" />
+                                        <core:Item key="PROCESSING" text="{i18n>statusProcessing}" />
+                                        <core:Item key="RECEIVED" text="{i18n>statusReceived}" />
+                                        <core:Item key="CANCELLED" text="{i18n>statusCancelled}" />
+                                    </items>
+                                </Select>
+                            </VBox>
+                        </FlexBox>
+                    </Panel>
+
+                    <VBox class="poDetailSummaryColumn">
+                        <Panel class="poSummaryHeroPanel">
+                            <VBox class="poSummaryHeroContent">
+                                <Text text="{i18n>poStatus}" class="poSummaryEyebrow" />
+                                <ObjectStatus
+                                    text="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusText' }"
+                                    state="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusState' }"
+                                    class="poSummaryStatus" />
+                                <Title text="{purchaseOrders>vendor}" level="H3" class="poSummaryTitle sapUiSmallMarginTop" />
+                                <Text text="{= ${purchaseOrders>id} + ' / ' + ${purchaseOrders>date}}" class="poSummarySubtext sapUiTinyMarginTop" />
+                            </VBox>
+                        </Panel>
+
+                        <HBox class="poMetricGrid" wrap="Wrap" renderType="Bare">
+                            <VBox class="poMetricCard">
+                                <Text text="{i18n>poItemCount}" class="poMetricLabel" />
+                                <Title text="{purchaseOrders>itemCount}" level="H3" class="poMetricValue" />
+                            </VBox>
+                            <VBox class="poMetricCard">
+                                <Text text="{i18n>poTotalQuantity}" class="poMetricLabel" />
+                                <Title text="{purchaseOrders>totalQuantity}" level="H3" class="poMetricValue" />
+                            </VBox>
+                            <VBox class="poMetricCard poMetricCardWide">
+                                <Text text="{i18n>poAmount}" class="poMetricLabel" />
+                                <Title text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" level="H3" class="poMetricValue" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </HBox>
+
+                <Panel headerText="{i18n>poLineItemsSection}" class="poLineItemsPanel">
+                    <headerToolbar>
+                        <Toolbar class="poLineItemsToolbar">
+                            <Title text="{i18n>poLineItemsSection}" level="H4" />
+                            <ToolbarSpacer />
+                            <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddItem" />
+                        </Toolbar>
+                    </headerToolbar>
+                    <Table items="{purchaseOrders>items}" class="poLineItemsTable">
+                        <columns>
+                            <Column width="5rem" hAlign="Center"><Text text="{i18n>poLineNo}" /></Column>
+                            <Column width="18rem"><Text text="{i18n>materialId}" /></Column>
+                            <Column width="8rem" hAlign="End"><Text text="{i18n>poQuantity}" /></Column>
+                            <Column width="6rem" hAlign="Center"><Text text="{i18n>unit}" /></Column>
+                            <Column width="10rem" hAlign="End"><Text text="{i18n>poUnitPrice}" /></Column>
+                            <Column width="11rem" hAlign="End"><Text text="{i18n>poAmount}" /></Column>
+                            <Column width="10rem" hAlign="Center"><Text text="{i18n>priceMatchStatus}" /></Column>
+                            <Column width="12rem" hAlign="Center"><Text text="{i18n>poBenchmark}" /></Column>
+                            <Column width="5rem" hAlign="Center"><Text text="{i18n>actions}" /></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem class="poLineItemRow">
+                                <cells>
+                                    <Text text="{purchaseOrders>lineId}" textAlign="Center" class="poCellText" />
+                                    <Select selectedKey="{purchaseOrders>materialId}" change="onPricingConditionChange" items="{selectOptions>/materialOptions}" class="poCellSelect" forceSelection="false">
+                                        <items>
+                                            <core:Item key="{selectOptions>id}" text="{= ${selectOptions>id} ? ${selectOptions>id} + ' - ' + ${selectOptions>name} : ${selectOptions>name} }" />
+                                        </items>
+                                    </Select>
+                                    <Input value="{purchaseOrders>quantity}" type="Number" liveChange="onPricingConditionChange" textAlign="End" class="poCellInput poCellNumber" />
+                                    <Text text="{purchaseOrders>unit}" textAlign="Center" class="poCellText" />
+                                    <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>unitPrice}}" textAlign="End" class="poCellText poCellNumberText" />
+                                    <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" textAlign="End" class="poCellText poCellNumberText poCellAmountText" />
+                                    <ObjectStatus text="{ path: 'purchaseOrders>priceStatusText', formatter: '.formatPriceMatchText' }" state="{purchaseOrders>priceStatusState}" class="poCellStatus" />
+                                    <ObjectStatus text="{purchaseOrders>priceBenchmarkText}" state="{purchaseOrders>priceBenchmarkState}" class="poCellStatus" />
+                                    <Button icon="sap-icon://delete" type="Reject" press="onDeleteItem" class="poRowDeleteButton" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Panel>
+                <HBox justifyContent="End" class="poDetailActionBar" renderType="Bare">
+                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" class="sapUiTinyMarginEnd" />
                     <Button text="{i18n>cancelButton}" press="onCancel" />
                 </HBox>
             </VBox>

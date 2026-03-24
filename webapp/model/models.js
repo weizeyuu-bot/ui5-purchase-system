@@ -1,4 +1,4 @@
-sap.ui.define([
+﻿sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/ui/Device"
 ], function (JSONModel, Device) {
@@ -202,16 +202,106 @@ sap.ui.define([
         createPurchaseOrderModel: function () {
             var oData = {
                 purchaseOrders: [
-                    { id: "PO001", vendor: "ABC Supplies", date: "2026-03-01", status: "已下单", materialId: "MAT001", supplierId: "SUP001", quantity: 12 },
-                    { id: "PO002", vendor: "XYZ Corp", date: "2026-03-05", status: "已收货", materialId: "MAT002", supplierId: "SUP002", quantity: 300 },
-                    { id: "PO003", vendor: "Global Traders", date: "2026-03-08", status: "处理中", materialId: "MAT003", supplierId: "SUP003", quantity: 80 },
-                    { id: "PO004", vendor: "Tech Solutions", date: "2026-03-10", status: "已下单", materialId: "MAT004", supplierId: "SUP004", quantity: 15 },
-                    { id: "PO005", vendor: "Build Masters", date: "2026-03-12", status: "已取消", materialId: "MAT005", supplierId: "SUP005", quantity: 40 },
-                    { id: "PO006", vendor: "Food Essentials", date: "2026-03-14", status: "已下单", materialId: "MAT006", supplierId: "SUP006", quantity: 500 },
-                    { id: "PO007", vendor: "ABC Supplies", date: "2026-03-15", status: "已收货", materialId: "MAT007", supplierId: "SUP001", quantity: 120 },
-                    { id: "PO008", vendor: "XYZ Corp", date: "2026-03-17", status: "处理中", materialId: "MAT008", supplierId: "SUP002", quantity: 30 },
-                    { id: "PO009", vendor: "Global Traders", date: "2026-03-18", status: "已下单", materialId: "MAT009", supplierId: "SUP003", quantity: 260 },
-                    { id: "PO010", vendor: "Tech Solutions", date: "2026-03-19", status: "已下单", materialId: "MAT010", supplierId: "SUP004", quantity: 22 }
+                    {
+                        id: "PO001",
+                        vendor: "ABC Supplies",
+                        supplierId: "SUP001",
+                        date: "2026-03-01",
+                        status: "ORDERED",
+                        items: [
+                            { lineId: "10", materialId: "MAT001", quantity: 12 }
+                        ]
+                    },
+                    {
+                        id: "PO002",
+                        vendor: "XYZ Corp",
+                        supplierId: "SUP002",
+                        date: "2026-03-05",
+                        status: "RECEIVED",
+                        items: [
+                            { lineId: "10", materialId: "MAT002", quantity: 300 }
+                        ]
+                    },
+                    {
+                        id: "PO003",
+                        vendor: "Global Traders",
+                        supplierId: "SUP003",
+                        date: "2026-03-08",
+                        status: "PROCESSING",
+                        items: [
+                            { lineId: "10", materialId: "MAT003", quantity: 80 }
+                        ]
+                    },
+                    {
+                        id: "PO004",
+                        vendor: "Tech Solutions",
+                        supplierId: "SUP004",
+                        date: "2026-03-10",
+                        status: "ORDERED",
+                        items: [
+                            { lineId: "10", materialId: "MAT004", quantity: 15 }
+                        ]
+                    },
+                    {
+                        id: "PO005",
+                        vendor: "Build Masters",
+                        supplierId: "SUP005",
+                        date: "2026-03-12",
+                        status: "CANCELLED",
+                        items: [
+                            { lineId: "10", materialId: "MAT005", quantity: 40 }
+                        ]
+                    },
+                    {
+                        id: "PO006",
+                        vendor: "Food Essentials",
+                        supplierId: "SUP006",
+                        date: "2026-03-14",
+                        status: "ORDERED",
+                        items: [
+                            { lineId: "10", materialId: "MAT006", quantity: 500 }
+                        ]
+                    },
+                    {
+                        id: "PO007",
+                        vendor: "ABC Supplies",
+                        supplierId: "SUP001",
+                        date: "2026-03-15",
+                        status: "RECEIVED",
+                        items: [
+                            { lineId: "10", materialId: "MAT007", quantity: 120 }
+                        ]
+                    },
+                    {
+                        id: "PO008",
+                        vendor: "XYZ Corp",
+                        supplierId: "SUP002",
+                        date: "2026-03-17",
+                        status: "PROCESSING",
+                        items: [
+                            { lineId: "10", materialId: "MAT008", quantity: 30 }
+                        ]
+                    },
+                    {
+                        id: "PO009",
+                        vendor: "Global Traders",
+                        supplierId: "SUP003",
+                        date: "2026-03-18",
+                        status: "ORDERED",
+                        items: [
+                            { lineId: "10", materialId: "MAT009", quantity: 260 }
+                        ]
+                    },
+                    {
+                        id: "PO010",
+                        vendor: "Tech Solutions",
+                        supplierId: "SUP004",
+                        date: "2026-03-19",
+                        status: "ORDERED",
+                        items: [
+                            { lineId: "10", materialId: "MAT010", quantity: 22 }
+                        ]
+                    }
                 ]
             };
             return new JSONModel(oData);
@@ -220,16 +310,16 @@ sap.ui.define([
         createDeliveryPlanModel: function () {
             var oData = {
                 deliveryPlans: [
-                    { id: "DP001", date: "2026-03-20", status: "待发货", purchaseOrderId: "PO001" },
-                    { id: "DP002", date: "2026-03-21", status: "已出库", purchaseOrderId: "PO002" },
-                    { id: "DP003", date: "2026-03-22", status: "运输中", purchaseOrderId: "PO003" },
-                    { id: "DP004", date: "2026-03-23", status: "已送达", purchaseOrderId: "PO004" },
-                    { id: "DP005", date: "2026-03-24", status: "待发货", purchaseOrderId: "PO005" },
-                    { id: "DP006", date: "2026-03-25", status: "已出库", purchaseOrderId: "PO006" },
-                    { id: "DP007", date: "2026-03-26", status: "运输中", purchaseOrderId: "PO007" },
-                    { id: "DP008", date: "2026-03-27", status: "已送达", purchaseOrderId: "PO008" },
-                    { id: "DP009", date: "2026-03-28", status: "待发货", purchaseOrderId: "PO009" },
-                    { id: "DP010", date: "2026-03-29", status: "已出库", purchaseOrderId: "PO010" }
+                    { id: "DP001", date: "2026-03-20", status: "PENDING", purchaseOrderId: "PO001", itemCount: 1, totalQuantity: 12, items: [{ lineId: "10", purchaseOrderId: "PO001", quantity: 12 }] },
+                    { id: "DP002", date: "2026-03-21", status: "SHIPPED", purchaseOrderId: "PO002", itemCount: 1, totalQuantity: 300, items: [{ lineId: "10", purchaseOrderId: "PO002", quantity: 300 }] },
+                    { id: "DP003", date: "2026-03-22", status: "IN_TRANSIT", purchaseOrderId: "PO003", itemCount: 1, totalQuantity: 80, items: [{ lineId: "10", purchaseOrderId: "PO003", quantity: 80 }] },
+                    { id: "DP004", date: "2026-03-23", status: "DELIVERED", purchaseOrderId: "PO004", itemCount: 1, totalQuantity: 15, items: [{ lineId: "10", purchaseOrderId: "PO004", quantity: 15 }] },
+                    { id: "DP005", date: "2026-03-24", status: "PENDING", purchaseOrderId: "PO005", itemCount: 1, totalQuantity: 40, items: [{ lineId: "10", purchaseOrderId: "PO005", quantity: 40 }] },
+                    { id: "DP006", date: "2026-03-25", status: "SHIPPED", purchaseOrderId: "PO006", itemCount: 1, totalQuantity: 500, items: [{ lineId: "10", purchaseOrderId: "PO006", quantity: 500 }] },
+                    { id: "DP007", date: "2026-03-26", status: "IN_TRANSIT", purchaseOrderId: "PO007", itemCount: 1, totalQuantity: 120, items: [{ lineId: "10", purchaseOrderId: "PO007", quantity: 120 }] },
+                    { id: "DP008", date: "2026-03-27", status: "DELIVERED", purchaseOrderId: "PO008", itemCount: 1, totalQuantity: 30, items: [{ lineId: "10", purchaseOrderId: "PO008", quantity: 30 }] },
+                    { id: "DP009", date: "2026-03-28", status: "PENDING", purchaseOrderId: "PO009", itemCount: 1, totalQuantity: 260, items: [{ lineId: "10", purchaseOrderId: "PO009", quantity: 260 }] },
+                    { id: "DP010", date: "2026-03-29", status: "SHIPPED", purchaseOrderId: "PO010", itemCount: 1, totalQuantity: 22, items: [{ lineId: "10", purchaseOrderId: "PO010", quantity: 22 }] }
                 ]
             };
             return new JSONModel(oData);
@@ -238,16 +328,16 @@ sap.ui.define([
         createInvoiceModel: function () {
             var oData = {
                 invoices: [
-                    { id: "INV001", date: "2026-03-05", amount: "12,000", status: "已开票", purchaseOrderId: "PO001", deliveryPlanId: "DP001" },
-                    { id: "INV002", date: "2026-03-08", amount: "8,500", status: "待开票", purchaseOrderId: "PO002", deliveryPlanId: "DP002" },
-                    { id: "INV003", date: "2026-03-10", amount: "16,200", status: "已开票", purchaseOrderId: "PO003", deliveryPlanId: "DP003" },
-                    { id: "INV004", date: "2026-03-12", amount: "4,300", status: "已作废", purchaseOrderId: "PO004", deliveryPlanId: "DP004" },
-                    { id: "INV005", date: "2026-03-14", amount: "9,900", status: "待开票", purchaseOrderId: "PO005", deliveryPlanId: "DP005" },
-                    { id: "INV006", date: "2026-03-16", amount: "7,600", status: "已开票", purchaseOrderId: "PO006", deliveryPlanId: "DP006" },
-                    { id: "INV007", date: "2026-03-18", amount: "5,200", status: "待开票", purchaseOrderId: "PO007", deliveryPlanId: "DP007" },
-                    { id: "INV008", date: "2026-03-19", amount: "14,800", status: "已开票", purchaseOrderId: "PO008", deliveryPlanId: "DP008" },
-                    { id: "INV009", date: "2026-03-20", amount: "6,400", status: "待开票", purchaseOrderId: "PO009", deliveryPlanId: "DP009" },
-                    { id: "INV010", date: "2026-03-21", amount: "11,000", status: "已开票", purchaseOrderId: "PO010", deliveryPlanId: "DP010" }
+                    { id: "INV001", date: "2026-03-05", amount: "12000.00", status: "INVOICED", purchaseOrderId: "PO001", deliveryPlanId: "DP001", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO001", deliveryPlanId: "DP001", amount: 12000 }] },
+                    { id: "INV002", date: "2026-03-08", amount: "8500.00", status: "PENDING", purchaseOrderId: "PO002", deliveryPlanId: "DP002", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO002", deliveryPlanId: "DP002", amount: 8500 }] },
+                    { id: "INV003", date: "2026-03-10", amount: "16200.00", status: "INVOICED", purchaseOrderId: "PO003", deliveryPlanId: "DP003", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO003", deliveryPlanId: "DP003", amount: 16200 }] },
+                    { id: "INV004", date: "2026-03-12", amount: "4300.00", status: "VOID", purchaseOrderId: "PO004", deliveryPlanId: "DP004", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO004", deliveryPlanId: "DP004", amount: 4300 }] },
+                    { id: "INV005", date: "2026-03-14", amount: "9900.00", status: "PENDING", purchaseOrderId: "PO005", deliveryPlanId: "DP005", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO005", deliveryPlanId: "DP005", amount: 9900 }] },
+                    { id: "INV006", date: "2026-03-16", amount: "7600.00", status: "INVOICED", purchaseOrderId: "PO006", deliveryPlanId: "DP006", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO006", deliveryPlanId: "DP006", amount: 7600 }] },
+                    { id: "INV007", date: "2026-03-18", amount: "5200.00", status: "PENDING", purchaseOrderId: "PO007", deliveryPlanId: "DP007", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO007", deliveryPlanId: "DP007", amount: 5200 }] },
+                    { id: "INV008", date: "2026-03-19", amount: "14800.00", status: "INVOICED", purchaseOrderId: "PO008", deliveryPlanId: "DP008", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO008", deliveryPlanId: "DP008", amount: 14800 }] },
+                    { id: "INV009", date: "2026-03-20", amount: "6400.00", status: "PENDING", purchaseOrderId: "PO009", deliveryPlanId: "DP009", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO009", deliveryPlanId: "DP009", amount: 6400 }] },
+                    { id: "INV010", date: "2026-03-21", amount: "11000.00", status: "INVOICED", purchaseOrderId: "PO010", deliveryPlanId: "DP010", itemCount: 1, items: [{ lineId: "10", purchaseOrderId: "PO010", deliveryPlanId: "DP010", amount: 11000 }] }
                 ]
             };
             return new JSONModel(oData);
@@ -297,11 +387,11 @@ sap.ui.define([
                     { title: "待验收", value: 0, subTitle: "验收管理" }
                 ],
                 topSuppliers: [
-                    { name: "ABC Supplies", contacts: 24, value: "¥120,000", status: "活跃", state: "Success" },
-                    { name: "XYZ Corp", contacts: 18, value: "¥85,000", status: "活跃", state: "Success" },
-                    { name: "Global Traders", contacts: 15, value: "¥68,000", status: "活跃", state: "Success" },
-                    { name: "Tech Solutions", contacts: 12, value: "¥54,000", status: "正常", state: "Information" },
-                    { name: "Build Masters", contacts: 8, value: "¥32,000", status: "低频", state: "Warning" }
+                    { name: "ABC Supplies", contacts: 24, value: "¥120,000", status: "ACTIVE", state: "Success" },
+                    { name: "XYZ Corp", contacts: 18, value: "¥85,000", status: "ACTIVE", state: "Success" },
+                    { name: "Global Traders", contacts: 15, value: "¥68,000", status: "ACTIVE", state: "Success" },
+                    { name: "Tech Solutions", contacts: 12, value: "¥54,000", status: "NORMAL", state: "Information" },
+                    { name: "Build Masters", contacts: 8, value: "¥32,000", status: "LOW_FREQUENCY", state: "Warning" }
                 ]
             };
             return new JSONModel(oData);
@@ -315,7 +405,7 @@ sap.ui.define([
                         email: "admin@example.com",
                         phone: "13800000001",
                         registrationDate: "2026-02-01",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "系统管理",
                         role: "系统管理员",
@@ -328,7 +418,7 @@ sap.ui.define([
                         email: "user1@example.com",
                         phone: "13800000002",
                         registrationDate: "2026-02-15",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
                         role: "采购员",
@@ -341,7 +431,7 @@ sap.ui.define([
                         email: "user2@example.com",
                         phone: "13800000003",
                         registrationDate: "2026-02-20",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
                         role: "采购经理",
@@ -354,7 +444,7 @@ sap.ui.define([
                         email: "user3@example.com",
                         phone: "13800000004",
                         registrationDate: "2026-03-01",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "财务部",
                         role: "财务人员",
@@ -367,7 +457,7 @@ sap.ui.define([
                         email: "user4@example.com",
                         phone: "13800000005",
                         registrationDate: "2026-03-05",
-                        status: "不活跃",
+                        status: "INACTIVE",
                         statusState: "Warning",
                         department: "供应链部",
                         role: "供应链协调员",
@@ -380,7 +470,7 @@ sap.ui.define([
                         email: "user5@example.com",
                         phone: "13800000006",
                         registrationDate: "2026-03-10",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
                         role: "采购员",
@@ -393,7 +483,7 @@ sap.ui.define([
                         email: "user6@example.com",
                         phone: "13800000007",
                         registrationDate: "2026-03-12",
-                        status: "活跃",
+                        status: "ACTIVE",
                         statusState: "Success",
                         department: "财务部",
                         role: "财务经理",
@@ -406,7 +496,7 @@ sap.ui.define([
                         email: "user7@example.com",
                         phone: "13800000008",
                         registrationDate: "2026-03-15",
-                        status: "禁用",
+                        status: "DISABLED",
                         statusState: "Error",
                         department: "市场部",
                         role: "市场专员",
@@ -540,49 +630,112 @@ sap.ui.define([
             this.annotatePriceLibraryRecords(oPriceLibraryModel);
 
             aOrders.forEach(function (oOrder) {
+                if (!Array.isArray(oOrder.items) || !oOrder.items.length) {
+                    oOrder.items = [{
+                        lineId: "10",
+                        materialId: oOrder.materialId || "",
+                        materialName: oOrder.materialName || "",
+                        quantity: Number(oOrder.quantity || 0),
+                        unit: oOrder.unit || "",
+                        unitPrice: Number(oOrder.unitPrice || 0),
+                        amount: oOrder.amount || "0.00",
+                        priceRecordId: oOrder.priceRecordId || "",
+                        priceValidFrom: oOrder.priceValidFrom || "",
+                        priceValidTo: oOrder.priceValidTo || "",
+                        priceMatched: oOrder.priceMatched,
+                        priceStatusText: oOrder.priceStatusText || "MISSING",
+                        priceStatusState: oOrder.priceStatusState || "Error",
+                        lowestPriceRecordId: oOrder.lowestPriceRecordId || "",
+                        lowestMarketPrice: oOrder.lowestMarketPrice || "0.00",
+                        lowestMarketSupplierName: oOrder.lowestMarketSupplierName || "",
+                        priceBenchmarkText: oOrder.priceBenchmarkText || "暂无可比价格",
+                        priceBenchmarkState: oOrder.priceBenchmarkState || "None"
+                    }];
+                }
+
                 var oSupplier = aSuppliers.find(function (oItem) {
                     return oItem.id === oOrder.supplierId;
                 });
-                var oMaterial = aMaterials.find(function (oItem) {
-                    return oItem.id === oOrder.materialId;
-                });
-                var oPrice = this.findEffectivePriceRecord(aPrices, oOrder.supplierId, oOrder.materialId, oOrder.date);
-                var oLowestPrice = this.findLowestPriceRecordForMaterial(aPrices, oOrder.materialId, oOrder.date);
-                var iQuantity = Number(oOrder.quantity || 0);
-                var iLowestPrice = oLowestPrice ? Number(oLowestPrice.unitPrice) : 0;
 
                 oOrder.vendor = oSupplier ? oSupplier.name : (oOrder.vendor || "");
-                oOrder.materialName = oMaterial ? oMaterial.name : "";
-                oOrder.unit = oMaterial ? oMaterial.unit : (oOrder.unit || "");
-                oOrder.unitPrice = oPrice ? Number(oPrice.unitPrice) : 0;
-                oOrder.currency = oPrice ? oPrice.currency : "CNY";
-                oOrder.priceRecordId = oPrice ? oPrice.id : "";
-                oOrder.priceRemark = oPrice ? oPrice.remark : "未匹配到有效价格";
-                oOrder.priceValidFrom = oPrice ? oPrice.validFrom : "";
-                oOrder.priceValidTo = oPrice ? oPrice.validTo : "";
-                oOrder.priceMatched = !!oPrice;
-                oOrder.priceStatusText = oPrice ? "已匹配" : "缺失";
-                oOrder.priceStatusState = oPrice ? "Success" : "Error";
-                oOrder.amount = oPrice ? (iQuantity * Number(oPrice.unitPrice)).toFixed(2) : "0.00";
 
-                oOrder.lowestPriceRecordId = oLowestPrice ? oLowestPrice.id : "";
-                oOrder.lowestMarketPrice = oLowestPrice ? iLowestPrice.toFixed(2) : "0.00";
-                oOrder.lowestMarketSupplierName = oLowestPrice ? oLowestPrice.supplierName : "";
+                var fOrderAmount = 0;
+                var iTotalQuantity = 0;
+                var aMaterialNames = [];
+                var sHeaderCurrency = "CNY";
 
-                if (!oPrice || !oLowestPrice) {
-                    oOrder.priceBenchmarkText = "暂无可比价格";
-                    oOrder.priceBenchmarkState = "None";
-                    return;
-                }
+                oOrder.items.forEach(function (oItem, iIndex) {
+                    if (!oItem.lineId) {
+                        oItem.lineId = String((iIndex + 1) * 10);
+                    }
 
-                if (Number(oPrice.unitPrice) === iLowestPrice) {
-                    oOrder.priceBenchmarkText = "当前为最低价";
-                    oOrder.priceBenchmarkState = "Success";
-                    return;
-                }
+                    var oMaterial = aMaterials.find(function (oMaterialItem) {
+                        return oMaterialItem.id === oItem.materialId;
+                    });
+                    var oPrice = this.findEffectivePriceRecord(aPrices, oOrder.supplierId, oItem.materialId, oOrder.date);
+                    var oLowestPrice = this.findLowestPriceRecordForMaterial(aPrices, oItem.materialId, oOrder.date);
+                    var iQuantity = Number(oItem.quantity || 0);
+                    var iLowestPrice = oLowestPrice ? Number(oLowestPrice.unitPrice) : 0;
 
-                oOrder.priceBenchmarkText = "高于最低价 " + (Number(oPrice.unitPrice) - iLowestPrice).toFixed(2);
-                oOrder.priceBenchmarkState = "Warning";
+                    oItem.materialName = oMaterial ? oMaterial.name : "";
+                    oItem.unit = oMaterial ? oMaterial.unit : (oItem.unit || "");
+                    oItem.unitPrice = oPrice ? Number(oPrice.unitPrice) : 0;
+                    oItem.currency = oPrice ? oPrice.currency : "CNY";
+                    oItem.priceRecordId = oPrice ? oPrice.id : "";
+                    oItem.priceRemark = oPrice ? oPrice.remark : "未匹配到有效价格";
+                    oItem.priceValidFrom = oPrice ? oPrice.validFrom : "";
+                    oItem.priceValidTo = oPrice ? oPrice.validTo : "";
+                    oItem.priceMatched = !!oPrice;
+                    oItem.priceStatusText = oPrice ? "MATCHED" : "MISSING";
+                    oItem.priceStatusState = oPrice ? "Success" : "Error";
+                    oItem.amount = oPrice ? (iQuantity * Number(oPrice.unitPrice)).toFixed(2) : "0.00";
+
+                    oItem.lowestPriceRecordId = oLowestPrice ? oLowestPrice.id : "";
+                    oItem.lowestMarketPrice = oLowestPrice ? iLowestPrice.toFixed(2) : "0.00";
+                    oItem.lowestMarketSupplierName = oLowestPrice ? oLowestPrice.supplierName : "";
+
+                    if (!oPrice || !oLowestPrice) {
+                        oItem.priceBenchmarkText = "暂无可比价格";
+                        oItem.priceBenchmarkState = "None";
+                    } else if (Number(oPrice.unitPrice) === iLowestPrice) {
+                        oItem.priceBenchmarkText = "当前为最低价";
+                        oItem.priceBenchmarkState = "Success";
+                    } else {
+                        oItem.priceBenchmarkText = "高于最低价 " + (Number(oPrice.unitPrice) - iLowestPrice).toFixed(2);
+                        oItem.priceBenchmarkState = "Warning";
+                    }
+
+                    fOrderAmount += Number(oItem.amount || 0);
+                    iTotalQuantity += iQuantity;
+                    if (oItem.materialName) {
+                        aMaterialNames.push(oItem.materialName);
+                    }
+                    if (oItem.currency) {
+                        sHeaderCurrency = oItem.currency;
+                    }
+                }, this);
+
+                oOrder.itemCount = oOrder.items.length;
+                oOrder.totalQuantity = iTotalQuantity;
+                oOrder.amount = fOrderAmount.toFixed(2);
+                oOrder.currency = sHeaderCurrency;
+                oOrder.materialSummary = aMaterialNames.join(" / ");
+                oOrder.materialId = oOrder.items[0] ? oOrder.items[0].materialId : "";
+                oOrder.materialName = oOrder.items[0] ? oOrder.items[0].materialName : "";
+                oOrder.unit = oOrder.items[0] ? oOrder.items[0].unit : "";
+                oOrder.unitPrice = oOrder.items[0] ? oOrder.items[0].unitPrice : 0;
+                oOrder.quantity = oOrder.items[0] ? Number(oOrder.items[0].quantity || 0) : 0;
+                oOrder.priceRecordId = oOrder.items[0] ? oOrder.items[0].priceRecordId : "";
+                oOrder.priceValidFrom = oOrder.items[0] ? oOrder.items[0].priceValidFrom : "";
+                oOrder.priceValidTo = oOrder.items[0] ? oOrder.items[0].priceValidTo : "";
+                oOrder.priceMatched = oOrder.items.every(function (oItem) { return !!oItem.priceMatched; });
+                oOrder.priceStatusText = oOrder.priceMatched ? "MATCHED" : "MISSING";
+                oOrder.priceStatusState = oOrder.priceMatched ? "Success" : "Error";
+                oOrder.lowestPriceRecordId = oOrder.items[0] ? oOrder.items[0].lowestPriceRecordId : "";
+                oOrder.lowestMarketPrice = oOrder.items[0] ? oOrder.items[0].lowestMarketPrice : "0.00";
+                oOrder.lowestMarketSupplierName = oOrder.items[0] ? oOrder.items[0].lowestMarketSupplierName : "";
+                oOrder.priceBenchmarkText = oOrder.items.some(function (oItem) { return oItem.priceBenchmarkState === "Warning"; }) ? "部分行高于最低价" : (oOrder.items.some(function (oItem) { return oItem.priceBenchmarkState === "None"; }) ? "存在未比价行" : "当前为最低价");
+                oOrder.priceBenchmarkState = oOrder.items.some(function (oItem) { return oItem.priceBenchmarkState === "Warning"; }) ? "Warning" : (oOrder.items.some(function (oItem) { return oItem.priceBenchmarkState === "None"; }) ? "None" : "Success");
             }, this);
 
             oPurchaseOrderModel.refresh(true);
@@ -601,7 +754,7 @@ sap.ui.define([
                         username: "admin",
                         loginTime: "2026-03-20 10:30:15",
                         ipAddress: "192.168.1.100",
-                        status: "登录中",
+                        status: "LOGGED_IN",
                         statusState: "Success",
                         duration: "2小时 15分钟"
                     },
@@ -609,7 +762,7 @@ sap.ui.define([
                         username: "user1",
                         loginTime: "2026-03-20 09:45:30",
                         ipAddress: "192.168.1.101",
-                        status: "已登出",
+                        status: "LOGGED_OUT",
                         statusState: "Warning",
                         duration: "1小时 30分钟"
                     },
@@ -617,7 +770,7 @@ sap.ui.define([
                         username: "user2",
                         loginTime: "2026-03-20 08:20:00",
                         ipAddress: "192.168.1.102",
-                        status: "登录中",
+                        status: "LOGGED_IN",
                         statusState: "Success",
                         duration: "5小时 25分钟"
                     },
@@ -625,7 +778,7 @@ sap.ui.define([
                         username: "user3",
                         loginTime: "2026-03-20 07:15:45",
                         ipAddress: "192.168.1.103",
-                        status: "已登出",
+                        status: "LOGGED_OUT",
                         statusState: "Warning",
                         duration: "2小时 10分钟"
                     },
@@ -633,7 +786,7 @@ sap.ui.define([
                         username: "user4",
                         loginTime: "2026-03-19 22:30:00",
                         ipAddress: "192.168.1.104",
-                        status: "已登出",
+                        status: "LOGGED_OUT",
                         statusState: "Warning",
                         duration: "3小时 50分钟"
                     }
@@ -759,14 +912,14 @@ sap.ui.define([
                     { id: "f3", name: "请假单表单", fields: ["开始时间", "结束时间", "请假类型", "原因"] }
                 ],
                 processModels: [
-                    { id: "pm1", name: "采购审批模型", version: "1.0", status: "已发布" },
-                    { id: "pm2", name: "报销审批模型", version: "1.1", status: "测试中" },
-                    { id: "pm3", name: "出库审批模型", version: "1.0", status: "已发布" }
+                    { id: "pm1", name: "采购审批模型", version: "1.0", status: "PUBLISHED" },
+                    { id: "pm2", name: "报销审批模型", version: "1.1", status: "TESTING" },
+                    { id: "pm3", name: "出库审批模型", version: "1.0", status: "PUBLISHED" }
                 ],
                 deployments: [
-                    { id: "d1", modelName: "采购审批模型", deployTime: "2026-04-01 10:00", status: "成功" },
-                    { id: "d2", modelName: "报销审批模型", deployTime: "2026-04-05 13:20", status: "成功" },
-                    { id: "d3", modelName: "出库审批模型", deployTime: "2026-04-08 09:10", status: "失败" }
+                    { id: "d1", modelName: "采购审批模型", deployTime: "2026-04-01 10:00", status: "SUCCESS" },
+                    { id: "d2", modelName: "报销审批模型", deployTime: "2026-04-05 13:20", status: "SUCCESS" },
+                    { id: "d3", modelName: "出库审批模型", deployTime: "2026-04-08 09:10", status: "FAILED" }
                 ]
             };
             return new JSONModel(oData);

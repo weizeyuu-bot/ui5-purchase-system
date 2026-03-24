@@ -2,14 +2,19 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/m/MessageToast",
+    "sap/ui/model/json/JSONModel",
     "myapp/model/models"
-], function (Controller, History, MessageToast, models) {
+], function (Controller, History, MessageToast, JSONModel, models) {
     "use strict";
 
     return Controller.extend("myapp.controller.PurchaseOrderDetail", {
 
         onInit: function () {
             this.getView().setModel(this.getOwnerComponent().getModel("purchaseOrders"), "purchaseOrders");
+            this.getView().setModel(new JSONModel({
+                supplierOptions: [{ id: "", name: this._getText("pleaseSelect") }].concat(this.getOwnerComponent().getModel("suppliers").getProperty("/suppliers") || []),
+                materialOptions: [{ id: "", name: this._getText("pleaseSelect") }].concat(this.getOwnerComponent().getModel("materials").getProperty("/materials") || [])
+            }), "selectOptions");
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("RoutePurchaseOrderDetail").attachPatternMatched(this._onObjectMatched, this);
         },
@@ -48,7 +53,7 @@ sap.ui.define([
                 this.getOwnerComponent().getModel("suppliers"),
                 this.getOwnerComponent().getModel("materials")
             );
-            MessageToast.show("采购订单保存成功");
+            MessageToast.show(this._getText("purchaseOrderSaved"));
             this.onNavBack();
         },
 
@@ -63,6 +68,77 @@ sap.ui.define([
                 this.getOwnerComponent().getModel("suppliers"),
                 this.getOwnerComponent().getModel("materials")
             );
+        },
+
+        onAddItem: function () {
+            if (this._iOrderIndex === undefined || this._iOrderIndex < 0) {
+                return;
+            }
+
+            var oModel = this.getView().getModel("purchaseOrders");
+            var aItems = oModel.getProperty("/purchaseOrders/" + this._iOrderIndex + "/items") || [];
+            aItems.push({
+                lineId: String((aItems.length + 1) * 10),
+                materialId: "",
+                materialName: "",
+                quantity: 1,
+                unit: "",
+                unitPrice: 0,
+                currency: "CNY",
+                amount: "0.00",
+                priceRecordId: "",
+                priceValidFrom: "",
+                priceValidTo: "",
+                priceMatched: false,
+                priceStatusText: "MISSING",
+                priceStatusState: "Error",
+                lowestPriceRecordId: "",
+                lowestMarketPrice: "0.00",
+                lowestMarketSupplierName: "",
+                priceBenchmarkText: this._getText("poNoComparablePrice"),
+                priceBenchmarkState: "None"
+            });
+            oModel.setProperty("/purchaseOrders/" + this._iOrderIndex + "/items", aItems);
+            this.onPricingConditionChange();
+        },
+
+        onDeleteItem: function (oEvent) {
+            if (this._iOrderIndex === undefined || this._iOrderIndex < 0) {
+                return;
+            }
+
+            var sPath = oEvent.getSource().getBindingContext("purchaseOrders").getPath();
+            var iItemIndex = parseInt(sPath.split("/").pop(), 10);
+            var oModel = this.getView().getModel("purchaseOrders");
+            var aItems = oModel.getProperty("/purchaseOrders/" + this._iOrderIndex + "/items") || [];
+
+            aItems.splice(iItemIndex, 1);
+            if (!aItems.length) {
+                aItems.push({
+                    lineId: "10",
+                    materialId: "",
+                    materialName: "",
+                    quantity: 1,
+                    unit: "",
+                    unitPrice: 0,
+                    currency: "CNY",
+                    amount: "0.00",
+                    priceRecordId: "",
+                    priceValidFrom: "",
+                    priceValidTo: "",
+                    priceMatched: false,
+                    priceStatusText: "MISSING",
+                    priceStatusState: "Error",
+                    lowestPriceRecordId: "",
+                    lowestMarketPrice: "0.00",
+                    lowestMarketSupplierName: "",
+                    priceBenchmarkText: this._getText("poNoComparablePrice"),
+                    priceBenchmarkState: "None"
+                });
+            }
+
+            oModel.setProperty("/purchaseOrders/" + this._iOrderIndex + "/items", aItems);
+            this.onPricingConditionChange();
         },
 
         onCancel: function () {
@@ -81,6 +157,34 @@ sap.ui.define([
             this.getOwnerComponent().getRouter().navTo("RouteSupplierDetail", {
                 supplierId: sSupplierId
             });
+        },
+
+        formatOrderStatusText: function (sStatus) {
+            var mKey = {
+                ORDERED: "statusOrderPlaced",
+                PROCESSING: "statusProcessing",
+                RECEIVED: "statusReceived",
+                CANCELLED: "statusCancelled"
+            };
+            return this._getText(mKey[sStatus] || "status");
+        },
+
+        formatOrderStatusState: function (sStatus) {
+            var mState = {
+                ORDERED: "Information",
+                PROCESSING: "Warning",
+                RECEIVED: "Success",
+                CANCELLED: "Error"
+            };
+            return mState[sStatus] || "None";
+        },
+
+        formatPriceMatchText: function (sStatus) {
+            return this._getText(sStatus === "MATCHED" ? "priceMatched" : "priceMissing");
+        },
+
+        _getText: function (sKey) {
+            return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
         }
 
     });

@@ -2,81 +2,117 @@
     controllerName="myapp.controller.UserDetail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
-    xmlns:layout="sap.ui.layout">
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form">
     <Page title="{i18n>userDetailTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding sapUiLargeMargin">
             <!-- Header -->
             <VBox class="sapUiSmallMarginBottom">
                 <Title text="{i18n>userDetailTitle}" level="H1" />
-                <HBox spacing="1rem" class="sapUiSmallMarginTop">
+                <HBox class="sapUiSmallMarginTop">
                     <ObjectStatus 
-                        text="{userDetail>status}"
-                        state="{userDetail>statusState}" />
-                    <Text text="ID: {userDetail>username}" class="sapUiSmallMargin" />
+                        text="{ path: 'users>status', formatter: '.formatUserStatusText' }"
+                        state="{users>statusState}" />
+                    <Text text="ID: {users>username}" class="sapUiSmallMargin" />
                 </HBox>
             </VBox>
 
             <!-- Basic Information Panel -->
             <Panel headerText="{i18n>basicInformation}" class="sapUiLargeMarginBottom">
-                <Form editable="false">
-                    <layout:GridContainer>
-                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <FormContainer>
-                                <FormElement label="{i18n>username}">
-                                    <Text text="{userDetail>username}" />
-                                </FormElement>
-                                <FormElement label="{i18n>userEmail}">
-                                    <Text text="{userDetail>email}" />
-                                </FormElement>
-                                <FormElement label="{i18n>userPhone}">
-                                    <Text text="{userDetail>phone}" />
-                                </FormElement>
-                                <FormElement label="{i18n>department}">
-                                    <Text text="{userDetail>department}" />
-                                </FormElement>
-                            </FormContainer>
-                            <FormContainer>
-                                <FormElement label="{i18n>role}">
-                                    <Text text="{userDetail>role}" />
-                                </FormElement>
-                                <FormElement label="{i18n>status}">
-                                    <ObjectStatus 
-                                        text="{userDetail>status}"
-                                        state="{userDetail>statusState}" />
-                                </FormElement>
-                                <FormElement label="{i18n>registrationDate}">
-                                    <Text text="{userDetail>registrationDate}" />
-                                </FormElement>
-                                <FormElement label="{i18n>createdBy}">
-                                    <Text text="{userDetail>createdBy}" />
-                                </FormElement>
-                            </FormContainer>
-                        </layout:Grid>
-                    </layout:GridContainer>
-                </Form>
+                <form:Form editable="false">
+                    <form:layout>
+                        <form:ResponsiveGridLayout columnsL="2" columnsM="2" labelSpanL="4" labelSpanM="4" emptySpanL="1" emptySpanM="1" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>username}">
+                                    <form:fields>
+                                        <Text text="{users>username}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>userEmail}">
+                                    <form:fields>
+                                        <Input value="{users>email}" editable="{ui>/editMode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>userPhone}">
+                                    <form:fields>
+                                        <Input value="{users>phone}" editable="{ui>/editMode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>department}">
+                                    <form:fields>
+                                        <Input value="{users>department}" editable="{ui>/editMode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>role}">
+                                    <form:fields>
+                                        <Input value="{users>role}" editable="{ui>/editMode}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>status}">
+                                    <form:fields>
+                                        <Select selectedKey="{users>status}" enabled="{ui>/editMode}" change="onStatusChange">
+                                            <items>
+                                                <core:Item key="ACTIVE" text="{i18n>statusActive}" />
+                                                <core:Item key="INACTIVE" text="{i18n>statusInactive}" />
+                                                <core:Item key="DISABLED" text="{i18n>statusDisabled}" />
+                                            </items>
+                                        </Select>
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>registrationDate}">
+                                    <form:fields>
+                                        <Text text="{users>registrationDate}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>createdBy}">
+                                    <form:fields>
+                                        <Text text="{users>createdBy}" />
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
+                </form:Form>
             </Panel>
 
             <!-- Login Information Panel -->
             <Panel headerText="{i18n>loginInformation}" class="sapUiLargeMarginBottom">
-                <Form editable="false">
-                    <layout:GridContainer>
-                        <layout:Grid defaultSpan="L6 M6 S12" spacing="2">
-                            <FormContainer>
-                                <FormElement label="{i18n>lastLogin}">
-                                    <Text text="{userDetail>lastLogin}" />
-                                </FormElement>
-                                <FormElement label="{i18n>loginCount}">
-                                    <Text text="{userDetail>loginCount}" />
-                                </FormElement>
-                            </FormContainer>
-                        </layout:Grid>
-                    </layout:GridContainer>
-                </Form>
+                <form:Form editable="false">
+                    <form:layout>
+                        <form:ResponsiveGridLayout columnsL="1" columnsM="1" labelSpanL="4" labelSpanM="4" emptySpanL="0" emptySpanM="0" />
+                    </form:layout>
+                    <form:formContainers>
+                        <form:FormContainer>
+                            <form:formElements>
+                                <form:FormElement label="{i18n>lastLogin}">
+                                    <form:fields>
+                                        <Text text="{users>lastLogin}" />
+                                    </form:fields>
+                                </form:FormElement>
+                                <form:FormElement label="{i18n>loginCount}">
+                                    <form:fields>
+                                        <Text text="{users>loginCount}" />
+                                    </form:fields>
+                                </form:FormElement>
+                            </form:formElements>
+                        </form:FormContainer>
+                    </form:formContainers>
+                </form:Form>
             </Panel>
 
             <!-- Action Buttons -->
-            <HBox spacing="1rem" class="sapUiLargeMarginTop">
-                <Button text="{i18n>editButton}" icon="sap-icon://edit" type="Emphasized" press="onEditUser" />
+            <HBox class="sapUiLargeMarginTop">
+                <Button text="{i18n>editButton}" icon="sap-icon://edit" type="Emphasized" press="onEditUser" visible="{= !${ui>/editMode} }" />
+                <Button text="{i18n>saveButton}" icon="sap-icon://save" type="Emphasized" press="onSaveUser" visible="{ui>/editMode}" />
+                <Button text="{i18n>cancelButton}" icon="sap-icon://decline" press="onCancelEdit" visible="{ui>/editMode}" />
                 <Button text="{i18n>back}" icon="sap-icon://nav-back" press="onNavBack" />
             </HBox>
         </VBox>
