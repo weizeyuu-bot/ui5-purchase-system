@@ -561,7 +561,9 @@ sap.ui.define([
             }
 
             var oPermissions = oRole.permissions || {};
-            var aRows = aCatalog.map(function (oModule) {
+            var aRows = aCatalog
+                .filter(function (oModule) { return !!oModule.module && !!oModule.moduleName; })
+                .map(function (oModule) {
                 var oAuth = oPermissions[oModule.module] || { query: false, operate: false };
                 return {
                     module: oModule.module,

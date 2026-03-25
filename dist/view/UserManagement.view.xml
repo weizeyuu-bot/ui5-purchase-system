@@ -153,14 +153,15 @@
                                 showIcon="true"
                                 class="sapUiSmallMarginTop" />
 
-                            <Table items="{vm>/permissionRows}" class="sapUiSmallMarginTop">
+                            <Table items="{vm>/permissionRows}" class="sapUiSmallMarginTop"
+                                    noDataText="{i18n>roleSelectFirst}">
                                 <columns>
                                     <Column><Text text="{i18n>permissionModule}" /></Column>
                                     <Column hAlign="Center" width="120px"><Text text="{i18n>permissionQuery}" /></Column>
                                     <Column hAlign="Center" width="120px"><Text text="{i18n>permissionOperate}" /></Column>
                                 </columns>
                                 <items>
-                                    <ColumnListItem>
+                                    <ColumnListItem visible="{= !!${vm>moduleName} }">
                                         <cells>
                                             <Text text="{vm>moduleName}" />
                                             <Switch state="{vm>query}" change="onPermissionQueryChange" />
