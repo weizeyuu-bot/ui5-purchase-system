@@ -36,6 +36,7 @@ sap.ui.define([
             this.getView().setModel(oUsersModel, "users");
 
             this.getView().setModel(new JSONModel({
+                pageTitle: this._getText("userManagementTitle"),
                 selectedRoleId: "",
                 permissionRows: []
             }), "vm");
@@ -59,9 +60,15 @@ sap.ui.define([
             if (oIconTabBar && oIconTabBar.getSelectedKey() !== sTab) {
                 oIconTabBar.setSelectedKey(sTab);
             }
+            this._setPageTitleByTab(sTab);
             if (sTab === "permissions") {
                 this._initDefaultRoleSelection();
             }
+        },
+
+        onTabSelect: function (oEvent) {
+            var sTab = oEvent.getParameter("key") || "users";
+            this._setPageTitleByTab(sTab);
         },
 
         onNavBack: function () {
@@ -573,6 +580,18 @@ sap.ui.define([
                 };
             });
             oVm.setProperty("/permissionRows", aRows);
+        },
+
+        _setPageTitleByTab: function (sTab) {
+            var mTitleKey = {
+                users: "userManagementTitle",
+                roles: "menuRoleManagement",
+                permissions: "menuPermissionManagement"
+            };
+            this.getView().getModel("vm").setProperty(
+                "/pageTitle",
+                this._getText(mTitleKey[sTab] || "userManagementTitle")
+            );
         },
 
         _syncUserRoleData: function () {

@@ -4,11 +4,11 @@
     xmlns="sap.m"
     xmlns:layout="sap.ui.layout"
     xmlns:core="sap.ui.core">
-    <Page title="{i18n>userManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
+    <Page title="{vm>/pageTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding sapUiLargeMargin">
-            <Title text="{i18n>userManagementTitle}" level="H1" class="sapUiMediumMarginBottom" />
+            <Title text="{vm>/pageTitle}" level="H1" class="sapUiMediumMarginBottom" />
 
-            <IconTabBar id="userMgmtTabBar" expandable="false" class="sapUiResponsiveContentPadding">
+            <IconTabBar id="userMgmtTabBar" expandable="false" class="sapUiResponsiveContentPadding" select="onTabSelect">
                 <items>
                     <IconTabFilter key="users" icon="sap-icon://group" text="{i18n>userTabTitle}">
                         <VBox class="sapUiSmallMarginTop">

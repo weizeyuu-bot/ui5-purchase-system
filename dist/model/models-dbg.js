@@ -430,6 +430,7 @@
                             invoices: { query: true, operate: true },
                             users: { query: true, operate: true },
                             roles: { query: true, operate: true },
+                            permissionManagement: { query: true, operate: true },
                             system: { query: true, operate: true }
                         }
                     },
@@ -447,6 +448,7 @@
                             invoices: { query: true, operate: false },
                             users: { query: false, operate: false },
                             roles: { query: false, operate: false },
+                            permissionManagement: { query: false, operate: false },
                             system: { query: false, operate: false }
                         }
                     },
@@ -464,6 +466,7 @@
                             invoices: { query: true, operate: true },
                             users: { query: false, operate: false },
                             roles: { query: false, operate: false },
+                            permissionManagement: { query: false, operate: false },
                             system: { query: false, operate: false }
                         }
                     }
@@ -477,6 +480,7 @@
                     { module: "invoices", moduleName: "开票管理" },
                     { module: "users", moduleName: "用户管理" },
                     { module: "roles", moduleName: "角色管理" },
+                    { module: "permissionManagement", moduleName: "权限管理" },
                     { module: "system", moduleName: "系统管理" }
                 ],
                 registeredUsers: [
