@@ -47,6 +47,21 @@ sap.ui.define([
             this._refreshUserStatistics();
             this._refreshRoleUserCounts();
             this._initDefaultRoleSelection();
+
+            this.getOwnerComponent().getRouter()
+                .getRoute("RouteUserManagement")
+                .attachPatternMatched(this._onRouteMatched, this);
+        },
+
+        _onRouteMatched: function (oEvent) {
+            var sTab = oEvent.getParameter("arguments").tab || "users";
+            var oIconTabBar = this.byId("userMgmtTabBar");
+            if (oIconTabBar && oIconTabBar.getSelectedKey() !== sTab) {
+                oIconTabBar.setSelectedKey(sTab);
+            }
+            if (sTab === "permissions") {
+                this._initDefaultRoleSelection();
+            }
         },
 
         onNavBack: function () {

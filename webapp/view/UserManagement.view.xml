@@ -8,7 +8,7 @@
         <VBox class="sapUiContentPadding sapUiLargeMargin">
             <Title text="{i18n>userManagementTitle}" level="H1" class="sapUiMediumMarginBottom" />
 
-            <IconTabBar expandable="false" class="sapUiResponsiveContentPadding">
+            <IconTabBar id="userMgmtTabBar" expandable="false" class="sapUiResponsiveContentPadding">
                 <items>
                     <IconTabFilter key="users" icon="sap-icon://group" text="{i18n>userTabTitle}">
                         <VBox class="sapUiSmallMarginTop">

@@ -31,6 +31,8 @@
                     <GroupHeaderListItem title="{i18n>menuGroupGovernance}" upperCase="false" />
                     <StandardListItem title="{i18n>menuProfile}" icon="sap-icon://employee" type="Navigation" press="onNavigateToProfile" />
                     <StandardListItem title="{i18n>menuUserManagement}" icon="sap-icon://group" type="Navigation" press="onNavigateToUserManagement" />
+                    <StandardListItem title="{i18n>menuRoleManagement}" icon="sap-icon://personnel-view" type="Navigation" press="onNavigateToRoleManagement" />
+                    <StandardListItem title="{i18n>menuPermissionManagement}" icon="sap-icon://key" type="Navigation" press="onNavigateToPermissionManagement" />
                     <StandardListItem
                         id="processManagementParent"
                         title="{i18n>processManagementTitle}"

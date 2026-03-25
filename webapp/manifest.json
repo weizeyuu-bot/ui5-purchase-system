@@ -179,7 +179,7 @@
         },
         {
           "name": "RouteUserManagement",
-          "pattern": "userManagement",
+          "pattern": "userManagement/:tab:",
           "target": [
             "TargetUserManagement"
           ]
