@@ -425,12 +425,14 @@
                             suppliers: { query: true, operate: true },
                             materials: { query: true, operate: true },
                             priceLibrary: { query: true, operate: true },
+                            quoteManagement: { query: true, operate: true },
                             purchaseOrders: { query: true, operate: true },
                             deliveryPlans: { query: true, operate: true },
                             invoices: { query: true, operate: true },
                             users: { query: true, operate: true },
                             roles: { query: true, operate: true },
                             permissionManagement: { query: true, operate: true },
+                            processManagement: { query: true, operate: true },
                             system: { query: true, operate: true }
                         }
                     },
@@ -443,12 +445,14 @@
                             suppliers: { query: true, operate: false },
                             materials: { query: true, operate: false },
                             priceLibrary: { query: true, operate: false },
+                            quoteManagement: { query: true, operate: true },
                             purchaseOrders: { query: true, operate: true },
                             deliveryPlans: { query: true, operate: true },
                             invoices: { query: true, operate: false },
                             users: { query: false, operate: false },
                             roles: { query: false, operate: false },
                             permissionManagement: { query: false, operate: false },
+                            processManagement: { query: false, operate: false },
                             system: { query: false, operate: false }
                         }
                     },
@@ -461,27 +465,31 @@
                             suppliers: { query: true, operate: false },
                             materials: { query: true, operate: false },
                             priceLibrary: { query: true, operate: false },
+                            quoteManagement: { query: false, operate: false },
                             purchaseOrders: { query: true, operate: false },
                             deliveryPlans: { query: true, operate: false },
                             invoices: { query: true, operate: true },
                             users: { query: false, operate: false },
                             roles: { query: false, operate: false },
                             permissionManagement: { query: false, operate: false },
+                            processManagement: { query: false, operate: false },
                             system: { query: false, operate: false }
                         }
                     }
                 ],
                 permissionCatalog: [
-                    { module: "suppliers", moduleName: "供应商管理" },
-                    { module: "materials", moduleName: "物料管理" },
-                    { module: "priceLibrary", moduleName: "价格库管理" },
-                    { module: "purchaseOrders", moduleName: "采购订单管理" },
-                    { module: "deliveryPlans", moduleName: "送货计划管理" },
-                    { module: "invoices", moduleName: "开票管理" },
-                    { module: "users", moduleName: "用户管理" },
-                    { module: "roles", moduleName: "角色管理" },
-                    { module: "permissionManagement", moduleName: "权限管理" },
-                    { module: "system", moduleName: "系统管理" }
+                    { module: "suppliers", moduleName: "供应商管理", groupKey: "permissionGroupMasterData" },
+                    { module: "materials", moduleName: "物料管理", groupKey: "permissionGroupMasterData" },
+                    { module: "priceLibrary", moduleName: "价格库管理", groupKey: "permissionGroupMasterData" },
+                    { module: "quoteManagement", moduleName: "报价管理", groupKey: "permissionGroupMasterData" },
+                    { module: "purchaseOrders", moduleName: "采购订单管理", groupKey: "permissionGroupExecution" },
+                    { module: "deliveryPlans", moduleName: "送货计划管理", groupKey: "permissionGroupExecution" },
+                    { module: "invoices", moduleName: "开票管理", groupKey: "permissionGroupExecution" },
+                    { module: "users", moduleName: "用户管理", groupKey: "permissionGroupGovernanceConfig" },
+                    { module: "roles", moduleName: "角色管理", groupKey: "permissionGroupGovernanceConfig" },
+                    { module: "permissionManagement", moduleName: "权限管理", groupKey: "permissionGroupGovernanceConfig" },
+                    { module: "processManagement", moduleName: "流程配置", groupKey: "permissionGroupPlatformGovernance" },
+                    { module: "system", moduleName: "系统管理", groupKey: "permissionGroupPlatformGovernance" }
                 ],
                 registeredUsers: [
                     {

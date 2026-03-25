@@ -18,9 +18,28 @@ sap.ui.define([
             var sCurrentLang = ((sLangParam || sSavedLang || "ZH").toUpperCase().startsWith("EN")) ? "EN" : "ZH";
 
             this.getView().setModel(new JSONModel({
+                activeMenuKey: "",
                 processMenuExpanded: false,
                 processMenuSelectedKey: "",
-                currentLang: sCurrentLang
+                currentLang: sCurrentLang,
+                menuVisibility: {
+                    suppliers: true,
+                    materials: true,
+                    priceLibrary: true,
+                    quoteManagement: true,
+                    purchaseOrders: true,
+                    deliveryPlans: true,
+                    invoices: true,
+                    profile: true,
+                    users: true,
+                    roles: true,
+                    permissionManagement: true,
+                    processManagement: true,
+                    system: true,
+                    masterDataGroup: true,
+                    operationsGroup: true,
+                    governanceGroup: true
+                }
             }), "view");
 
             this._oDashboardModel = new JSONModel({
@@ -43,10 +62,12 @@ sap.ui.define([
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.getRoute("RouteHome").attachPatternMatched(this._onHomeMatched, this);
 
+            this._applyMenuAuthorization();
             this._refreshDashboard();
         },
 
         _onHomeMatched: function () {
+            this._applyMenuAuthorization();
             this._refreshDashboard();
         },
 
@@ -68,46 +89,57 @@ sap.ui.define([
         },
 
         onNavigateToSuppliers: function () {
+            this._setActiveMenuKey("suppliers");
             this.getOwnerComponent().getRouter().navTo("RouteSupplierList");
         },
 
         onNavigateToMaterials: function () {
+            this._setActiveMenuKey("materials");
             this.getOwnerComponent().getRouter().navTo("RouteMaterialList");
         },
 
         onNavigateToPurchaseOrders: function () {
+            this._setActiveMenuKey("purchaseOrders");
             this.getOwnerComponent().getRouter().navTo("RoutePurchaseOrderList");
         },
 
         onNavigateToDeliveryPlans: function () {
+            this._setActiveMenuKey("deliveryPlans");
             this.getOwnerComponent().getRouter().navTo("RouteDeliveryPlanList");
         },
 
         onNavigateToInvoices: function () {
+            this._setActiveMenuKey("invoices");
             this.getOwnerComponent().getRouter().navTo("RouteInvoiceList");
         },
 
         onNavigateToProfile: function () {
+            this._setActiveMenuKey("profile");
             this.getOwnerComponent().getRouter().navTo("RouteProfile");
         },
 
         onNavigateToUserManagement: function () {
+            this._setActiveMenuKey("users");
             this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "users" });
         },
 
         onNavigateToRoleManagement: function () {
+            this._setActiveMenuKey("roles");
             this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "roles" });
         },
 
         onNavigateToPermissionManagement: function () {
+            this._setActiveMenuKey("permissionManagement");
             this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "permissions" });
         },
 
         onNavigateToQuoteManagement: function () {
+            this._setActiveMenuKey("quoteManagement");
             this.getOwnerComponent().getRouter().navTo("RouteQuoteManagement");
         },
 
         onNavigateToPriceLibrary: function () {
+            this._setActiveMenuKey("priceLibrary");
             this.getOwnerComponent().getRouter().navTo("RoutePriceLibrary");
         },
 
@@ -116,6 +148,7 @@ sap.ui.define([
         },
 
         onNavigateToProcessCategories: function () {
+            this._setActiveMenuKey("processCategories");
             this.getOwnerComponent().getRouter().navTo("RouteProcessCategories");
             var oViewModel = this.getView().getModel("view");
             oViewModel.setProperty("/processMenuExpanded", true);
@@ -123,6 +156,7 @@ sap.ui.define([
         },
 
         onNavigateToProcessFormConfigs: function () {
+            this._setActiveMenuKey("processForms");
             this.getOwnerComponent().getRouter().navTo("RouteProcessFormConfigs");
             var oViewModel = this.getView().getModel("view");
             oViewModel.setProperty("/processMenuExpanded", true);
@@ -130,6 +164,7 @@ sap.ui.define([
         },
 
         onNavigateToProcessModels: function () {
+            this._setActiveMenuKey("processModels");
             this.getOwnerComponent().getRouter().navTo("RouteProcessModels");
             var oViewModel = this.getView().getModel("view");
             oViewModel.setProperty("/processMenuExpanded", true);
@@ -137,6 +172,7 @@ sap.ui.define([
         },
 
         onNavigateToProcessDeployments: function () {
+            this._setActiveMenuKey("processDeployments");
             this.getOwnerComponent().getRouter().navTo("RouteProcessDeployments");
             var oViewModel = this.getView().getModel("view");
             oViewModel.setProperty("/processMenuExpanded", true);
@@ -155,7 +191,52 @@ sap.ui.define([
         },
 
         onNavigateToSystemManagement: function () {
+            this._setActiveMenuKey("system");
             this.getOwnerComponent().getRouter().navTo("RouteSystemManagement");
+        },
+
+        _setActiveMenuKey: function (sKey) {
+            this.getView().getModel("view").setProperty("/activeMenuKey", sKey || "");
+        },
+
+        _applyMenuAuthorization: function () {
+            var oViewModel = this.getView().getModel("view");
+            var oUserModel = this.getOwnerComponent().getModel("user");
+            var oUsersModel = this.getOwnerComponent().getModel("users");
+            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+            var aRegisteredUsers = oUsersModel.getProperty("/registeredUsers") || [];
+            var aRoles = oUsersModel.getProperty("/roles") || [];
+            var oRegisteredUser = aRegisteredUsers.find(function (oItem) {
+                return oCurrentUser && oItem.username === oCurrentUser.username;
+            });
+            var oRole = aRoles.find(function (oItem) {
+                return oRegisteredUser && oItem.id === oRegisteredUser.roleId;
+            });
+            var oPermissions = oRole && oRole.permissions ? oRole.permissions : {};
+            var fnCanQuery = function (sModule) {
+                return !!(oPermissions[sModule] && oPermissions[sModule].query);
+            };
+            var oVisibility = {
+                suppliers: fnCanQuery("suppliers"),
+                materials: fnCanQuery("materials"),
+                priceLibrary: fnCanQuery("priceLibrary"),
+                quoteManagement: fnCanQuery("quoteManagement"),
+                purchaseOrders: fnCanQuery("purchaseOrders"),
+                deliveryPlans: fnCanQuery("deliveryPlans"),
+                invoices: fnCanQuery("invoices"),
+                profile: true,
+                users: fnCanQuery("users"),
+                roles: fnCanQuery("roles"),
+                permissionManagement: fnCanQuery("permissionManagement"),
+                processManagement: fnCanQuery("processManagement"),
+                system: fnCanQuery("system")
+            };
+
+            oVisibility.masterDataGroup = oVisibility.suppliers || oVisibility.materials || oVisibility.priceLibrary || oVisibility.quoteManagement;
+            oVisibility.operationsGroup = oVisibility.purchaseOrders || oVisibility.deliveryPlans || oVisibility.invoices;
+            oVisibility.governanceGroup = oVisibility.profile || oVisibility.users || oVisibility.roles || oVisibility.permissionManagement || oVisibility.processManagement || oVisibility.system;
+
+            oViewModel.setProperty("/menuVisibility", oVisibility);
         },
 
         onDashboardRoutePress: function (oEvent) {

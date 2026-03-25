@@ -17,34 +17,36 @@
         <HBox class="homeMainContainer">
             <VBox class="homeMenuPanel" width="220px">
                 <List selectionMode="None" class="navigationList">
-                    <GroupHeaderListItem title="{i18n>menuGroupMasterData}" upperCase="false" />
-                    <StandardListItem title="{i18n>menuSuppliers}" icon="sap-icon://tag" type="Navigation" press="onNavigateToSuppliers" />
-                    <StandardListItem title="{i18n>menuMaterials}" icon="sap-icon://product" type="Navigation" press="onNavigateToMaterials" />
-                    <StandardListItem title="{i18n>menuPriceLibrary}" icon="sap-icon://money-bills" type="Navigation" press="onNavigateToPriceLibrary" />
-                    <StandardListItem title="{i18n>menuQuoteManagement}" icon="sap-icon://business-objects-experience" type="Navigation" press="onNavigateToQuoteManagement" />
+                    <GroupHeaderListItem title="{i18n>menuGroupMasterData}" upperCase="false" visible="{view>/menuVisibility/masterDataGroup}" />
+                    <StandardListItem title="{i18n>menuSuppliers}" icon="sap-icon://tag" type="Navigation" press="onNavigateToSuppliers" visible="{view>/menuVisibility/suppliers}" selected="{= ${view>/activeMenuKey} === 'suppliers' }" />
+                    <StandardListItem title="{i18n>menuMaterials}" icon="sap-icon://product" type="Navigation" press="onNavigateToMaterials" visible="{view>/menuVisibility/materials}" selected="{= ${view>/activeMenuKey} === 'materials' }" />
+                    <StandardListItem title="{i18n>menuPriceLibrary}" icon="sap-icon://money-bills" type="Navigation" press="onNavigateToPriceLibrary" visible="{view>/menuVisibility/priceLibrary}" selected="{= ${view>/activeMenuKey} === 'priceLibrary' }" />
+                    <StandardListItem title="{i18n>menuQuoteManagement}" icon="sap-icon://business-objects-experience" type="Navigation" press="onNavigateToQuoteManagement" visible="{view>/menuVisibility/quoteManagement}" selected="{= ${view>/activeMenuKey} === 'quoteManagement' }" />
 
-                    <GroupHeaderListItem title="{i18n>menuGroupOperations}" upperCase="false" />
-                    <StandardListItem title="{i18n>menuPurchaseOrders}" icon="sap-icon://documents" type="Navigation" press="onNavigateToPurchaseOrders" />
-                    <StandardListItem title="{i18n>menuDeliveryPlans}" icon="sap-icon://shipping-status" type="Navigation" press="onNavigateToDeliveryPlans" />
-                    <StandardListItem title="{i18n>menuInvoices}" icon="sap-icon://receipt" type="Navigation" press="onNavigateToInvoices" />
+                    <GroupHeaderListItem title="{i18n>menuGroupOperations}" upperCase="false" visible="{view>/menuVisibility/operationsGroup}" />
+                    <StandardListItem title="{i18n>menuPurchaseOrders}" icon="sap-icon://documents" type="Navigation" press="onNavigateToPurchaseOrders" visible="{view>/menuVisibility/purchaseOrders}" selected="{= ${view>/activeMenuKey} === 'purchaseOrders' }" />
+                    <StandardListItem title="{i18n>menuDeliveryPlans}" icon="sap-icon://shipping-status" type="Navigation" press="onNavigateToDeliveryPlans" visible="{view>/menuVisibility/deliveryPlans}" selected="{= ${view>/activeMenuKey} === 'deliveryPlans' }" />
+                    <StandardListItem title="{i18n>menuInvoices}" icon="sap-icon://receipt" type="Navigation" press="onNavigateToInvoices" visible="{view>/menuVisibility/invoices}" selected="{= ${view>/activeMenuKey} === 'invoices' }" />
 
-                    <GroupHeaderListItem title="{i18n>menuGroupGovernance}" upperCase="false" />
-                    <StandardListItem title="{i18n>menuProfile}" icon="sap-icon://employee" type="Navigation" press="onNavigateToProfile" />
-                    <StandardListItem title="{i18n>menuUserManagement}" icon="sap-icon://group" type="Navigation" press="onNavigateToUserManagement" />
-                    <StandardListItem title="{i18n>menuRoleManagement}" icon="sap-icon://personnel-view" type="Navigation" press="onNavigateToRoleManagement" />
-                    <StandardListItem title="{i18n>menuPermissionManagement}" icon="sap-icon://key" type="Navigation" press="onNavigateToPermissionManagement" />
+                    <GroupHeaderListItem title="{i18n>menuGroupGovernance}" upperCase="false" visible="{view>/menuVisibility/governanceGroup}" />
+                    <StandardListItem title="{i18n>menuProfile}" icon="sap-icon://employee" type="Navigation" press="onNavigateToProfile" visible="{view>/menuVisibility/profile}" selected="{= ${view>/activeMenuKey} === 'profile' }" />
+                    <StandardListItem title="{i18n>menuUserManagement}" icon="sap-icon://group" type="Navigation" press="onNavigateToUserManagement" visible="{view>/menuVisibility/users}" selected="{= ${view>/activeMenuKey} === 'users' }" />
+                    <StandardListItem title="{i18n>menuRoleManagement}" icon="sap-icon://personnel-view" type="Navigation" press="onNavigateToRoleManagement" visible="{view>/menuVisibility/roles}" selected="{= ${view>/activeMenuKey} === 'roles' }" />
+                    <StandardListItem title="{i18n>menuPermissionManagement}" icon="sap-icon://key" type="Navigation" press="onNavigateToPermissionManagement" visible="{view>/menuVisibility/permissionManagement}" selected="{= ${view>/activeMenuKey} === 'permissionManagement' }" />
                     <StandardListItem
                         id="processManagementParent"
                         title="{i18n>processManagementTitle}"
                         icon="{= ${view>/processMenuExpanded} ? 'sap-icon://navigation-up-arrow' : 'sap-icon://navigation-down-arrow'}"
                         type="Navigation"
+                        visible="{view>/menuVisibility/processManagement}"
                         press="onToggleProcessMenu"
+                        selected="{= ${view>/activeMenuKey} === 'processCategories' || ${view>/activeMenuKey} === 'processForms' || ${view>/activeMenuKey} === 'processModels' || ${view>/activeMenuKey} === 'processDeployments' }"
                         class="parentMenuItem" />
-                    <StandardListItem title="{i18n>processCategoriesTitle}" icon="sap-icon://activity-individual" type="Navigation" visible="{= ${view>/processMenuExpanded} }" press="onNavigateToProcessCategories" selected="{= ${view>/processMenuSelectedKey} === 'categories'}" class="subMenuItem" />
-                    <StandardListItem title="{i18n>formConfigTitle}" icon="sap-icon://form" type="Navigation" visible="{= ${view>/processMenuExpanded} }" press="onNavigateToProcessFormConfigs" selected="{= ${view>/processMenuSelectedKey} === 'forms'}" class="subMenuItem" />
-                    <StandardListItem title="{i18n>processModelTitle}" icon="sap-icon://process" type="Navigation" visible="{= ${view>/processMenuExpanded} }" press="onNavigateToProcessModels" selected="{= ${view>/processMenuSelectedKey} === 'models'}" class="subMenuItem" />
-                    <StandardListItem title="{i18n>deploymentManagementTitle}" icon="sap-icon://sys-enter-2" type="Navigation" visible="{= ${view>/processMenuExpanded} }" press="onNavigateToProcessDeployments" selected="{= ${view>/processMenuSelectedKey} === 'deployment'}" class="subMenuItem" />
-                    <StandardListItem title="{i18n>menuSystemManagement}" icon="sap-icon://settings" type="Navigation" press="onNavigateToSystemManagement" />
+                    <StandardListItem title="{i18n>processCategoriesTitle}" icon="sap-icon://activity-individual" type="Navigation" visible="{= ${view>/menuVisibility/processManagement} &amp;&amp; ${view>/processMenuExpanded} }" press="onNavigateToProcessCategories" selected="{= ${view>/processMenuSelectedKey} === 'categories'}" class="subMenuItem" />
+                    <StandardListItem title="{i18n>formConfigTitle}" icon="sap-icon://form" type="Navigation" visible="{= ${view>/menuVisibility/processManagement} &amp;&amp; ${view>/processMenuExpanded} }" press="onNavigateToProcessFormConfigs" selected="{= ${view>/processMenuSelectedKey} === 'forms'}" class="subMenuItem" />
+                    <StandardListItem title="{i18n>processModelTitle}" icon="sap-icon://process" type="Navigation" visible="{= ${view>/menuVisibility/processManagement} &amp;&amp; ${view>/processMenuExpanded} }" press="onNavigateToProcessModels" selected="{= ${view>/processMenuSelectedKey} === 'models'}" class="subMenuItem" />
+                    <StandardListItem title="{i18n>deploymentManagementTitle}" icon="sap-icon://sys-enter-2" type="Navigation" visible="{= ${view>/menuVisibility/processManagement} &amp;&amp; ${view>/processMenuExpanded} }" press="onNavigateToProcessDeployments" selected="{= ${view>/processMenuSelectedKey} === 'deployment'}" class="subMenuItem" />
+                    <StandardListItem title="{i18n>menuSystemManagement}" icon="sap-icon://settings" type="Navigation" press="onNavigateToSystemManagement" visible="{view>/menuVisibility/system}" selected="{= ${view>/activeMenuKey} === 'system' }" />
                 </List>
             </VBox>
 

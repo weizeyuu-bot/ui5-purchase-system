@@ -568,17 +568,24 @@ sap.ui.define([
             }
 
             var oPermissions = oRole.permissions || {};
+            var sLastGroupKey = "";
             var aRows = aCatalog
                 .filter(function (oModule) { return !!oModule.module && !!oModule.moduleName; })
                 .map(function (oModule) {
-                var oAuth = oPermissions[oModule.module] || { query: false, operate: false };
-                return {
-                    module: oModule.module,
-                    moduleName: oModule.moduleName,
-                    query: !!oAuth.query,
-                    operate: !!oAuth.operate
-                };
-            });
+                    var oAuth = oPermissions[oModule.module] || { query: false, operate: false };
+                    var sGroupKey = oModule.groupKey || "";
+                    var sGroupName = sGroupKey && sGroupKey !== sLastGroupKey ? this._getText(sGroupKey) : "";
+
+                    sLastGroupKey = sGroupKey;
+
+                    return {
+                        module: oModule.module,
+                        groupName: sGroupName,
+                        moduleName: oModule.moduleName,
+                        query: !!oAuth.query,
+                        operate: !!oAuth.operate
+                    };
+                }, this);
             oVm.setProperty("/permissionRows", aRows);
         },
 

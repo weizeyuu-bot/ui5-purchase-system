@@ -156,6 +156,7 @@
                             <Table items="{vm>/permissionRows}" class="sapUiSmallMarginTop"
                                     noDataText="{i18n>roleSelectFirst}">
                                 <columns>
+                                    <Column width="160px"><Text text="{i18n>permissionGroup}" /></Column>
                                     <Column><Text text="{i18n>permissionModule}" /></Column>
                                     <Column hAlign="Center" width="120px"><Text text="{i18n>permissionQuery}" /></Column>
                                     <Column hAlign="Center" width="120px"><Text text="{i18n>permissionOperate}" /></Column>
@@ -163,6 +164,7 @@
                                 <items>
                                     <ColumnListItem visible="{= !!${vm>moduleName} }">
                                         <cells>
+                                            <Text text="{vm>groupName}" />
                                             <Text text="{vm>moduleName}" />
                                             <Switch state="{vm>query}" change="onPermissionQueryChange" />
                                             <Switch state="{vm>operate}" change="onPermissionOperateChange" />

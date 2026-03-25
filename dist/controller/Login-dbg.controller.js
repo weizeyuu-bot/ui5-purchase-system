@@ -40,6 +40,7 @@ sap.ui.define([
             MessageToast.show(this._getText("loggingIn"));
             var oView = this.getView();
             var oUserModel = this.getOwnerComponent().getModel("user");
+            var oUsersManagementModel = this.getOwnerComponent().getModel("users");
 
             // 先尝试后端校验，失败回退本地模型
             fetch("/api/auth/login", {
@@ -60,12 +61,12 @@ sap.ui.define([
                     // 成功：后端返回用户信息（建议仅返回 id/name/token）
                     var sToken = data.token || "";
                     var iExpiry = Date.now() + 30 * 60 * 1000; // 30 分钟有效期
-                    var oCurrentUser = {
+                    var oCurrentUser = this._enrichCurrentUser({
                         username: data.user.username,
                         name: data.user.name || data.user.username,
                         token: sToken,
                         tokenExpiry: iExpiry
-                    };
+                    }, oUsersManagementModel);
                     if (!oUserModel) {
                         oUserModel = new JSONModel({ users: [], currentUser: oCurrentUser });
                         this.getOwnerComponent().setModel(oUserModel, "user");
@@ -106,10 +107,10 @@ sap.ui.define([
                 } else if (oUser.password !== sPassword) {
                     MessageToast.show(this._getText("passwordIncorrect"));
                 } else {
-                    var oLocalUser = Object.assign({}, oUser, {
+                    var oLocalUser = this._enrichCurrentUser(Object.assign({}, oUser, {
                         token: "local-token-" + Math.random().toString(36).slice(2),
                         tokenExpiry: Date.now() + 30 * 60 * 1000 // 30 分钟
-                    });
+                    }), oUsersManagementModel);
                     oUserModel.setProperty("/currentUser", oLocalUser);
                     localStorage.setItem("currentUser", JSON.stringify(oLocalUser));
                     oView.getModel().setProperty("/password", "");
@@ -168,6 +169,23 @@ sap.ui.define([
 
         _getText: function (sKey) {
             return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(sKey);
+        },
+
+        _enrichCurrentUser: function (oCurrentUser, oUsersManagementModel) {
+            var aRegisteredUsers = oUsersManagementModel ? (oUsersManagementModel.getProperty("/registeredUsers") || []) : [];
+            var oRegisteredUser = aRegisteredUsers.find(function (oItem) {
+                return oItem.username === oCurrentUser.username;
+            });
+
+            if (!oRegisteredUser) {
+                return oCurrentUser;
+            }
+
+            return Object.assign({}, oCurrentUser, {
+                roleId: oRegisteredUser.roleId || "",
+                roleName: oRegisteredUser.roleName || oRegisteredUser.role || "",
+                department: oRegisteredUser.department || ""
+            });
         }
     });
 });
