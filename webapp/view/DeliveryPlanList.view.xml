@@ -61,13 +61,9 @@
                             <Label text="{i18n>deliveryDate}" />
                             <DatePicker value="{oNewDP>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" />
                             <Label text="{i18n>status}" />
-                            <Select id="dpStatusInput" selectedKey="{oNewDP>/status}" forceSelection="false">
+                            <Select id="dpStatusInput" selectedKey="{oNewDP>/status}" forceSelection="false" items="{statusOptions>/deliveryStatusWithBlank}">
                                 <items>
-                                    <core:Item key="" text="{i18n>pleaseSelect}" />
-                                    <core:Item key="PENDING" text="{i18n>deliveryStatusPending}" />
-                                    <core:Item key="SHIPPED" text="{i18n>deliveryStatusShipped}" />
-                                    <core:Item key="IN_TRANSIT" text="{i18n>deliveryStatusInTransit}" />
-                                    <core:Item key="DELIVERED" text="{i18n>deliveryStatusDelivered}" />
+                                    <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                 </items>
                             </Select>
                             <Label text="{i18n>poItemCount}" />

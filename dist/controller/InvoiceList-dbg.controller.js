@@ -122,6 +122,7 @@ sap.ui.define([
                 return;
             }
             var oDraft = oDraftModel.getData();
+            this._alignDraftItems(oDraft);
             this._syncDraftSummary(oDraft);
             oDraftModel.refresh(true);
         },
@@ -140,6 +141,13 @@ sap.ui.define([
                 return !oLine.purchaseOrderId || !oLine.deliveryPlanId || !Number(oLine.amount || 0);
             })) {
                 MessageBox.error(this._getText("invoiceItemRequired"));
+                return;
+            }
+
+            if (aItems.some(function (oLine) {
+                return !this._isDeliveryPlanLinkedToPurchaseOrder(oLine.deliveryPlanId, oLine.purchaseOrderId);
+            }, this)) {
+                MessageBox.error(this._getText("invoiceItemRelationInvalid"));
                 return;
             }
 
@@ -267,6 +275,44 @@ sap.ui.define([
             oDraft.amount = fTotalAmount.toFixed(2);
             oDraft.purchaseOrderId = aItems.length ? (aItems[0].purchaseOrderId || "") : "";
             oDraft.deliveryPlanId = aItems.length ? (aItems[0].deliveryPlanId || "") : "";
+        },
+
+        _alignDraftItems: function (oDraft) {
+            var aItems = oDraft.items || [];
+            aItems.forEach(function (oLine) {
+                oLine.amount = Number(oLine.amount || 0);
+                if (!oLine.purchaseOrderId) {
+                    oLine.deliveryPlanId = "";
+                    return;
+                }
+
+                if (!this._isDeliveryPlanLinkedToPurchaseOrder(oLine.deliveryPlanId, oLine.purchaseOrderId)) {
+                    oLine.deliveryPlanId = this._getFirstDeliveryPlanIdByPurchaseOrder(oLine.purchaseOrderId);
+                }
+            }, this);
+        },
+
+        _isDeliveryPlanLinkedToPurchaseOrder: function (sDeliveryPlanId, sPurchaseOrderId) {
+            if (!sDeliveryPlanId || !sPurchaseOrderId) {
+                return false;
+            }
+
+            var aPlans = this.getOwnerComponent().getModel("deliveryPlans").getProperty("/deliveryPlans") || [];
+            return aPlans.some(function (oPlan) {
+                return oPlan.id === sDeliveryPlanId && oPlan.purchaseOrderId === sPurchaseOrderId;
+            });
+        },
+
+        _getFirstDeliveryPlanIdByPurchaseOrder: function (sPurchaseOrderId) {
+            if (!sPurchaseOrderId) {
+                return "";
+            }
+
+            var aPlans = this.getOwnerComponent().getModel("deliveryPlans").getProperty("/deliveryPlans") || [];
+            var oMatched = aPlans.find(function (oPlan) {
+                return oPlan.purchaseOrderId === sPurchaseOrderId;
+            });
+            return oMatched ? oMatched.id : "";
         },
 
         _todayString: function () {

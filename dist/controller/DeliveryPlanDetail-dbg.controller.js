@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     "sap/ui/model/json/JSONModel"
-], function (Controller, History, MessageToast, JSONModel) {
+], function (Controller, History, MessageToast, MessageBox, JSONModel) {
     "use strict";
 
     return Controller.extend("myapp.controller.DeliveryPlanDetail", {
@@ -51,6 +52,24 @@ sap.ui.define([
         },
 
         onSave: function () {
+            var oModel = this.getView().getModel("deliveryPlans");
+            var oPlan = oModel.getProperty("/deliveryPlans/" + this._iPlanIndex);
+            var aItems = (oPlan && oPlan.items) || [];
+
+            if (!aItems.length || aItems.some(function (oLine) {
+                return !oLine.purchaseOrderId || !Number(oLine.quantity || 0);
+            })) {
+                MessageBox.error(this._getText("deliveryPlanItemRequired"));
+                return;
+            }
+
+            if (aItems.some(function (oLine) {
+                return !this._isPurchaseOrderExists(oLine.purchaseOrderId);
+            }, this)) {
+                MessageBox.error(this._getText("deliveryPlanPurchaseOrderRequired"));
+                return;
+            }
+
             this._syncCurrentPlan();
             MessageToast.show(this._getText("deliveryPlanSaved"));
             this.onNavBack();
@@ -137,14 +156,39 @@ sap.ui.define([
             var aItems = oPlan.items || [];
             aItems.forEach(function (oItem, iIndex) {
                 oItem.lineId = String((iIndex + 1) * 10);
-                oItem.quantity = Number(oItem.quantity || 0);
-            });
+
+                if (!oItem.purchaseOrderId) {
+                    oItem.quantity = Number(oItem.quantity || 0);
+                    return;
+                }
+
+                if (!Number(oItem.quantity || 0)) {
+                    var oOrder = this._findPurchaseOrderById(oItem.purchaseOrderId);
+                    oItem.quantity = Number(oOrder ? (oOrder.totalQuantity || oOrder.quantity || 0) : 0);
+                } else {
+                    oItem.quantity = Number(oItem.quantity || 0);
+                }
+            }, this);
 
             oPlan.itemCount = aItems.length;
             oPlan.totalQuantity = aItems.reduce(function (iSum, oItem) {
                 return iSum + Number(oItem.quantity || 0);
             }, 0);
             oPlan.purchaseOrderId = aItems.length ? (aItems[0].purchaseOrderId || "") : "";
+        },
+
+        _findPurchaseOrderById: function (sPurchaseOrderId) {
+            var aOrders = this.getOwnerComponent().getModel("purchaseOrders").getProperty("/purchaseOrders") || [];
+            return aOrders.find(function (oOrder) {
+                return oOrder.id === sPurchaseOrderId;
+            });
+        },
+
+        _isPurchaseOrderExists: function (sPurchaseOrderId) {
+            if (!sPurchaseOrderId) {
+                return false;
+            }
+            return !!this._findPurchaseOrderById(sPurchaseOrderId);
         },
 
         _getText: function (sKey) {

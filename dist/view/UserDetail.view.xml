@@ -58,11 +58,9 @@
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>status}">
                                     <form:fields>
-                                        <Select selectedKey="{users>status}" enabled="{ui>/editMode}" change="onStatusChange">
+                                        <Select selectedKey="{users>status}" enabled="{ui>/editMode}" change="onStatusChange" forceSelection="false" items="{statusOptions>/userStatus}">
                                             <items>
-                                                <core:Item key="ACTIVE" text="{i18n>statusActive}" />
-                                                <core:Item key="INACTIVE" text="{i18n>statusInactive}" />
-                                                <core:Item key="DISABLED" text="{i18n>statusDisabled}" />
+                                                <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                             </items>
                                         </Select>
                                     </form:fields>

@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/core/routing/History",
     "sap/m/MessageToast",
+    "sap/m/MessageBox",
     "sap/ui/model/json/JSONModel"
-], function (Controller, History, MessageToast, JSONModel) {
+], function (Controller, History, MessageToast, MessageBox, JSONModel) {
     "use strict";
 
     return Controller.extend("myapp.controller.InvoiceDetail", {
@@ -57,6 +58,24 @@ sap.ui.define([
         },
 
         onSave: function () {
+            var oModel = this.getView().getModel("invoices");
+            var oInvoice = oModel.getProperty("/invoices/" + this._iInvoiceIndex);
+            var aItems = (oInvoice && oInvoice.items) || [];
+
+            if (!aItems.length || aItems.some(function (oLine) {
+                return !oLine.purchaseOrderId || !oLine.deliveryPlanId || !Number(oLine.amount || 0);
+            })) {
+                MessageBox.error(this._getText("invoiceItemRequired"));
+                return;
+            }
+
+            if (aItems.some(function (oLine) {
+                return !this._isDeliveryPlanLinkedToPurchaseOrder(oLine.deliveryPlanId, oLine.purchaseOrderId);
+            }, this)) {
+                MessageBox.error(this._getText("invoiceItemRelationInvalid"));
+                return;
+            }
+
             this._syncCurrentInvoice();
             MessageToast.show(this._getText("invoiceSaved"));
             this.onNavBack();
@@ -151,7 +170,16 @@ sap.ui.define([
             aItems.forEach(function (oItem, iIndex) {
                 oItem.lineId = String((iIndex + 1) * 10);
                 oItem.amount = Number(oItem.amount || 0);
-            });
+
+                if (!oItem.purchaseOrderId) {
+                    oItem.deliveryPlanId = "";
+                    return;
+                }
+
+                if (!this._isDeliveryPlanLinkedToPurchaseOrder(oItem.deliveryPlanId, oItem.purchaseOrderId)) {
+                    oItem.deliveryPlanId = this._getFirstDeliveryPlanIdByPurchaseOrder(oItem.purchaseOrderId);
+                }
+            }, this);
 
             oInvoice.itemCount = aItems.length;
             oInvoice.amount = aItems.reduce(function (fSum, oItem) {
@@ -159,6 +187,29 @@ sap.ui.define([
             }, 0).toFixed(2);
             oInvoice.purchaseOrderId = aItems.length ? (aItems[0].purchaseOrderId || "") : "";
             oInvoice.deliveryPlanId = aItems.length ? (aItems[0].deliveryPlanId || "") : "";
+        },
+
+        _isDeliveryPlanLinkedToPurchaseOrder: function (sDeliveryPlanId, sPurchaseOrderId) {
+            if (!sDeliveryPlanId || !sPurchaseOrderId) {
+                return false;
+            }
+
+            var aPlans = this.getOwnerComponent().getModel("deliveryPlans").getProperty("/deliveryPlans") || [];
+            return aPlans.some(function (oPlan) {
+                return oPlan.id === sDeliveryPlanId && oPlan.purchaseOrderId === sPurchaseOrderId;
+            });
+        },
+
+        _getFirstDeliveryPlanIdByPurchaseOrder: function (sPurchaseOrderId) {
+            if (!sPurchaseOrderId) {
+                return "";
+            }
+
+            var aPlans = this.getOwnerComponent().getModel("deliveryPlans").getProperty("/deliveryPlans") || [];
+            var oMatched = aPlans.find(function (oPlan) {
+                return oPlan.purchaseOrderId === sPurchaseOrderId;
+            });
+            return oMatched ? oMatched.id : "";
         },
 
         _getText: function (sKey) {

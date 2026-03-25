@@ -121,6 +121,7 @@ sap.ui.define([
                 return;
             }
             var oDraft = oDraftModel.getData();
+            this._alignDraftItems(oDraft);
             this._syncDraftSummary(oDraft);
             oDraftModel.refresh(true);
         },
@@ -139,6 +140,13 @@ sap.ui.define([
                 return !oLine.purchaseOrderId || !Number(oLine.quantity || 0);
             })) {
                 MessageBox.error(this._getText("deliveryPlanItemRequired"));
+                return;
+            }
+
+            if (aItems.some(function (oLine) {
+                return !this._isPurchaseOrderExists(oLine.purchaseOrderId);
+            }, this)) {
+                MessageBox.error(this._getText("deliveryPlanPurchaseOrderRequired"));
                 return;
             }
 
@@ -254,6 +262,37 @@ sap.ui.define([
             oDraft.itemCount = aItems.length;
             oDraft.totalQuantity = iTotalQuantity;
             oDraft.purchaseOrderId = aItems.length ? (aItems[0].purchaseOrderId || "") : "";
+        },
+
+        _alignDraftItems: function (oDraft) {
+            var aItems = oDraft.items || [];
+            aItems.forEach(function (oLine) {
+                if (!oLine.purchaseOrderId) {
+                    oLine.quantity = Number(oLine.quantity || 0);
+                    return;
+                }
+
+                if (!Number(oLine.quantity || 0)) {
+                    var oOrder = this._findPurchaseOrderById(oLine.purchaseOrderId);
+                    oLine.quantity = Number(oOrder ? (oOrder.totalQuantity || oOrder.quantity || 0) : 0);
+                } else {
+                    oLine.quantity = Number(oLine.quantity || 0);
+                }
+            }, this);
+        },
+
+        _findPurchaseOrderById: function (sPurchaseOrderId) {
+            var aOrders = this.getOwnerComponent().getModel("purchaseOrders").getProperty("/purchaseOrders") || [];
+            return aOrders.find(function (oOrder) {
+                return oOrder.id === sPurchaseOrderId;
+            }) || null;
+        },
+
+        _isPurchaseOrderExists: function (sPurchaseOrderId) {
+            if (!sPurchaseOrderId) {
+                return false;
+            }
+            return !!this._findPurchaseOrderById(sPurchaseOrderId);
         },
 
         _todayString: function () {

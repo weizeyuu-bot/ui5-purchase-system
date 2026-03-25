@@ -65,12 +65,9 @@
                             <Label text="{i18n>invoiceDate}" />
                             <DatePicker value="{oNewInvoice>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" />
                             <Label text="{i18n>status}" />
-                            <Select id="invStatusInput" selectedKey="{oNewInvoice>/status}" forceSelection="false">
+                            <Select id="invStatusInput" selectedKey="{oNewInvoice>/status}" forceSelection="false" items="{statusOptions>/invoiceStatusWithBlank}">
                                 <items>
-                                    <core:Item key="" text="{i18n>pleaseSelect}" />
-                                    <core:Item key="PENDING" text="{i18n>invoiceStatusPending}" />
-                                    <core:Item key="INVOICED" text="{i18n>invoiceStatusInvoiced}" />
-                                    <core:Item key="VOID" text="{i18n>invoiceStatusVoided}" />
+                                    <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                 </items>
                             </Select>
                             <Label text="{i18n>poItemCount}" />

@@ -74,13 +74,9 @@
                             <Label text="{i18n>poDate}" />
                             <DatePicker value="{oNewPO>/date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" />
                             <Label text="{i18n>status}" />
-                            <Select selectedKey="{oNewPO>/status}" forceSelection="false">
+                            <Select selectedKey="{oNewPO>/status}" forceSelection="false" items="{statusOptions>/orderStatusWithBlank}">
                                 <items>
-                                    <core:Item key="" text="{i18n>pleaseSelect}" />
-                                    <core:Item key="ORDERED" text="{i18n>statusOrderPlaced}" />
-                                    <core:Item key="PROCESSING" text="{i18n>statusProcessing}" />
-                                    <core:Item key="RECEIVED" text="{i18n>statusReceived}" />
-                                    <core:Item key="CANCELLED" text="{i18n>statusCancelled}" />
+                                    <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                 </items>
                             </Select>
                             <Label text="{i18n>poItemCount}" />

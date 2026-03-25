@@ -161,6 +161,53 @@
     gap: 16px;
 }
 
+.dashboardBarChartRow {
+    gap: 0;
+    align-items: flex-start;
+}
+
+.dashboardBarChartBlock {
+    flex: 1 1 260px;
+    min-width: 220px;
+    padding: 8px 20px 8px 8px;
+    box-sizing: border-box;
+}
+
+.dashboardBarChartBlock + .dashboardBarChartBlock {
+    border-left: 1px solid #e8e8e8;
+}
+
+.dashboardBarChartTitle {
+    margin-bottom: 10px !important;
+    color: #32363a;
+}
+
+.dashboardBarList .sapMLIB {
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.dashboardBarItem {
+    width: 100%;
+    padding: 6px 0;
+}
+
+.dashboardBarLabel {
+    font-size: 0.82rem;
+    color: #556b7d;
+    max-width: 80px;
+}
+
+.dashboardBarCount {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #32363a;
+}
+
+.dashboardBarProgress {
+    width: 100% !important;
+}
+
 .dashboardContainer {
     padding: 2rem;
 }

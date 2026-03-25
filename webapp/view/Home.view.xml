@@ -130,22 +130,50 @@
                 </HBox>
 
                 <Panel headerText="{i18n>dashboardExecutionSection}" class="sapUiLargeMargin sapUiMediumMarginBegin sapUiMediumMarginEnd dashboardPanel">
-                    <Table items="{dashboard>/statusOverview}">
-                        <columns>
-                            <Column><Text text="{i18n>status}" /></Column>
-                            <Column><Text text="{i18n>purchaseOrderCount}" /></Column>
-                            <Column><Text text="{i18n>dashboardExecutionInsight}" /></Column>
-                        </columns>
-                        <items>
-                            <ColumnListItem>
-                                <cells>
-                                    <Text text="{dashboard>label}" />
-                                    <Text text="{dashboard>count}" />
-                                    <Text text="{dashboard>description}" />
-                                </cells>
-                            </ColumnListItem>
-                        </items>
-                    </Table>
+                    <HBox class="dashboardBarChartRow" wrap="Wrap">
+                        <VBox class="dashboardBarChartBlock">
+                            <Title text="{i18n>dashboardChartPOTitle}" level="H5" class="dashboardBarChartTitle" />
+                            <List items="{dashboard>/statusOverview}" showSeparators="None" class="dashboardBarList">
+                                <CustomListItem>
+                                    <VBox class="dashboardBarItem">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <Label text="{dashboard>label}" class="dashboardBarLabel" />
+                                            <Text text="{dashboard>count}" class="dashboardBarCount" />
+                                        </HBox>
+                                        <ProgressIndicator percentValue="{dashboard>percentage}" state="{dashboard>state}" showValue="false" class="dashboardBarProgress sapUiSmallMarginTop" />
+                                    </VBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+                        <VBox class="dashboardBarChartBlock">
+                            <Title text="{i18n>dashboardChartDeliveryTitle}" level="H5" class="dashboardBarChartTitle" />
+                            <List items="{dashboard>/deliveryStatus}" showSeparators="None" class="dashboardBarList">
+                                <CustomListItem>
+                                    <VBox class="dashboardBarItem">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <Label text="{dashboard>label}" class="dashboardBarLabel" />
+                                            <Text text="{dashboard>count}" class="dashboardBarCount" />
+                                        </HBox>
+                                        <ProgressIndicator percentValue="{dashboard>percentage}" state="{dashboard>state}" showValue="false" class="dashboardBarProgress sapUiSmallMarginTop" />
+                                    </VBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+                        <VBox class="dashboardBarChartBlock">
+                            <Title text="{i18n>dashboardChartInvoiceTitle}" level="H5" class="dashboardBarChartTitle" />
+                            <List items="{dashboard>/invoiceStatus}" showSeparators="None" class="dashboardBarList">
+                                <CustomListItem>
+                                    <VBox class="dashboardBarItem">
+                                        <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                            <Label text="{dashboard>label}" class="dashboardBarLabel" />
+                                            <Text text="{dashboard>count}" class="dashboardBarCount" />
+                                        </HBox>
+                                        <ProgressIndicator percentValue="{dashboard>percentage}" state="{dashboard>state}" showValue="false" class="dashboardBarProgress sapUiSmallMarginTop" />
+                                    </VBox>
+                                </CustomListItem>
+                            </List>
+                        </VBox>
+                    </HBox>
                 </Panel>
             </VBox>
         </HBox>

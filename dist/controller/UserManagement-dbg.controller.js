@@ -160,12 +160,11 @@ sap.ui.define([
                                 new Select({
                                     selectedKey: "{dialog>/status}",
                                     forceSelection: false,
-                                    items: [
-                                        new Item({ key: "", text: that._getText("pleaseSelect") }),
-                                        new Item({ key: "ACTIVE", text: that._getText("statusActive") }),
-                                        new Item({ key: "INACTIVE", text: that._getText("statusInactive") }),
-                                        new Item({ key: "DISABLED", text: that._getText("statusDisabled") })
-                                    ]
+                                    items: [{key: "", textKey: "pleaseSelect"}].concat(
+                                        (that.getOwnerComponent().getModel("statusOptions").getProperty("/userStatus") || [])
+                                    ).map(function (oOpt) {
+                                        return new Item({ key: oOpt.key, text: that._getText(oOpt.textKey) });
+                                    })
                                 })
                             ]
                         })

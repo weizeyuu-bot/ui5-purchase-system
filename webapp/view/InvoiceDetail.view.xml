@@ -26,11 +26,9 @@
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldShort">
                                 <Text text="{i18n>invoiceStatus}" class="poHeaderFieldLabel" />
-                                <Select selectedKey="{invoices>status}" class="poHeaderFieldInput">
+                                <Select selectedKey="{invoices>status}" class="poHeaderFieldInput" forceSelection="false" items="{statusOptions>/invoiceStatus}">
                                     <items>
-                                        <core:Item key="PENDING" text="{i18n>invoiceStatusPending}" />
-                                        <core:Item key="INVOICED" text="{i18n>invoiceStatusInvoiced}" />
-                                        <core:Item key="VOID" text="{i18n>invoiceStatusVoided}" />
+                                        <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                     </items>
                                 </Select>
                             </VBox>

@@ -26,12 +26,9 @@
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldShort">
                                 <Text text="{i18n>deliveryStatus}" class="poHeaderFieldLabel" />
-                                <Select selectedKey="{deliveryPlans>status}" class="poHeaderFieldInput">
+                                <Select selectedKey="{deliveryPlans>status}" class="poHeaderFieldInput" forceSelection="false" items="{statusOptions>/deliveryStatus}">
                                     <items>
-                                        <core:Item key="PENDING" text="{i18n>deliveryStatusPending}" />
-                                        <core:Item key="SHIPPED" text="{i18n>deliveryStatusShipped}" />
-                                        <core:Item key="IN_TRANSIT" text="{i18n>deliveryStatusInTransit}" />
-                                        <core:Item key="DELIVERED" text="{i18n>deliveryStatusDelivered}" />
+                                        <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                     </items>
                                 </Select>
                             </VBox>

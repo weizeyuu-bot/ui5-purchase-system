@@ -361,40 +361,56 @@
             return new JSONModel(oData);
         },
 
-        createDashboardModel: function () {
-            var oData = {
-                activities: [
-                    { title: "新增供应商", description: "ABC Supplies 已添加到系统", icon: "sap-icon://add-employee" },
-                    { title: "采购订单已完成", description: "订单 PO001 已交付", icon: "sap-icon://status-completed" },
-                    { title: "库存预警", description: "物料 MAT005 库存不足", icon: "sap-icon://alert" },
-                    { title: "发票已开出", description: "发票 INV010 已生成", icon: "sap-icon://receipt" },
-                    { title: "用户权限变更", description: "User One 权限已更新", icon: "sap-icon://edit" }
-                ],
-                summaryCards: [
-                    { title: "本年度立项总金额", value: "¥0", icon: "sap-icon://document" },
-                    { title: "本年度采购合同总金额", value: "¥0", icon: "sap-icon://contract" },
-                    { title: "本年度采购开票总金额", value: "¥0", icon: "sap-icon://invoice" },
-                    { title: "本年度采购付款总金额", value: "¥0", icon: "sap-icon://money-bills" }
-                ],
-                myDocuments: [
-                    { title: "草稿", value: 0, subTitle: "采购合同" },
-                    { title: "签批中", value: 0, subTitle: "采购合同" },
-                    { title: "用章批准", value: 74, subTitle: "采购合同" },
-                    { title: "待归档", value: 0, subTitle: "采购合同" },
-                    { title: "待开票", value: 0, subTitle: "发票" },
-                    { title: "部分开票", value: 0, subTitle: "发票" },
-                    { title: "待付款", value: 0, subTitle: "付款单" },
-                    { title: "待验收", value: 0, subTitle: "验收管理" }
-                ],
-                topSuppliers: [
-                    { name: "ABC Supplies", contacts: 24, value: "¥120,000", status: "ACTIVE", state: "Success" },
-                    { name: "XYZ Corp", contacts: 18, value: "¥85,000", status: "ACTIVE", state: "Success" },
-                    { name: "Global Traders", contacts: 15, value: "¥68,000", status: "ACTIVE", state: "Success" },
-                    { name: "Tech Solutions", contacts: 12, value: "¥54,000", status: "NORMAL", state: "Information" },
-                    { name: "Build Masters", contacts: 8, value: "¥32,000", status: "LOW_FREQUENCY", state: "Warning" }
-                ]
-            };
-            return new JSONModel(oData);
+        createStatusOptionsModel: function () {
+            var oBlank = { key: "", textKey: "pleaseSelect" };
+            var aOrderStatus = [
+                { key: "ORDERED",    textKey: "statusOrderPlaced" },
+                { key: "PROCESSING", textKey: "statusProcessing" },
+                { key: "RECEIVED",   textKey: "statusReceived" },
+                { key: "CANCELLED",  textKey: "statusCancelled" }
+            ];
+            var aDeliveryStatus = [
+                { key: "PENDING",    textKey: "deliveryStatusPending" },
+                { key: "SHIPPED",    textKey: "deliveryStatusShipped" },
+                { key: "IN_TRANSIT", textKey: "deliveryStatusInTransit" },
+                { key: "DELIVERED",  textKey: "deliveryStatusDelivered" }
+            ];
+            var aInvoiceStatus = [
+                { key: "PENDING",  textKey: "invoiceStatusPending" },
+                { key: "INVOICED", textKey: "invoiceStatusInvoiced" },
+                { key: "VOID",     textKey: "invoiceStatusVoided" }
+            ];
+            var aUserStatus = [
+                { key: "ACTIVE",   textKey: "statusActive" },
+                { key: "INACTIVE", textKey: "statusInactive" },
+                { key: "DISABLED", textKey: "statusDisabled" }
+            ];
+            return new JSONModel({
+                orderStatus:              aOrderStatus,
+                orderStatusWithBlank:     [oBlank].concat(aOrderStatus),
+                deliveryStatus:           aDeliveryStatus,
+                deliveryStatusWithBlank:  [oBlank].concat(aDeliveryStatus),
+                invoiceStatus:            aInvoiceStatus,
+                invoiceStatusWithBlank:   [oBlank].concat(aInvoiceStatus),
+                userStatus:               aUserStatus,
+                userStatusWithBlank:      [oBlank].concat(aUserStatus)
+            });
+        },
+
+        resolveStatusOptionsText: function (oStatusModel, oResourceBundle) {
+            if (!oStatusModel || !oResourceBundle) {
+                return;
+            }
+            var oData = oStatusModel.getData();
+            Object.keys(oData).forEach(function (sGroup) {
+                var aItems = oData[sGroup];
+                if (Array.isArray(aItems)) {
+                    aItems.forEach(function (oItem) {
+                        oItem.text = oResourceBundle.getText(oItem.textKey);
+                    });
+                }
+            });
+            oStatusModel.refresh(true);
         },
 
         createUserManagementModel: function () {

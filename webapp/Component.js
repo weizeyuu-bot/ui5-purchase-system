@@ -26,10 +26,13 @@ sap.ui.define([
             this.setModel(models.createPurchaseOrderModel(), "purchaseOrders");
             this.setModel(models.createDeliveryPlanModel(), "deliveryPlans");
             this.setModel(models.createInvoiceModel(), "invoices");
-            this.setModel(models.createDashboardModel(), "dashboard");
             this.setModel(models.createProcessManagementModel(), "process");
             this.setModel(models.createUserManagementModel(), "users");
             this.setModel(models.createSystemManagementModel(), "system");
+
+            var oStatusOptions = models.createStatusOptionsModel();
+            models.resolveStatusOptionsText(oStatusOptions, this.getModel("i18n").getResourceBundle());
+            this.setModel(oStatusOptions, "statusOptions");
 
             models.syncPurchaseOrderPricing(
                 this.getModel("purchaseOrders"),

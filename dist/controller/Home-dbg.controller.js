@@ -33,6 +33,8 @@ sap.ui.define([
                 alerts: [],
                 quickActions: [],
                 statusOverview: [],
+                deliveryStatus: [],
+                invoiceStatus: [],
                 topSuppliers: [],
                 activities: []
             });
@@ -274,6 +276,8 @@ sap.ui.define([
                     { title: oBundle.getText("homeQuickActionSupplierTitle"), description: oBundle.getText("homeQuickActionSupplierDesc"), icon: "sap-icon://supplier", route: "RouteSupplierList" }
                 ],
                 statusOverview: this._buildStatusOverview(aOrders),
+                deliveryStatus: this._buildDeliveryStatus(aDeliveries),
+                invoiceStatus: this._buildInvoiceStatus(aInvoices),
                 topSuppliers: this._buildTopSuppliers(aOrders),
                 activities: this._buildActivities(aExpiringPrices, iPendingOrders, iPendingInvoices, iLowStock)
             });
@@ -348,15 +352,59 @@ sap.ui.define([
         _buildStatusOverview: function (aOrders) {
             var aStatuses = ["ORDERED", "PROCESSING", "RECEIVED", "CANCELLED"];
             var iTotal = aOrders.length || 1;
+            var mStateMap = { ORDERED: "Information", PROCESSING: "Warning", RECEIVED: "Success", CANCELLED: "Error" };
 
             return aStatuses.map(function (sStatus) {
                 var iCount = aOrders.filter(function (oOrder) {
                     return oOrder.status === sStatus;
                 }).length;
+                var iPercent = Math.round((iCount / iTotal) * 100);
                 return {
                     label: this._mapOrderStatusToText(sStatus),
                     count: iCount,
-                    description: this._getText("homeStatusOverviewDesc", [Math.round((iCount / iTotal) * 100)])
+                    percentage: iPercent,
+                    state: mStateMap[sStatus] || "None",
+                    description: this._getText("homeStatusOverviewDesc", [iPercent])
+                };
+            }, this);
+        },
+
+        _buildDeliveryStatus: function (aDeliveries) {
+            var aStatuses = ["PENDING", "SHIPPED", "IN_TRANSIT", "DELIVERED"];
+            var iTotal = aDeliveries.length || 1;
+            var mStateMap = { PENDING: "None", SHIPPED: "Information", IN_TRANSIT: "Warning", DELIVERED: "Success" };
+            var mLabelKey = { PENDING: "deliveryStatusPending", SHIPPED: "deliveryStatusShipped", IN_TRANSIT: "deliveryStatusInTransit", DELIVERED: "deliveryStatusDelivered" };
+
+            return aStatuses.map(function (sStatus) {
+                var iCount = aDeliveries.filter(function (oPlan) {
+                    return oPlan.status === sStatus;
+                }).length;
+                var iPercent = Math.round((iCount / iTotal) * 100);
+                return {
+                    label: this._getText(mLabelKey[sStatus]),
+                    count: iCount,
+                    percentage: iPercent,
+                    state: mStateMap[sStatus] || "None"
+                };
+            }, this);
+        },
+
+        _buildInvoiceStatus: function (aInvoices) {
+            var aStatuses = ["PENDING", "INVOICED", "VOID"];
+            var iTotal = aInvoices.length || 1;
+            var mStateMap = { PENDING: "Warning", INVOICED: "Success", VOID: "Error" };
+            var mLabelKey = { PENDING: "invoiceStatusPending", INVOICED: "invoiceStatusInvoiced", VOID: "invoiceStatusVoided" };
+
+            return aStatuses.map(function (sStatus) {
+                var iCount = aInvoices.filter(function (oInvoice) {
+                    return oInvoice.status === sStatus;
+                }).length;
+                var iPercent = Math.round((iCount / iTotal) * 100);
+                return {
+                    label: this._getText(mLabelKey[sStatus]),
+                    count: iCount,
+                    percentage: iPercent,
+                    state: mStateMap[sStatus] || "None"
                 };
             }, this);
         },

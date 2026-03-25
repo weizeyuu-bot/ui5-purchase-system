@@ -41,12 +41,9 @@
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldShort">
                                 <Text text="{i18n>poStatus}" class="poHeaderFieldLabel" />
-                                <Select selectedKey="{purchaseOrders>status}" class="poHeaderFieldInput">
+                                <Select selectedKey="{purchaseOrders>status}" class="poHeaderFieldInput" forceSelection="false" items="{statusOptions>/orderStatus}">
                                     <items>
-                                        <core:Item key="ORDERED" text="{i18n>statusOrderPlaced}" />
-                                        <core:Item key="PROCESSING" text="{i18n>statusProcessing}" />
-                                        <core:Item key="RECEIVED" text="{i18n>statusReceived}" />
-                                        <core:Item key="CANCELLED" text="{i18n>statusCancelled}" />
+                                        <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                     </items>
                                 </Select>
                             </VBox>
