@@ -208,6 +208,19 @@
                         supplierId: "SUP001",
                         date: "2026-03-01",
                         status: "ORDERED",
+                        approvalStatus: "APPROVED",
+                        approvalStatusText: "已审批",
+                        approvalStatusState: "Success",
+                        processInstanceId: "PI-PO-001",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user1",
+                        creatorRole: "采购专员",
+                        submittedBy: "user1",
+                        submittedAt: "2026-03-01 09:10",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-01 11:25",
                         items: [
                             { lineId: "10", materialId: "MAT001", quantity: 12 }
                         ]
@@ -218,6 +231,19 @@
                         supplierId: "SUP002",
                         date: "2026-03-05",
                         status: "RECEIVED",
+                        approvalStatus: "APPROVED",
+                        approvalStatusText: "已审批",
+                        approvalStatusState: "Success",
+                        processInstanceId: "PI-PO-002",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user5",
+                        creatorRole: "采购专员",
+                        submittedBy: "user5",
+                        submittedAt: "2026-03-05 10:20",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-05 13:05",
                         items: [
                             { lineId: "10", materialId: "MAT002", quantity: 300 }
                         ]
@@ -228,6 +254,19 @@
                         supplierId: "SUP003",
                         date: "2026-03-08",
                         status: "PROCESSING",
+                        approvalStatus: "SUBMITTED",
+                        approvalStatusText: "待采购经理审批",
+                        approvalStatusState: "Warning",
+                        processInstanceId: "PI-PO-003",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user1",
+                        creatorRole: "采购专员",
+                        submittedBy: "user1",
+                        submittedAt: "2026-03-08 14:30",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "",
+                        approvedAt: "",
                         items: [
                             { lineId: "10", materialId: "MAT003", quantity: 80 }
                         ]
@@ -238,6 +277,19 @@
                         supplierId: "SUP004",
                         date: "2026-03-10",
                         status: "ORDERED",
+                        approvalStatus: "REJECTED",
+                        approvalStatusText: "采购经理驳回",
+                        approvalStatusState: "Error",
+                        processInstanceId: "PI-PO-004",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user5",
+                        creatorRole: "采购专员",
+                        submittedBy: "user5",
+                        submittedAt: "2026-03-10 16:00",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-10 17:10",
                         items: [
                             { lineId: "10", materialId: "MAT004", quantity: 15 }
                         ]
@@ -248,6 +300,19 @@
                         supplierId: "SUP005",
                         date: "2026-03-12",
                         status: "CANCELLED",
+                        approvalStatus: "DRAFT",
+                        approvalStatusText: "草稿待提交",
+                        approvalStatusState: "Information",
+                        processInstanceId: "",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user1",
+                        creatorRole: "采购专员",
+                        submittedBy: "",
+                        submittedAt: "",
+                        currentApprover: "",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "",
+                        approvedAt: "",
                         items: [
                             { lineId: "10", materialId: "MAT005", quantity: 40 }
                         ]
@@ -258,6 +323,19 @@
                         supplierId: "SUP006",
                         date: "2026-03-14",
                         status: "ORDERED",
+                        approvalStatus: "APPROVED",
+                        approvalStatusText: "已审批",
+                        approvalStatusState: "Success",
+                        processInstanceId: "PI-PO-006",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user5",
+                        creatorRole: "采购专员",
+                        submittedBy: "user5",
+                        submittedAt: "2026-03-14 09:45",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-14 10:30",
                         items: [
                             { lineId: "10", materialId: "MAT006", quantity: 500 }
                         ]
@@ -268,6 +346,19 @@
                         supplierId: "SUP001",
                         date: "2026-03-15",
                         status: "RECEIVED",
+                        approvalStatus: "APPROVED",
+                        approvalStatusText: "已审批",
+                        approvalStatusState: "Success",
+                        processInstanceId: "PI-PO-007",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user1",
+                        creatorRole: "采购专员",
+                        submittedBy: "user1",
+                        submittedAt: "2026-03-15 11:00",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-15 11:50",
                         items: [
                             { lineId: "10", materialId: "MAT007", quantity: 120 }
                         ]
@@ -278,6 +369,19 @@
                         supplierId: "SUP002",
                         date: "2026-03-17",
                         status: "PROCESSING",
+                        approvalStatus: "SUBMITTED",
+                        approvalStatusText: "待采购经理审批",
+                        approvalStatusState: "Warning",
+                        processInstanceId: "PI-PO-008",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user5",
+                        creatorRole: "采购专员",
+                        submittedBy: "user5",
+                        submittedAt: "2026-03-17 08:40",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "",
+                        approvedAt: "",
                         items: [
                             { lineId: "10", materialId: "MAT008", quantity: 30 }
                         ]
@@ -288,6 +392,19 @@
                         supplierId: "SUP003",
                         date: "2026-03-18",
                         status: "ORDERED",
+                        approvalStatus: "SUBMITTED",
+                        approvalStatusText: "待采购经理审批",
+                        approvalStatusState: "Warning",
+                        processInstanceId: "PI-PO-009",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user1",
+                        creatorRole: "采购专员",
+                        submittedBy: "user1",
+                        submittedAt: "2026-03-18 15:35",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "",
+                        approvedAt: "",
                         items: [
                             { lineId: "10", materialId: "MAT009", quantity: 260 }
                         ]
@@ -298,6 +415,19 @@
                         supplierId: "SUP004",
                         date: "2026-03-19",
                         status: "ORDERED",
+                        approvalStatus: "APPROVED",
+                        approvalStatusText: "已审批",
+                        approvalStatusState: "Success",
+                        processInstanceId: "PI-PO-010",
+                        processModelName: "采购订单审批流程",
+                        createdBy: "user5",
+                        creatorRole: "采购专员",
+                        submittedBy: "user5",
+                        submittedAt: "2026-03-19 10:05",
+                        currentApprover: "user2",
+                        currentApproverRole: "采购经理",
+                        approvedBy: "user2",
+                        approvedAt: "2026-03-19 12:40",
                         items: [
                             { lineId: "10", materialId: "MAT010", quantity: 22 }
                         ]
@@ -354,7 +484,9 @@
             var oData = {
                 users: [
                     { username: "admin", password: "admin", name: "Administrator" },
-                    { username: "user1", password: "pass1", name: "User One" }
+                    { username: "user1", password: "pass1", name: "User One" },
+                    { username: "user2", password: "pass2", name: "Procurement Manager" },
+                    { username: "user6", password: "pass6", name: "Finance Manager" }
                 ],
                 currentUser: oSavedUser || null
             };
@@ -457,6 +589,26 @@
                         }
                     },
                     {
+                        id: "ROLE_PROCUREMENT_MANAGER",
+                        name: "采购经理",
+                        description: "负责采购业务统筹、价格管理与执行监督",
+                        userCount: 0,
+                        permissions: {
+                            suppliers: { query: true, operate: true },
+                            materials: { query: true, operate: true },
+                            priceLibrary: { query: true, operate: true },
+                            quoteManagement: { query: true, operate: true },
+                            purchaseOrders: { query: true, operate: true },
+                            deliveryPlans: { query: true, operate: true },
+                            invoices: { query: true, operate: false },
+                            users: { query: false, operate: false },
+                            roles: { query: false, operate: false },
+                            permissionManagement: { query: false, operate: false },
+                            processManagement: { query: false, operate: false },
+                            system: { query: false, operate: false }
+                        }
+                    },
+                    {
                         id: "ROLE_FINANCE",
                         name: "财务专员",
                         description: "负责开票与结算，聚焦对账与支付流程",
@@ -466,6 +618,26 @@
                             materials: { query: true, operate: false },
                             priceLibrary: { query: true, operate: false },
                             quoteManagement: { query: false, operate: false },
+                            purchaseOrders: { query: true, operate: false },
+                            deliveryPlans: { query: true, operate: false },
+                            invoices: { query: true, operate: true },
+                            users: { query: false, operate: false },
+                            roles: { query: false, operate: false },
+                            permissionManagement: { query: false, operate: false },
+                            processManagement: { query: false, operate: false },
+                            system: { query: false, operate: false }
+                        }
+                    },
+                    {
+                        id: "ROLE_FINANCE_MANAGER",
+                        name: "财务经理",
+                        description: "负责财务审核、发票结算与资金执行监督",
+                        userCount: 0,
+                        permissions: {
+                            suppliers: { query: true, operate: false },
+                            materials: { query: true, operate: false },
+                            priceLibrary: { query: true, operate: false },
+                            quoteManagement: { query: true, operate: false },
                             purchaseOrders: { query: true, operate: false },
                             deliveryPlans: { query: true, operate: false },
                             invoices: { query: true, operate: true },
@@ -530,9 +702,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
-                        roleId: "ROLE_BUYER",
+                        roleId: "ROLE_PROCUREMENT_MANAGER",
                         role: "采购经理",
-                        roleName: "采购专员",
+                        roleName: "采购经理",
                         lastLogin: "2026-03-20 08:20:00",
                         loginCount: 67,
                         createdBy: "admin"
@@ -590,9 +762,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "财务部",
-                        roleId: "ROLE_FINANCE",
+                        roleId: "ROLE_FINANCE_MANAGER",
                         role: "财务经理",
-                        roleName: "财务专员",
+                        roleName: "财务经理",
                         lastLogin: "2026-03-20 13:45:15",
                         loginCount: 58,
                         createdBy: "admin"
@@ -1009,25 +1181,36 @@
         createProcessManagementModel: function () {
             var oData = {
                 processCategories: [
-                    { id: "pc1", name: "采购流程" },
-                    { id: "pc2", name: "审批流程" },
-                    { id: "pc3", name: "出库流程" },
-                    { id: "pc4", name: "报销流程" }
+                    { id: "pc1", name: "采购流程", description: "覆盖采购申请、采购订单、供应商协同等配置", owner: "采购平台主管" },
+                    { id: "pc2", name: "审批流程", description: "用于采购、费用、合同等单据的审批策略配置", owner: "流程管理员" },
+                    { id: "pc3", name: "出库流程", description: "用于仓储发运、签收回传等执行流程", owner: "仓储主管" },
+                    { id: "pc4", name: "报销流程", description: "用于财务报销、借款、差旅审批等配置", owner: "财务经理" }
                 ],
                 formConfigs: [
-                    { id: "f1", name: "采购单表单", fields: ["物料", "数量", "供应商", "价格"] },
-                    { id: "f2", name: "报销单表单", fields: ["金额", "类别", "说明", "附件"] },
-                    { id: "f3", name: "请假单表单", fields: ["开始时间", "结束时间", "请假类型", "原因"] }
+                    { id: "F_PO_APPROVAL", name: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", fields: ["采购单号", "供应商", "物料明细", "订单金额", "价格匹配结果", "比价结论", "提交说明"] },
+                    { id: "F_EXPENSE_APPROVAL", name: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", fields: ["金额", "类别", "说明", "附件"] },
+                    { id: "F_LEAVE_APPROVAL", name: "请假单表单", businessObject: "请假申请单", initiatorRole: "员工", approverRole: "部门经理", fields: ["开始时间", "结束时间", "请假类型", "原因"] }
                 ],
                 processModels: [
-                    { id: "pm1", name: "采购审批模型", version: "1.0", status: "PUBLISHED" },
-                    { id: "pm2", name: "报销审批模型", version: "1.1", status: "TESTING" },
-                    { id: "pm3", name: "出库审批模型", version: "1.0", status: "PUBLISHED" }
+                    { id: "PM_PO_APPROVAL_V1", name: "采购订单审批流程", categoryName: "审批流程", formName: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "采购员创建采购订单后提交，系统自动流转至采购经理审批。审批通过后订单进入执行，驳回则退回采购员修改。" },
+                    { id: "PM_EXPENSE_APPROVAL_V11", name: "报销审批模型", categoryName: "审批流程", formName: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", version: "1.1", nodeCount: 4, status: "TESTING", description: "用于差旅与费用报销的审核流程。" },
+                    { id: "PM_OUTBOUND_APPROVAL_V1", name: "出库审批模型", categoryName: "出库流程", formName: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "用于仓储发货前的出库审核。" }
                 ],
                 deployments: [
-                    { id: "d1", modelName: "采购审批模型", deployTime: "2026-04-01 10:00", status: "SUCCESS" },
-                    { id: "d2", modelName: "报销审批模型", deployTime: "2026-04-05 13:20", status: "SUCCESS" },
-                    { id: "d3", modelName: "出库审批模型", deployTime: "2026-04-08 09:10", status: "FAILED" }
+                    { id: "DEP-PO-001", modelName: "采购订单审批流程", environment: "生产环境", scope: "采购订单单据", deployTime: "2026-03-20 10:00", publishedBy: "admin", status: "SUCCESS" },
+                    { id: "DEP-EXP-002", modelName: "报销审批模型", environment: "测试环境", scope: "费用报销单", deployTime: "2026-03-22 13:20", publishedBy: "admin", status: "SUCCESS" },
+                    { id: "DEP-OUT-003", modelName: "出库审批模型", environment: "测试环境", scope: "出库单", deployTime: "2026-03-24 09:10", publishedBy: "admin", status: "FAILED" }
+                ],
+                processNodes: [
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N1", nodeName: "采购员创建", nodeType: "发起节点", nodeAction: "创建采购订单并填写明细", assigneeRole: "采购专员", sla: "0.5" },
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N2", nodeName: "提交审批", nodeType: "提交节点", nodeAction: "校验价格与供应商后提交", assigneeRole: "采购专员", sla: "0.5" },
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N3", nodeName: "经理审批", nodeType: "审批节点", nodeAction: "采购经理审批通过/驳回", assigneeRole: "采购经理", sla: "1" }
+                ],
+                processInstances: [
+                    { instanceId: "PI-PO-003", modelName: "采购订单审批流程", businessId: "PO003", currentNode: "经理审批", initiator: "user1", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-08 14:30" },
+                    { instanceId: "PI-PO-008", modelName: "采购订单审批流程", businessId: "PO008", currentNode: "经理审批", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-17 08:40" },
+                    { instanceId: "PI-PO-004", modelName: "采购订单审批流程", businessId: "PO004", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已驳回", statusState: "Error", submittedAt: "2026-03-10 16:00" },
+                    { instanceId: "PI-PO-010", modelName: "采购订单审批流程", businessId: "PO010", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已完成", statusState: "Success", submittedAt: "2026-03-19 10:05" }
                 ]
             };
             return new JSONModel(oData);

@@ -26,6 +26,12 @@
                         <Text text="{i18n>poStatus}" />
                     </Column>
                     <Column>
+                        <Text text="{i18n>poApprovalStatus}" />
+                    </Column>
+                    <Column>
+                        <Text text="{i18n>poCurrentApprover}" />
+                    </Column>
+                    <Column>
                         <Text text="{i18n>poItemCount}" />
                     </Column>
                     <Column>
@@ -45,10 +51,27 @@
                             <Text text="{purchaseOrders>vendor}" />
                             <Text text="{purchaseOrders>date}" />
                             <Text text="{ path: 'purchaseOrders>status', formatter: '.formatOrderStatusText' }" />
+                            <ObjectStatus text="{purchaseOrders>approvalStatusText}" state="{purchaseOrders>approvalStatusState}" />
+                            <Text text="{= ${purchaseOrders>currentApprover} ? ${purchaseOrders>currentApprover} + ' / ' + ${purchaseOrders>currentApproverRole} : '-' }" />
                             <Text text="{purchaseOrders>itemCount}" />
                             <Text text="{purchaseOrders>totalQuantity}" />
                             <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" />
                             <HBox>
+                                <Button
+                                    text="{i18n>poSubmitApprovalButton}"
+                                    type="Emphasized"
+                                    visible="{parts:[{path:'purchaseOrders>approvalStatus'},{path:'purchaseOrders>createdBy'}], formatter:'.isQuickSubmitVisible'}"
+                                    press="onQuickSubmitApproval" />
+                                <Button
+                                    text="{i18n>poApproveButton}"
+                                    type="Accept"
+                                    visible="{parts:[{path:'purchaseOrders>approvalStatus'},{path:'purchaseOrders>currentApprover'}], formatter:'.isQuickApproveVisible'}"
+                                    press="onQuickApprove" />
+                                <Button
+                                    text="{i18n>poRejectButton}"
+                                    type="Reject"
+                                    visible="{parts:[{path:'purchaseOrders>approvalStatus'},{path:'purchaseOrders>currentApprover'}], formatter:'.isQuickRejectVisible'}"
+                                    press="onQuickReject" />
                                 <Button text="{i18n>viewButton}" press="onViewPress" />
                                 <Button text="{i18n>editButton}" press="onEditPress" />
                                 <Button icon="sap-icon://delete" type="Reject" press="onDeletePress" />

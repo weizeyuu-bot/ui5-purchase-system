@@ -25,7 +25,7 @@
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldWide">
                                 <Text text="{i18n>supplierId}" class="poHeaderFieldLabel" />
-                                <Select selectedKey="{purchaseOrders>supplierId}" change="onPricingConditionChange" items="{selectOptions>/supplierOptions}" class="poHeaderFieldInput" forceSelection="false">
+                                <Select selectedKey="{purchaseOrders>supplierId}" change="onPricingConditionChange" items="{selectOptions>/supplierOptions}" class="poHeaderFieldInput" forceSelection="false" enabled="{ui>/canEditOrder}">
                                     <items>
                                         <core:Item key="{selectOptions>id}" text="{= ${selectOptions>id} ? ${selectOptions>id} + ' - ' + ${selectOptions>name} : ${selectOptions>name} }" />
                                     </items>
@@ -37,11 +37,11 @@
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldShort">
                                 <Text text="{i18n>poDate}" class="poHeaderFieldLabel" />
-                                <DatePicker value="{purchaseOrders>date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" class="poHeaderFieldInput" />
+                                <DatePicker value="{purchaseOrders>date}" valueFormat="yyyy-MM-dd" displayFormat="yyyy-MM-dd" change="onPricingConditionChange" class="poHeaderFieldInput" enabled="{ui>/canEditOrder}" />
                             </VBox>
                             <VBox class="poHeaderField poHeaderFieldShort">
                                 <Text text="{i18n>poStatus}" class="poHeaderFieldLabel" />
-                                <Select selectedKey="{purchaseOrders>status}" class="poHeaderFieldInput" forceSelection="false" items="{statusOptions>/orderStatus}">
+                                <Select selectedKey="{purchaseOrders>status}" class="poHeaderFieldInput" forceSelection="false" items="{statusOptions>/orderStatus}" enabled="{ui>/canEditOrder}">
                                     <items>
                                         <core:Item key="{statusOptions>key}" text="{statusOptions>text}" />
                                     </items>
@@ -60,6 +60,20 @@
                                     class="poSummaryStatus" />
                                 <Title text="{purchaseOrders>vendor}" level="H3" class="poSummaryTitle sapUiSmallMarginTop" />
                                 <Text text="{= ${purchaseOrders>id} + ' / ' + ${purchaseOrders>date}}" class="poSummarySubtext sapUiTinyMarginTop" />
+                            </VBox>
+                        </Panel>
+
+                        <Panel headerText="{i18n>poApprovalSection}" class="sapUiSmallMarginTop">
+                            <VBox class="sapUiSmallMargin">
+                                <ObjectStatus text="{purchaseOrders>approvalStatusText}" state="{purchaseOrders>approvalStatusState}" class="sapUiTinyMarginBottom" />
+                                <Text text="{= ${i18n>poProcessModel} + ': ' + ${purchaseOrders>processModelName}}" />
+                                <Text text="{= ${i18n>poCreatedBy} + ': ' + ${purchaseOrders>createdBy} + ' / ' + ${purchaseOrders>creatorRole}}" />
+                                <Text text="{= ${i18n>poSubmittedBy} + ': ' + (${purchaseOrders>submittedBy} || '-') }" />
+                                <Text text="{= ${i18n>poSubmittedAt} + ': ' + (${purchaseOrders>submittedAt} || '-') }" />
+                                <Text text="{= ${i18n>poCurrentApprover} + ': ' + ((${purchaseOrders>currentApprover} &amp;&amp; ${purchaseOrders>currentApproverRole}) ? ${purchaseOrders>currentApprover} + ' / ' + ${purchaseOrders>currentApproverRole} : '-') }" />
+                                <Text text="{= ${i18n>poApprovedBy} + ': ' + (${purchaseOrders>approvedBy} || '-') }" />
+                                <Text text="{= ${i18n>poApprovedAt} + ': ' + (${purchaseOrders>approvedAt} || '-') }" />
+                                <Text text="{= ${i18n>poApprovalComment} + ': ' + (${purchaseOrders>approvalComment} || '-') }" />
                             </VBox>
                         </Panel>
 
@@ -85,7 +99,7 @@
                         <Toolbar class="poLineItemsToolbar">
                             <Title text="{i18n>poLineItemsSection}" level="H4" />
                             <ToolbarSpacer />
-                            <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddItem" />
+                                <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddItem" visible="{ui>/canEditOrder}" />
                         </Toolbar>
                     </headerToolbar>
                     <Table items="{purchaseOrders>items}" class="poLineItemsTable">
@@ -104,25 +118,28 @@
                             <ColumnListItem class="poLineItemRow">
                                 <cells>
                                     <Text text="{purchaseOrders>lineId}" textAlign="Center" class="poCellText" />
-                                    <Select selectedKey="{purchaseOrders>materialId}" change="onPricingConditionChange" items="{selectOptions>/materialOptions}" class="poCellSelect" forceSelection="false">
+                                    <Select selectedKey="{purchaseOrders>materialId}" change="onPricingConditionChange" items="{selectOptions>/materialOptions}" class="poCellSelect" forceSelection="false" enabled="{ui>/canEditOrder}">
                                         <items>
                                             <core:Item key="{selectOptions>id}" text="{= ${selectOptions>id} ? ${selectOptions>id} + ' - ' + ${selectOptions>name} : ${selectOptions>name} }" />
                                         </items>
                                     </Select>
-                                    <Input value="{purchaseOrders>quantity}" type="Number" liveChange="onPricingConditionChange" textAlign="End" class="poCellInput poCellNumber" />
+                                    <Input value="{purchaseOrders>quantity}" type="Number" liveChange="onPricingConditionChange" textAlign="End" class="poCellInput poCellNumber" editable="{ui>/canEditOrder}" />
                                     <Text text="{purchaseOrders>unit}" textAlign="Center" class="poCellText" />
                                     <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>unitPrice}}" textAlign="End" class="poCellText poCellNumberText" />
                                     <Text text="{= ${purchaseOrders>currency} + ' ' + ${purchaseOrders>amount}}" textAlign="End" class="poCellText poCellNumberText poCellAmountText" />
                                     <ObjectStatus text="{ path: 'purchaseOrders>priceStatusText', formatter: '.formatPriceMatchText' }" state="{purchaseOrders>priceStatusState}" class="poCellStatus" />
                                     <ObjectStatus text="{purchaseOrders>priceBenchmarkText}" state="{purchaseOrders>priceBenchmarkState}" class="poCellStatus" />
-                                    <Button icon="sap-icon://delete" type="Reject" press="onDeleteItem" class="poRowDeleteButton" />
+                                    <Button icon="sap-icon://delete" type="Reject" press="onDeleteItem" class="poRowDeleteButton" visible="{ui>/canEditOrder}" />
                                 </cells>
                             </ColumnListItem>
                         </items>
                     </Table>
                 </Panel>
                 <HBox justifyContent="End" class="poDetailActionBar" renderType="Bare">
-                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" class="sapUiTinyMarginEnd" />
+                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" class="sapUiTinyMarginEnd" visible="{ui>/canEditOrder}" />
+                    <Button text="{i18n>poSubmitApprovalButton}" press="onSubmitApproval" type="Emphasized" class="sapUiTinyMarginEnd" visible="{ui>/canSubmit}" />
+                    <Button text="{i18n>poApproveButton}" press="onApprove" type="Accept" class="sapUiTinyMarginEnd" visible="{ui>/canApprove}" />
+                    <Button text="{i18n>poRejectButton}" press="onReject" type="Reject" class="sapUiTinyMarginEnd" visible="{ui>/canReject}" />
                     <Button text="{i18n>cancelButton}" press="onCancel" />
                 </HBox>
             </VBox>

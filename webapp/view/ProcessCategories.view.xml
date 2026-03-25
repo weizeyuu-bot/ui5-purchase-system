@@ -10,12 +10,16 @@
                 <columns>
                     <Column><Text text="{i18n>processCategoryId}" /></Column>
                     <Column><Text text="{i18n>processCategoryName}" /></Column>
+                    <Column><Text text="{i18n>processCategoryDescription}" /></Column>
+                    <Column><Text text="{i18n>processOwner}" /></Column>
                 </columns>
                 <items>
                     <ColumnListItem>
                         <cells>
                             <Text text="{process>id}" />
                             <Text text="{process>name}" />
+                            <Text text="{process>description}" />
+                            <Text text="{process>owner}" />
                         </cells>
                     </ColumnListItem>
                 </items>

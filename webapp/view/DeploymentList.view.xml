@@ -10,7 +10,10 @@
                 <columns>
                     <Column><Text text="{i18n>deploymentId}" /></Column>
                     <Column><Text text="{i18n>processModelName}" /></Column>
+                    <Column><Text text="{i18n>deploymentEnvironment}" /></Column>
+                    <Column><Text text="{i18n>deploymentScope}" /></Column>
                     <Column><Text text="{i18n>deploymentTime}" /></Column>
+                    <Column><Text text="{i18n>publishedBy}" /></Column>
                     <Column><Text text="{i18n>status}" /></Column>
                 </columns>
                 <items>
@@ -18,7 +21,10 @@
                         <cells>
                             <Text text="{process>id}" />
                             <Text text="{process>modelName}" />
+                            <Text text="{process>environment}" />
+                            <Text text="{process>scope}" />
                             <Text text="{process>deployTime}" />
+                            <Text text="{process>publishedBy}" />
                             <ObjectStatus text="{= ${process>status} === 'SUCCESS' ? ${i18n>deployStatusSuccess} : ${process>status} === 'FAILED' ? ${i18n>deployStatusFailed} : ${process>status} }" state="{= ${process>status} === 'SUCCESS' ? 'Success' : ${process>status} === 'FAILED' ? 'Error' : 'Information' }" />
                         </cells>
                     </ColumnListItem>

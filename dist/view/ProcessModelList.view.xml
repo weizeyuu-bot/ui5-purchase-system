@@ -10,7 +10,11 @@
                 <columns>
                     <Column><Text text="{i18n>processModelId}" /></Column>
                     <Column><Text text="{i18n>processModelName}" /></Column>
+                    <Column><Text text="{i18n>processBusinessObject}" /></Column>
+                    <Column><Text text="{i18n>processInitiatorRole}" /></Column>
+                    <Column><Text text="{i18n>processApproverRole}" /></Column>
                     <Column><Text text="{i18n>processModelVersion}" /></Column>
+                    <Column><Text text="{i18n>processNodeCount}" /></Column>
                     <Column><Text text="{i18n>status}" /></Column>
                 </columns>
                 <items>
@@ -18,7 +22,11 @@
                         <cells>
                             <Text text="{process>id}" />
                             <Text text="{process>name}" />
+                            <Text text="{process>businessObject}" />
+                            <Text text="{process>initiatorRole}" />
+                            <Text text="{process>approverRole}" />
                             <Text text="{process>version}" />
+                            <Text text="{process>nodeCount}" />
                             <Text text="{= ${process>status} === 'PUBLISHED' ? ${i18n>processStatusPublished} : ${process>status} === 'TESTING' ? ${i18n>processStatusTesting} : ${process>status} }" />
                         </cells>
                     </ColumnListItem>

@@ -10,6 +10,9 @@
                 <columns>
                     <Column><Text text="{i18n>formId}" /></Column>
                     <Column><Text text="{i18n>formName}" /></Column>
+                    <Column><Text text="{i18n>formBusinessObject}" /></Column>
+                    <Column><Text text="{i18n>processInitiatorRole}" /></Column>
+                    <Column><Text text="{i18n>processApproverRole}" /></Column>
                     <Column><Text text="{i18n>formFields}" /></Column>
                 </columns>
                 <items>
@@ -17,6 +20,9 @@
                         <cells>
                             <Text text="{process>id}" />
                             <Text text="{process>name}" />
+                            <Text text="{process>businessObject}" />
+                            <Text text="{process>initiatorRole}" />
+                            <Text text="{process>approverRole}" />
                             <Text text="{= ${process>fields}.join(', ') }" />
                         </cells>
                     </ColumnListItem>
