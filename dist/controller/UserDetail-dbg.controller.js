@@ -80,7 +80,7 @@ sap.ui.define([
             var oUsersModel = this.getOwnerComponent().getModel("users");
             var oUser = oUsersModel.getProperty("/registeredUsers/" + this._iUserIndex);
 
-            if (!oUser.email || !oUser.phone || !oUser.department || !oUser.role) {
+            if (!oUser.email || !oUser.phone || !oUser.department || !oUser.roleId) {
                 MessageToast.show(this._getText("userFieldsRequired"));
                 return;
             }
@@ -91,6 +91,14 @@ sap.ui.define([
             if (!this._isValidPhone(oUser.phone)) {
                 MessageToast.show(this._getText("userPhoneInvalid"));
                 return;
+            }
+
+            // 同步角色名称
+            var aRoles = oUsersModel.getProperty("/roles") || [];
+            var oRole = aRoles.find(function (r) { return r.id === oUser.roleId; });
+            if (oRole) {
+                oUsersModel.setProperty("/registeredUsers/" + this._iUserIndex + "/roleName", oRole.name);
+                oUsersModel.setProperty("/registeredUsers/" + this._iUserIndex + "/role", oRole.name);
             }
 
             // 更新状态颜色
@@ -123,6 +131,18 @@ sap.ui.define([
             oUsersModel.setProperty("/statistics/totalUsers", aUsers.length);
             oUsersModel.setProperty("/statistics/activeUsers", iActive);
             oUsersModel.setProperty("/statistics/inactiveUsers", iInactive);
+        },
+
+        onRoleChange: function (oEvent) {
+            var sRoleId = oEvent.getSource().getSelectedKey();
+            if (this._iUserIndex < 0) { return; }
+            var oUsersModel = this.getOwnerComponent().getModel("users");
+            var aRoles = oUsersModel.getProperty("/roles") || [];
+            var oRole = aRoles.find(function (r) { return r.id === sRoleId; });
+            if (oRole) {
+                oUsersModel.setProperty("/registeredUsers/" + this._iUserIndex + "/roleName", oRole.name);
+                oUsersModel.setProperty("/registeredUsers/" + this._iUserIndex + "/role", oRole.name);
+            }
         },
 
         onStatusChange: function (oEvent) {

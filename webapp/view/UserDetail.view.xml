@@ -53,7 +53,19 @@
                             <form:formElements>
                                 <form:FormElement label="{i18n>role}">
                                     <form:fields>
-                                        <Input value="{users>role}" editable="{ui>/editMode}" />
+                                        <Text text="{users>roleName}" visible="{= !${ui>/editMode} }" />
+                                        <Select
+                                            selectedKey="{users>roleId}"
+                                            enabled="{ui>/editMode}"
+                                            visible="{ui>/editMode}"
+                                            forceSelection="false"
+                                            width="100%"
+                                            items="{users>/roles}"
+                                            change="onRoleChange">
+                                            <items>
+                                                <core:Item key="{users>id}" text="{users>name}" />
+                                            </items>
+                                        </Select>
                                     </form:fields>
                                 </form:FormElement>
                                 <form:FormElement label="{i18n>status}">

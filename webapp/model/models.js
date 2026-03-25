@@ -415,6 +415,70 @@
 
         createUserManagementModel: function () {
             var oData = {
+                roles: [
+                    {
+                        id: "ROLE_ADMIN",
+                        name: "系统管理员",
+                        description: "平台配置、用户与权限的全局管理",
+                        userCount: 0,
+                        permissions: {
+                            suppliers: { query: true, operate: true },
+                            materials: { query: true, operate: true },
+                            priceLibrary: { query: true, operate: true },
+                            purchaseOrders: { query: true, operate: true },
+                            deliveryPlans: { query: true, operate: true },
+                            invoices: { query: true, operate: true },
+                            users: { query: true, operate: true },
+                            roles: { query: true, operate: true },
+                            system: { query: true, operate: true }
+                        }
+                    },
+                    {
+                        id: "ROLE_BUYER",
+                        name: "采购专员",
+                        description: "负责采购执行，具备业务录入与跟进权限",
+                        userCount: 0,
+                        permissions: {
+                            suppliers: { query: true, operate: false },
+                            materials: { query: true, operate: false },
+                            priceLibrary: { query: true, operate: false },
+                            purchaseOrders: { query: true, operate: true },
+                            deliveryPlans: { query: true, operate: true },
+                            invoices: { query: true, operate: false },
+                            users: { query: false, operate: false },
+                            roles: { query: false, operate: false },
+                            system: { query: false, operate: false }
+                        }
+                    },
+                    {
+                        id: "ROLE_FINANCE",
+                        name: "财务专员",
+                        description: "负责开票与结算，聚焦对账与支付流程",
+                        userCount: 0,
+                        permissions: {
+                            suppliers: { query: true, operate: false },
+                            materials: { query: true, operate: false },
+                            priceLibrary: { query: true, operate: false },
+                            purchaseOrders: { query: true, operate: false },
+                            deliveryPlans: { query: true, operate: false },
+                            invoices: { query: true, operate: true },
+                            users: { query: false, operate: false },
+                            roles: { query: false, operate: false },
+                            system: { query: false, operate: false }
+                        }
+                    }
+                ],
+                permissionCatalog: [
+                    { module: "suppliers", moduleName: "供应商管理" },
+                    { module: "materials", moduleName: "物料管理" },
+                    { module: "priceLibrary", moduleName: "价格库管理" },
+                    { module: "purchaseOrders", moduleName: "采购订单管理" },
+                    { module: "deliveryPlans", moduleName: "送货计划管理" },
+                    { module: "invoices", moduleName: "开票管理" },
+                    { module: "users", moduleName: "用户管理" },
+                    { module: "roles", moduleName: "角色管理" },
+                    { module: "system", moduleName: "系统管理" }
+                ],
                 registeredUsers: [
                     {
                         username: "admin",
@@ -424,7 +488,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "系统管理",
+                        roleId: "ROLE_ADMIN",
                         role: "系统管理员",
+                        roleName: "系统管理员",
                         lastLogin: "2026-03-20 10:30:15",
                         loginCount: 128,
                         createdBy: "系统"
@@ -437,7 +503,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
+                        roleId: "ROLE_BUYER",
                         role: "采购员",
+                        roleName: "采购专员",
                         lastLogin: "2026-03-20 09:45:30",
                         loginCount: 45,
                         createdBy: "admin"
@@ -450,7 +518,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
+                        roleId: "ROLE_BUYER",
                         role: "采购经理",
+                        roleName: "采购专员",
                         lastLogin: "2026-03-20 08:20:00",
                         loginCount: 67,
                         createdBy: "admin"
@@ -463,7 +533,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "财务部",
+                        roleId: "ROLE_FINANCE",
                         role: "财务人员",
+                        roleName: "财务专员",
                         lastLogin: "2026-03-20 14:15:00",
                         loginCount: 32,
                         createdBy: "admin"
@@ -476,7 +548,9 @@
                         status: "INACTIVE",
                         statusState: "Warning",
                         department: "供应链部",
+                        roleId: "ROLE_BUYER",
                         role: "供应链协调员",
+                        roleName: "采购专员",
                         lastLogin: "2026-03-15 16:30:00",
                         loginCount: 18,
                         createdBy: "admin"
@@ -489,7 +563,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "采购部",
+                        roleId: "ROLE_BUYER",
                         role: "采购员",
+                        roleName: "采购专员",
                         lastLogin: "2026-03-20 11:00:30",
                         loginCount: 22,
                         createdBy: "admin"
@@ -502,7 +578,9 @@
                         status: "ACTIVE",
                         statusState: "Success",
                         department: "财务部",
+                        roleId: "ROLE_FINANCE",
                         role: "财务经理",
+                        roleName: "财务专员",
                         lastLogin: "2026-03-20 13:45:15",
                         loginCount: 58,
                         createdBy: "admin"
@@ -515,7 +593,9 @@
                         status: "DISABLED",
                         statusState: "Error",
                         department: "市场部",
+                        roleId: "ROLE_BUYER",
                         role: "市场专员",
+                        roleName: "采购专员",
                         lastLogin: "2026-03-18 15:20:00",
                         loginCount: 12,
                         createdBy: "admin"
