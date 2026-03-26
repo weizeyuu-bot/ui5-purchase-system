@@ -363,6 +363,18 @@
     background-color: #f5f5f5;
 }
 
+.poListScrollContainer {
+    width: 100%;
+}
+
+.poListTable {
+    margin-top: 0;
+}
+
+.poListTable .sapMListTbl {
+    min-width: 1580px;
+}
+
 .navigationList .sapMSLIContent {
     padding-left: 16px;
 }
@@ -752,4 +764,465 @@
 .detailForm {
     max-width: 600px;
     margin: 0 auto;
+}
+
+.processDetailTabs {
+    background: #f5f7fa;
+}
+
+.processVisualScroll {
+    background: transparent !important;
+}
+
+.processVisualLane {
+    gap: 2.25rem;
+    padding: 0.5rem 1.5rem 0.75rem 0.5rem;
+}
+
+.processVisualNodeCard {
+    position: relative;
+    width: 18rem;
+    min-height: 17rem;
+    padding: 0.75rem;
+    border: 1px solid #d5e1ef;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    box-shadow: 0 6px 16px rgba(15, 49, 86, 0.08);
+}
+
+.processVisualLane > .processVisualNodeCard::after {
+    content: "";
+    position: absolute;
+    top: 2.1rem;
+    right: -1.65rem;
+    width: 1.25rem;
+    height: 2px;
+    background: #9ab3cf;
+}
+
+.processVisualLane > .processVisualNodeCard::before {
+    content: "";
+    position: absolute;
+    top: 1.82rem;
+    right: -0.5rem;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid #9ab3cf;
+}
+
+.processVisualLane > .processVisualNodeCard:last-child::after,
+.processVisualLane > .processVisualNodeCard:last-child::before {
+    display: none;
+}
+
+.processVisualNodeHeader {
+    border-bottom: 1px solid #e5edf7;
+    padding-bottom: 0.4rem;
+}
+
+.processConditionFieldSelect {
+    width: 9rem;
+}
+
+.processConditionOperatorSelect {
+    width: 7rem;
+}
+
+.processVisualNodeId {
+    color: #4d6a86;
+    font-size: 0.78rem;
+}
+
+.processVisualNodeType {
+    margin-top: 0.1rem;
+    color: #0f3557;
+}
+
+.processVisualNodeCard[data-nodekind="start"] {
+    border-color: #8ec5ff;
+    box-shadow: 0 6px 16px rgba(12, 92, 180, 0.15);
+    background: linear-gradient(180deg, #f2f8ff 0%, #ffffff 100%);
+}
+
+.processVisualNodeCard[data-nodekind="submit"] {
+    border-color: #8fd8d2;
+    box-shadow: 0 6px 16px rgba(24, 131, 122, 0.14);
+    background: linear-gradient(180deg, #f0fcfa 0%, #ffffff 100%);
+}
+
+.processVisualNodeCard[data-nodekind="approve"] {
+    border-color: #ffd089;
+    box-shadow: 0 6px 16px rgba(177, 108, 11, 0.14);
+    background: linear-gradient(180deg, #fff8ec 0%, #ffffff 100%);
+}
+
+.processVisualNodeCard[data-nodekind="execute"] {
+    border-color: #b7b8ff;
+    box-shadow: 0 6px 16px rgba(84, 87, 190, 0.14);
+    background: linear-gradient(180deg, #f5f5ff 0%, #ffffff 100%);
+}
+
+.processVisualNodeCard[data-nodekind="end"] {
+    border-color: #c8d3de;
+    box-shadow: 0 6px 16px rgba(95, 108, 121, 0.12);
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+}
+
+.processParallelGroupWrap {
+    gap: 0.75rem;
+}
+
+.processParallelGroupCard {
+    width: 20rem;
+    min-height: 10rem;
+    padding: 0.75rem;
+    border: 1px dashed #9cb5cf;
+    border-radius: 0.75rem;
+    background: #f8fbff;
+}
+
+.processConditionalGroupCard {
+    border-color: #e0b65a;
+    background: linear-gradient(180deg, #fffaf0 0%, #fffdf7 100%);
+}
+
+.processConditionalBranchList .sapMLIB {
+    border: 1px solid #f0dfb7;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.processParallelNodeList .sapMLIB {
+    background: #ffffff;
+    border-radius: 0.35rem;
+    margin-bottom: 0.35rem;
+}
+
+.processFlowPreviewLane {
+    gap: 2rem;
+    padding: 0.5rem 1.25rem 0.75rem 0.25rem;
+}
+
+.processFlowStageCard {
+    position: relative;
+    min-width: 14rem;
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #cad7e6;
+    border-radius: 0.7rem;
+    background: #ffffff;
+}
+
+.processFlowPreviewLane > .processFlowStageCard::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -1.45rem;
+    width: 1.1rem;
+    height: 2px;
+    margin-top: -1px;
+    background: #9ab3cf;
+}
+
+.processFlowPreviewLane > .processFlowStageCard::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 4px);
+    right: -0.45rem;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 7px solid #9ab3cf;
+}
+
+.processFlowPreviewLane > .processFlowStageCard:last-child::after,
+.processFlowPreviewLane > .processFlowStageCard:last-child::before {
+    display: none;
+}
+
+.processFlowStageCard[data-stagekind="parallel"] {
+    border-style: dashed;
+    background: #f7fbff;
+}
+
+.processFlowStageCard[data-stagekind="conditional"] {
+    border-style: dashed;
+    border-color: #e2bb65;
+    background: linear-gradient(180deg, #fffaf0 0%, #ffffff 100%);
+}
+
+.processFlowRectNode {
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #ccd8e6;
+    border-radius: 0.35rem;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(22, 52, 84, 0.08);
+}
+
+.processFlowRectNodeMini {
+    border-radius: 0.3rem;
+    border-width: 1px;
+    box-shadow: 0 1px 4px rgba(22, 52, 84, 0.08);
+}
+
+.processFlowParallelStage {
+    position: relative;
+    padding-top: 0.25rem;
+}
+
+.processFlowConditionalStage {
+    position: relative;
+    padding-top: 0.25rem;
+}
+
+.processFlowDecisionHeader {
+    margin-bottom: 0.1rem;
+}
+
+.processFlowDecisionLead {
+    position: relative;
+    margin-left: 2.55rem;
+    margin-bottom: 0.12rem;
+}
+
+.processFlowDecisionLeadLine {
+    position: relative;
+    width: 2px;
+    height: 0.85rem;
+    background: #c9912e;
+}
+
+.processFlowDecisionLeadLine::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    bottom: -5px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid #c9912e;
+}
+
+.processFlowRouteLineLabel {
+    position: absolute;
+    left: -2.2rem;
+    top: 0.76rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.06rem 0.28rem;
+    border-radius: 0.3rem;
+    background: #ffffff;
+    z-index: 2;
+    line-height: 1.2;
+}
+
+.processFlowRouteLineLabelYes {
+    color: #2f8f54;
+    border: 1px solid #8fd0a7;
+}
+
+.processFlowRouteLineLabelNo {
+    color: #5f6d81;
+    border: 1px solid #b9c2cf;
+}
+
+.processFlowBranchHeaderLeft {
+    gap: 0.25rem;
+}
+
+.processFlowDecisionDiamond {
+    width: 4.8rem;
+    height: 4.8rem;
+    border: 2px solid #d09a35;
+    background: linear-gradient(180deg, #fff7e6 0%, #fff2d6 100%);
+    transform: rotate(45deg);
+    border-radius: 0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+}
+
+.processFlowDecisionText {
+    transform: rotate(-45deg);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #8b5a17;
+    text-align: center;
+    line-height: 1.15;
+    max-width: 4.2rem;
+}
+
+.processFlowConditionalBranchStack {
+    position: relative;
+    gap: 0.45rem;
+    padding-left: 1.1rem;
+}
+
+.processFlowConditionalBranchStack::before {
+    content: "";
+    position: absolute;
+    left: 0.35rem;
+    top: 0.15rem;
+    bottom: 0.2rem;
+    width: 2px;
+    background: #c9912e;
+}
+
+.processFlowConditionalBranchItem {
+    position: relative;
+    padding: 0.35rem 0.45rem;
+    border: 1px dashed #e8c985;
+    border-radius: 0.45rem;
+    background: rgba(255, 251, 242, 0.9);
+}
+
+.processFlowConditionalBranchItem::before {
+    content: "";
+    position: absolute;
+    left: -1.05rem;
+    top: 1.15rem;
+    width: 0.95rem;
+    height: 2px;
+    background: #c9912e;
+}
+
+.processFlowConditionalBranchItem[data-routekind="yes"] {
+    border-color: #86c49c;
+    background: rgba(243, 252, 246, 0.95);
+}
+
+.processFlowConditionalBranchItem[data-routekind="no"] {
+    border-color: #c9ced6;
+    background: rgba(247, 249, 252, 0.96);
+}
+
+.processFlowConditionalBranchItem[data-routekind="yes"]::before {
+    background: #4ea56f;
+}
+
+.processFlowConditionalBranchItem[data-routekind="no"]::before {
+    background: #98a5b6;
+}
+
+.processFlowConditionalBranchItem::after {
+    content: "";
+    position: absolute;
+    left: -0.16rem;
+    top: 0.94rem;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #c9912e;
+}
+
+.processFlowConditionalBranchItem[data-routekind="yes"]::after {
+    border-left-color: #4ea56f;
+}
+
+.processFlowConditionalBranchItem[data-routekind="no"]::after {
+    border-left-color: #98a5b6;
+}
+
+.processFlowMergeFooter {
+    position: relative;
+    margin-left: 1.1rem;
+    padding-top: 0.35rem;
+}
+
+.processFlowMergeFooter::before {
+    content: "";
+    position: absolute;
+    left: -0.75rem;
+    top: 0;
+    width: 2px;
+    height: 0.75rem;
+    background: #c9912e;
+}
+
+.processFlowMergeDot {
+    width: 0.82rem;
+    height: 0.82rem;
+    border-radius: 50%;
+    border: 2px solid #c9912e;
+    background: #fff8e8;
+    box-shadow: 0 0 0 2px rgba(201, 145, 46, 0.12);
+}
+
+.processFlowMergeLabel {
+    color: #8b5a17;
+    font-weight: 700;
+}
+
+.processFlowMergeTarget {
+    position: relative;
+    padding-left: 0.95rem;
+}
+
+.processFlowMergeTarget::before {
+    content: "";
+    position: absolute;
+    left: 0.1rem;
+    top: 50%;
+    width: 0.62rem;
+    height: 2px;
+    margin-top: -1px;
+    background: #c9912e;
+}
+
+.processFlowMergeTarget::after {
+    content: "";
+    position: absolute;
+    left: 0.66rem;
+    top: calc(50% - 4px);
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #c9912e;
+}
+
+.processFlowParallelStage::before,
+.processFlowParallelStage::after {
+    content: "";
+    position: absolute;
+    left: 0.2rem;
+    right: 0.2rem;
+    height: 1px;
+    background: #9bb7d4;
+}
+
+.processFlowConditionalStage::before,
+.processFlowConditionalStage::after {
+    content: "";
+    position: absolute;
+    left: 0.2rem;
+    right: 0.2rem;
+    height: 1px;
+    background: #d8b56d;
+}
+
+.processFlowParallelStage::before {
+    top: 0;
+}
+
+.processFlowParallelStage::after {
+    bottom: -0.15rem;
+}
+
+.processFlowConditionalStage::before {
+    top: 0;
+}
+
+.processFlowConditionalStage::after {
+    bottom: -0.15rem;
+}
+
+.processFlowParallelNodeStack {
+    gap: 0.35rem;
+}
+
+.processFlowParallelNodeItem {
+    padding: 0.3rem 0.45rem;
+    border: 1px solid #d9e4f0;
+    border-radius: 0.45rem;
+    background: #ffffff;
+}
+
+.processFlowConditionalNodeItem {
+    border-color: #ecd7a7;
+    background: #fffdf7;
 }

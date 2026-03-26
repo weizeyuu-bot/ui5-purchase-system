@@ -241,6 +241,20 @@
           ]
         },
         {
+          "name": "RouteProcessModelCreate",
+          "pattern": "processManagement/models/create",
+          "target": [
+            "TargetProcessModelDetail"
+          ]
+        },
+        {
+          "name": "RouteProcessModelDetail",
+          "pattern": "processManagement/models/{modelId}",
+          "target": [
+            "TargetProcessModelDetail"
+          ]
+        },
+        {
           "name": "RouteProcessDeployments",
           "pattern": "processManagement/deployments",
           "target": [
@@ -380,6 +394,12 @@
           "transition": "slide",
           "clearControlAggregation": false,
           "viewName": "ProcessModelList"
+        },
+        "TargetProcessModelDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewName": "ProcessModelDetail"
         },
         "TargetProcessDeployments": {
           "viewType": "XML",

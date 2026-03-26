@@ -1189,12 +1189,13 @@
                 formConfigs: [
                     { id: "F_PO_APPROVAL", name: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", fields: ["采购单号", "供应商", "物料明细", "订单金额", "价格匹配结果", "比价结论", "提交说明"] },
                     { id: "F_EXPENSE_APPROVAL", name: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", fields: ["金额", "类别", "说明", "附件"] },
-                    { id: "F_LEAVE_APPROVAL", name: "请假单表单", businessObject: "请假申请单", initiatorRole: "员工", approverRole: "部门经理", fields: ["开始时间", "结束时间", "请假类型", "原因"] }
+                    { id: "F_LEAVE_APPROVAL", name: "请假单表单", businessObject: "请假申请单", initiatorRole: "员工", approverRole: "部门经理", fields: ["开始时间", "结束时间", "请假类型", "原因"] },
+                    { id: "F_OUTBOUND_APPROVAL", name: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", fields: ["出库单号", "仓库", "物料明细", "发运说明"] }
                 ],
                 processModels: [
-                    { id: "PM_PO_APPROVAL_V1", name: "采购订单审批流程", categoryName: "审批流程", formName: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "采购员创建采购订单后提交，系统自动流转至采购经理审批。审批通过后订单进入执行，驳回则退回采购员修改。" },
-                    { id: "PM_EXPENSE_APPROVAL_V11", name: "报销审批模型", categoryName: "审批流程", formName: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", version: "1.1", nodeCount: 4, status: "TESTING", description: "用于差旅与费用报销的审核流程。" },
-                    { id: "PM_OUTBOUND_APPROVAL_V1", name: "出库审批模型", categoryName: "出库流程", formName: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "用于仓储发货前的出库审核。" }
+                    { id: "PM_PO_APPROVAL_V1", name: "采购订单审批流程", categoryName: "审批流程", formId: "F_PO_APPROVAL", formName: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", version: "1.0", nodeCount: 6, status: "PUBLISHED", description: "采购员创建采购订单后提交，系统自动流转至采购经理审批；当订单金额达到阈值时进入财务复核，否则走默认分支后结束。" },
+                    { id: "PM_EXPENSE_APPROVAL_V11", name: "报销审批模型", categoryName: "审批流程", formId: "F_EXPENSE_APPROVAL", formName: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", version: "1.1", nodeCount: 4, status: "TESTING", description: "用于差旅与费用报销的审核流程。" },
+                    { id: "PM_OUTBOUND_APPROVAL_V1", name: "出库审批模型", categoryName: "出库流程", formId: "F_OUTBOUND_APPROVAL", formName: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "用于仓储发货前的出库审核。" }
                 ],
                 deployments: [
                     { id: "DEP-PO-001", modelName: "采购订单审批流程", environment: "生产环境", scope: "采购订单单据", deployTime: "2026-03-20 10:00", publishedBy: "admin", status: "SUCCESS" },
@@ -1204,7 +1205,17 @@
                 processNodes: [
                     { modelId: "PM_PO_APPROVAL_V1", nodeId: "N1", nodeName: "采购员创建", nodeType: "发起节点", nodeAction: "创建采购订单并填写明细", assigneeRole: "采购专员", sla: "0.5" },
                     { modelId: "PM_PO_APPROVAL_V1", nodeId: "N2", nodeName: "提交审批", nodeType: "提交节点", nodeAction: "校验价格与供应商后提交", assigneeRole: "采购专员", sla: "0.5" },
-                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N3", nodeName: "经理审批", nodeType: "审批节点", nodeAction: "采购经理审批通过/驳回", assigneeRole: "采购经理", sla: "1" }
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N3", nodeName: "经理审批", nodeType: "审批节点", nodeAction: "采购经理审批通过/驳回", assigneeRole: "采购经理", sla: "1" },
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N4", nodeName: "大额采购复核", nodeType: "审批节点", nodeAction: "当订单金额达到阈值时触发财务复核", assigneeRole: "财务经理", nodePolicy: "CONDITIONAL", nodeBranchSet: "CS_AMOUNT", nodeBranchGroup: "CG_AMOUNT", nodeBranchMergeTo: "N6", nodeConditionField: "订单金额", nodeConditionOperator: "GTE", nodeConditionValue: "100000", nodeConditionIsDefault: false, sla: "0.5" },
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N5", nodeName: "常规订单直通", nodeType: "执行节点", nodeAction: "未命中大额条件时走默认分支并直接归档", assigneeRole: "系统", nodePolicy: "CONDITIONAL", nodeBranchSet: "CS_AMOUNT", nodeBranchGroup: "CG_DEFAULT", nodeBranchMergeTo: "N6", nodeConditionIsDefault: true, sla: "0.2" },
+                    { modelId: "PM_PO_APPROVAL_V1", nodeId: "N6", nodeName: "流程结束", nodeType: "结束节点", nodeAction: "归档审批结果", assigneeRole: "系统", sla: "0.2" },
+                    { modelId: "PM_EXPENSE_APPROVAL_V11", nodeId: "N1", nodeName: "员工提交", nodeType: "发起节点", nodeAction: "提交报销单", assigneeRole: "员工", sla: "0.5" },
+                    { modelId: "PM_EXPENSE_APPROVAL_V11", nodeId: "N2", nodeName: "直属主管审批", nodeType: "审批节点", nodeAction: "直属主管审核", assigneeRole: "部门经理", sla: "1" },
+                    { modelId: "PM_EXPENSE_APPROVAL_V11", nodeId: "N3", nodeName: "财务复核", nodeType: "审批节点", nodeAction: "财务经理复核", assigneeRole: "财务经理", sla: "1" },
+                    { modelId: "PM_EXPENSE_APPROVAL_V11", nodeId: "N4", nodeName: "归档", nodeType: "结束节点", nodeAction: "流程归档", assigneeRole: "系统", sla: "0.2" },
+                    { modelId: "PM_OUTBOUND_APPROVAL_V1", nodeId: "N1", nodeName: "仓库发起", nodeType: "发起节点", nodeAction: "创建出库单", assigneeRole: "仓库专员", sla: "0.5" },
+                    { modelId: "PM_OUTBOUND_APPROVAL_V1", nodeId: "N2", nodeName: "主管审批", nodeType: "审批节点", nodeAction: "仓储主管审批", assigneeRole: "仓储主管", sla: "1" },
+                    { modelId: "PM_OUTBOUND_APPROVAL_V1", nodeId: "N3", nodeName: "执行出库", nodeType: "执行节点", nodeAction: "完成拣货发运", assigneeRole: "仓库专员", sla: "0.5" }
                 ],
                 processInstances: [
                     { instanceId: "PI-PO-003", modelName: "采购订单审批流程", businessId: "PO003", currentNode: "经理审批", initiator: "user1", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-08 14:30" },

@@ -1,0 +1,402 @@
+<mvc:View
+    controllerName="myapp.controller.ProcessModelDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Page title="{processDisplay>/pageTitle}" showNavButton="true" navButtonPress="onNavBack">
+        <content>
+            <IconTabBar expandable="false" class="processDetailTabs sapUiResponsiveContentPadding">
+                <items>
+                    <IconTabFilter key="form" text="{i18n>processConfigTab}" icon="sap-icon://form">
+                        <VBox class="sapUiContentPadding" width="100%">
+                            <Label text="{i18n>processModelId}" required="true" />
+                            <Input value="{processDisplay>/editingModel/id}" editable="{processDisplay>/isCreate}" />
+
+                            <Label text="{i18n>processModelName}" required="true" class="sapUiTinyMarginTop" />
+                            <Input value="{processDisplay>/editingModel/name}" />
+
+                            <Label text="{i18n>formName}" required="true" class="sapUiTinyMarginTop" />
+                            <Select selectedKey="{processDisplay>/editingModel/formId}" items="{processDisplay>/formOptions}" forceSelection="false" change="onFormChanged">
+                                <items>
+                                    <core:Item key="{processDisplay>id}" text="{processDisplay>name}" />
+                                </items>
+                            </Select>
+
+                            <Label text="{i18n>processModelVersion}" class="sapUiTinyMarginTop" />
+                            <Input value="{processDisplay>/editingModel/version}" editable="false" />
+
+                            <Label text="{i18n>status}" class="sapUiTinyMarginTop" />
+                            <Select selectedKey="{processDisplay>/editingModel/status}" items="{processDisplay>/statusOptions}">
+                                <items>
+                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                </items>
+                            </Select>
+
+                            <Label text="{i18n>processModelDescription}" class="sapUiTinyMarginTop" />
+                            <TextArea value="{processDisplay>/editingModel/description}" rows="4" width="100%" />
+
+                            <Panel headerText="{i18n>processNodeConfigTitle}" class="sapUiSmallMarginTop">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <Title text="{i18n>processNodeConfigTitle}" level="H5" />
+                                        <ToolbarSpacer />
+                                        <Button text="{i18n>processNodeTemplateButton}" icon="sap-icon://process" press="onApplyNodeTemplate" class="sapUiTinyMarginEnd" />
+                                        <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddNode" />
+                                    </Toolbar>
+                                </headerToolbar>
+                                <Table items="{processDisplay>/editingNodes}">
+                                    <columns>
+                                        <Column width="6rem"><Text text="{i18n>processNodeId}" /></Column>
+                                        <Column width="8rem"><Text text="{i18n>processNodeType}" /></Column>
+                                        <Column width="9rem"><Text text="{i18n>processNodeName}" /></Column>
+                                        <Column width="12rem"><Text text="{i18n>processNodeAction}" /></Column>
+                                        <Column width="8rem"><Text text="{i18n>processNodeAssigneeRole}" /></Column>
+                                        <Column width="7rem"><Text text="{i18n>processNodePolicy}" /></Column>
+                                        <Column width="8rem"><Text text="{i18n>processNodeParallelGroup}" /></Column>
+                                        <Column width="6rem"><Text text="{i18n>processNodeSla}" /></Column>
+                                        <Column width="18rem"><Text text="{i18n>processNodeConditionConfig}" /></Column>
+                                        <Column width="14rem" hAlign="Center"><Text text="{i18n>actions}" /></Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Input value="{processDisplay>nodeId}" />
+                                                <Select selectedKey="{processDisplay>nodeType}" items="{processDisplay>/nodeTypeOptions}" change="onNodeTypeChange">
+                                                    <items>
+                                                        <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                    </items>
+                                                </Select>
+                                                <Input value="{processDisplay>nodeName}" />
+                                                <Input value="{processDisplay>nodeAction}" />
+                                                <Select selectedKey="{processDisplay>assigneeRole}" items="{processDisplay>/roleOptions}" forceSelection="false" enabled="{= ${processDisplay>nodeType} !== '结束节点' }">
+                                                    <items>
+                                                        <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                    </items>
+                                                </Select>
+                                                <Select selectedKey="{processDisplay>nodePolicy}" items="{processDisplay>/nodePolicyOptions}" change="onNodePolicyChange">
+                                                    <items>
+                                                        <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                    </items>
+                                                </Select>
+                                                <Input value="{processDisplay>nodeParallelGroup}" placeholder="{i18n>processNodeParallelGroupPlaceholder}" enabled="{= ${processDisplay>nodePolicy} === 'PARALLEL' }" />
+                                                <Input value="{processDisplay>sla}" type="Number" />
+                                                <VBox visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" class="sapUiTinyMarginTop">
+                                                    <CheckBox text="{i18n>processNodeConditionDefault}" selected="{processDisplay>nodeConditionIsDefault}" select="onConditionalDefaultChange" class="sapUiTinyMarginBottom" />
+                                                    <Select selectedKey="{processDisplay>nodeBranchMergeTo}" items="{processDisplay>/mergeTargetOptions}" forceSelection="false" class="sapUiTinyMarginBottom">
+                                                        <items>
+                                                            <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                        </items>
+                                                    </Select>
+                                                    <HBox>
+                                                        <Select selectedKey="{processDisplay>nodeConditionField}" items="{processDisplay>/conditionFieldOptions}" forceSelection="false" enabled="{= !${processDisplay>nodeConditionIsDefault} }" class="sapUiTinyMarginEnd processConditionFieldSelect">
+                                                            <items>
+                                                                <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                            </items>
+                                                        </Select>
+                                                        <Select selectedKey="{processDisplay>nodeConditionOperator}" items="{processDisplay>/conditionOperatorOptions}" forceSelection="false" enabled="{= !${processDisplay>nodeConditionIsDefault} }" class="processConditionOperatorSelect">
+                                                            <items>
+                                                                <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                            </items>
+                                                        </Select>
+                                                    </HBox>
+                                                    <Input value="{processDisplay>nodeConditionValue}" placeholder="{i18n>processNodeConditionValuePlaceholder}" enabled="{= !${processDisplay>nodeConditionIsDefault} }" class="sapUiTinyMarginTop" />
+                                                </VBox>
+                                                <Text text="-" visible="{= ${processDisplay>nodePolicy} !== 'CONDITIONAL' }" />
+                                                <HBox>
+                                                    <Button icon="sap-icon://add" tooltip="{i18n>insertBeforeButton}" press="onInsertNodeBefore" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://add-equipment" tooltip="{i18n>insertAfterButton}" press="onInsertNodeAfter" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://arrow-top" tooltip="{i18n>moveUpButton}" press="onMoveNodeUp" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://arrow-bottom" tooltip="{i18n>moveDownButton}" press="onMoveNodeDown" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://copy" tooltip="{i18n>copyButton}" press="onCopyNode" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://delete" type="Reject" press="onDeleteNode" />
+                                                </HBox>
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </Panel>
+                        </VBox>
+                    </IconTabFilter>
+
+                    <IconTabFilter key="visual" text="{i18n>processVisualConfigTab}" icon="sap-icon://process">
+                        <VBox class="sapUiContentPadding" width="100%">
+                            <MessageStrip text="{i18n>processVisualHint}" type="Information" showIcon="true" class="sapUiTinyMarginBottom" />
+                            <ScrollContainer horizontal="true" vertical="false" width="100%" class="processVisualScroll">
+                                <HBox items="{processDisplay>/editingNodes}" class="processVisualLane" renderType="Bare" wrap="NoWrap" alignItems="Start">
+                                    <items>
+                                        <VBox class="processVisualNodeCard sapUiTinyMarginEnd">
+                                            <customData>
+                                                <core:CustomData key="nodekind" value="{path: 'processDisplay>nodeType', formatter: '.formatVisualNodeKind'}" writeToDom="true" />
+                                            </customData>
+                                            <HBox justifyContent="SpaceBetween" alignItems="Center" class="processVisualNodeHeader">
+                                                <VBox>
+                                                    <Text text="{processDisplay>nodeId}" class="processVisualNodeId" />
+                                                    <Title text="{processDisplay>nodeType}" level="H6" class="processVisualNodeType" />
+                                                </VBox>
+                                                <ObjectStatus
+                                                    text="{path: 'processDisplay>nodePolicy', formatter: '.formatNodePolicyText'}"
+                                                    state="{path: 'processDisplay>nodePolicy', formatter: '.formatNodePolicyState'}"
+                                                    class="sapUiTinyMarginBegin" />
+                                                <ObjectStatus
+                                                    text="{path: 'processDisplay>nodeParallelGroup', formatter: '.formatParallelGroupText'}"
+                                                    state="Information"
+                                                    visible="{= ${processDisplay>nodePolicy} === 'PARALLEL' }"
+                                                    class="sapUiTinyMarginBegin" />
+                                                <ObjectStatus
+                                                    text="{parts:[{path:'processDisplay>nodeConditionField'},{path:'processDisplay>nodeConditionOperator'},{path:'processDisplay>nodeConditionValue'},{path:'processDisplay>nodeConditionIsDefault'}], formatter: '.formatConditionSummary'}"
+                                                    state="Warning"
+                                                    visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }"
+                                                    class="sapUiTinyMarginBegin" />
+                                                <HBox>
+                                                    <Button icon="sap-icon://navigation-left-arrow" tooltip="{i18n>moveUpButton}" press="onMoveNodeUp" class="sapUiTinyMarginEnd" />
+                                                    <Button icon="sap-icon://navigation-right-arrow" tooltip="{i18n>moveDownButton}" press="onMoveNodeDown" />
+                                                </HBox>
+                                            </HBox>
+                                            <Label text="{i18n>processNodeName}" class="sapUiTinyMarginTop" />
+                                            <Input value="{processDisplay>nodeName}" />
+                                            <Label text="{i18n>processNodeType}" class="sapUiTinyMarginTop" />
+                                            <Select selectedKey="{processDisplay>nodeType}" items="{processDisplay>/nodeTypeOptions}" change="onNodeTypeChange">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodeAssigneeRole}" class="sapUiTinyMarginTop" />
+                                            <Select selectedKey="{processDisplay>assigneeRole}" items="{processDisplay>/roleOptions}" forceSelection="false" enabled="{= ${processDisplay>nodeType} !== '结束节点' }">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodePolicy}" class="sapUiTinyMarginTop" />
+                                            <Select selectedKey="{processDisplay>nodePolicy}" items="{processDisplay>/nodePolicyOptions}" change="onNodePolicyChange">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodeParallelGroup}" class="sapUiTinyMarginTop" visible="{= ${processDisplay>nodePolicy} === 'PARALLEL' }" />
+                                            <Input value="{processDisplay>nodeParallelGroup}" placeholder="{i18n>processNodeParallelGroupPlaceholder}" visible="{= ${processDisplay>nodePolicy} === 'PARALLEL' }" />
+                                            <CheckBox text="{i18n>processNodeConditionDefault}" selected="{processDisplay>nodeConditionIsDefault}" select="onConditionalDefaultChange" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" class="sapUiTinyMarginTop" />
+                                            <Label text="{i18n>processNodeBranchMergeTo}" class="sapUiTinyMarginTop" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" />
+                                            <Select selectedKey="{processDisplay>nodeBranchMergeTo}" items="{processDisplay>/mergeTargetOptions}" forceSelection="false" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodeConditionField}" class="sapUiTinyMarginTop" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" />
+                                            <Select selectedKey="{processDisplay>nodeConditionField}" items="{processDisplay>/conditionFieldOptions}" forceSelection="false" enabled="{= !${processDisplay>nodeConditionIsDefault} }" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodeConditionOperator}" class="sapUiTinyMarginTop" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" />
+                                            <Select selectedKey="{processDisplay>nodeConditionOperator}" items="{processDisplay>/conditionOperatorOptions}" forceSelection="false" enabled="{= !${processDisplay>nodeConditionIsDefault} }" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }">
+                                                <items>
+                                                    <core:Item key="{processDisplay>key}" text="{processDisplay>text}" />
+                                                </items>
+                                            </Select>
+                                            <Label text="{i18n>processNodeConditionValue}" class="sapUiTinyMarginTop" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" />
+                                            <Input value="{processDisplay>nodeConditionValue}" placeholder="{i18n>processNodeConditionValuePlaceholder}" enabled="{= !${processDisplay>nodeConditionIsDefault} }" visible="{= ${processDisplay>nodePolicy} === 'CONDITIONAL' }" />
+                                            <Label text="{i18n>processNodeAction}" class="sapUiTinyMarginTop" />
+                                            <Input value="{processDisplay>nodeAction}" />
+                                            <HBox justifyContent="End" class="sapUiTinyMarginTop">
+                                                <Button icon="sap-icon://add" tooltip="{i18n>insertBeforeButton}" press="onInsertNodeBefore" class="sapUiTinyMarginEnd" />
+                                                <Button icon="sap-icon://add-equipment" tooltip="{i18n>insertAfterButton}" press="onInsertNodeAfter" class="sapUiTinyMarginEnd" />
+                                                <Button icon="sap-icon://copy" tooltip="{i18n>copyButton}" press="onCopyNode" class="sapUiTinyMarginEnd" />
+                                                <Button icon="sap-icon://delete" type="Reject" tooltip="{i18n>deleteButton}" press="onDeleteNode" />
+                                            </HBox>
+                                        </VBox>
+                                    </items>
+                                </HBox>
+                            </ScrollContainer>
+                            <HBox justifyContent="End" class="sapUiSmallMarginTop">
+                                <Button text="{i18n>processNodeTemplateButton}" icon="sap-icon://process" press="onApplyNodeTemplate" class="sapUiTinyMarginEnd" />
+                                <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddNode" />
+                            </HBox>
+
+                            <Panel headerText="{i18n>processParallelPreviewTitle}" class="sapUiSmallMarginTop" visible="{processDisplay>/hasParallelGroups}">
+                                <content>
+                                    <VBox class="sapUiSmallMargin">
+                                        <Text text="{i18n>processParallelPreviewHint}" class="sapUiTinyMarginBottom" />
+                                        <HBox items="{processDisplay>/parallelGroups}" wrap="Wrap" class="processParallelGroupWrap" renderType="Bare">
+                                            <items>
+                                                <VBox class="processParallelGroupCard sapUiTinyMarginEnd sapUiTinyMarginBottom">
+                                                    <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                                                        <Title text="{i18n>processParallelGroupLabel}" level="H6" />
+                                                        <HBox alignItems="Center">
+                                                            <Button text="{i18n>processParallelRestoreOrder}" press="onRestoreParallelGroupOrder" class="sapUiTinyMarginEnd" />
+                                                            <Button text="{i18n>processParallelSortByName}" press="onSortParallelGroupByName" class="sapUiTinyMarginEnd" />
+                                                            <Button text="{i18n>processParallelSortByRole}" press="onSortParallelGroupByRole" class="sapUiTinyMarginEnd" />
+                                                            <ObjectStatus text="{= ${processDisplay>nodeCount} + ' ' + ${i18n>processParallelNodeCountSuffix} }" state="Information" />
+                                                        </HBox>
+                                                    </HBox>
+                                                    <List items="{processDisplay>nodes}" class="processParallelNodeList">
+                                                        <items>
+                                                            <CustomListItem>
+                                                                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                                                    <VBox>
+                                                                        <Title text="{processDisplay>nodeName}" level="H6" />
+                                                                        <Text text="{processDisplay>assigneeRole}" class="sapUiTinyMarginTop" />
+                                                                    </VBox>
+                                                                    <HBox>
+                                                                        <ObjectStatus text="{processDisplay>nodeType}" state="Information" class="sapUiTinyMarginEnd" />
+                                                                        <Button icon="sap-icon://arrow-top" tooltip="{i18n>moveUpButton}" press="onMoveParallelNodeUp" enabled="{processDisplay>canMoveUp}" class="sapUiTinyMarginEnd" />
+                                                                        <Button icon="sap-icon://arrow-bottom" tooltip="{i18n>moveDownButton}" press="onMoveParallelNodeDown" enabled="{processDisplay>canMoveDown}" />
+                                                                    </HBox>
+                                                                </HBox>
+                                                            </CustomListItem>
+                                                        </items>
+                                                    </List>
+                                                </VBox>
+                                            </items>
+                                        </HBox>
+                                    </VBox>
+                                </content>
+                            </Panel>
+
+                            <Panel headerText="{i18n>processConditionalPreviewTitle}" class="sapUiSmallMarginTop" visible="{processDisplay>/hasConditionalSets}">
+                                <content>
+                                    <VBox class="sapUiSmallMargin">
+                                        <Text text="{i18n>processConditionalPreviewHint}" class="sapUiTinyMarginBottom" />
+                                        <HBox justifyContent="End" class="sapUiTinyMarginBottom">
+                                            <Button text="{i18n>processBranchMergeAutoInferButton}" icon="sap-icon://merge" press="onAutoInferBranchMergeTargets" />
+                                        </HBox>
+                                        <HBox items="{processDisplay>/conditionalSets}" wrap="Wrap" class="processParallelGroupWrap" renderType="Bare">
+                                            <items>
+                                                <VBox class="processParallelGroupCard processConditionalGroupCard sapUiTinyMarginEnd sapUiTinyMarginBottom">
+                                                    <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                                                        <Title text="{i18n>processConditionalDecisionLabel}" level="H6" />
+                                                        <ObjectStatus text="{= ${processDisplay>branchCount} + ' ' + ${i18n>processConditionalBranchCountSuffix} }" state="Warning" />
+                                                    </HBox>
+                                                    <List items="{processDisplay>branches}" class="processParallelNodeList processConditionalBranchList">
+                                                        <items>
+                                                            <CustomListItem>
+                                                                <VBox>
+                                                                    <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                                                                        <VBox>
+                                                                            <Title text="{i18n>processConditionalBranchLabel}" level="H6" />
+                                                                            <Text text="{processDisplay>conditionSummary}" class="sapUiTinyMarginTop" />
+                                                                            <Text text="{parts:[{path:'processDisplay>mergeTargetId'},{path:'processDisplay>mergeTargetLabel'}], formatter: '.formatMergeTargetSummary'}" class="sapUiTinyMarginTop" />
+                                                                        </VBox>
+                                                                        <ObjectStatus text="{= ${processDisplay>nodeCount} + ' ' + ${i18n>processParallelNodeCountSuffix} }" state="Warning" />
+                                                                    </HBox>
+                                                                    <List items="{processDisplay>nodes}" class="processParallelNodeList">
+                                                                        <items>
+                                                                            <CustomListItem>
+                                                                                <HBox justifyContent="SpaceBetween" alignItems="Center">
+                                                                                    <VBox>
+                                                                                        <Title text="{processDisplay>nodeName}" level="H6" />
+                                                                                        <Text text="{processDisplay>assigneeRole}" class="sapUiTinyMarginTop" />
+                                                                                    </VBox>
+                                                                                    <ObjectStatus text="{processDisplay>nodeType}" state="Warning" />
+                                                                                </HBox>
+                                                                            </CustomListItem>
+                                                                        </items>
+                                                                    </List>
+                                                                </VBox>
+                                                            </CustomListItem>
+                                                        </items>
+                                                    </List>
+                                                </VBox>
+                                            </items>
+                                        </HBox>
+                                    </VBox>
+                                </content>
+                            </Panel>
+
+                            <Panel headerText="{i18n>processFlowPreviewTitle}" class="sapUiSmallMarginTop" visible="{= ${processDisplay>/visualStages}.length > 0 }">
+                                <content>
+                                    <VBox class="sapUiSmallMargin">
+                                        <Text text="{i18n>processFlowPreviewHint}" class="sapUiTinyMarginBottom" />
+                                        <ScrollContainer horizontal="true" vertical="false" width="100%" class="processVisualScroll">
+                                            <HBox items="{processDisplay>/visualStages}" class="processFlowPreviewLane" renderType="Bare" wrap="NoWrap" alignItems="Center">
+                                                <items>
+                                                    <VBox class="processFlowStageCard sapUiTinyMarginEnd">
+                                                        <customData>
+                                                            <core:CustomData key="stagekind" value="{processDisplay>stageKind}" writeToDom="true" />
+                                                        </customData>
+                                                        <VBox visible="{= ${processDisplay>stageKind} === 'single' }" class="processFlowSingleStage">
+                                                            <VBox class="processFlowRectNode">
+                                                                <Title text="{processDisplay>nodes/0/nodeName}" level="H6" />
+                                                                <Text text="{= ${processDisplay>nodes/0/nodeType} + ' / ' + ${processDisplay>nodes/0/assigneeRole} }" class="sapUiTinyMarginTop" />
+                                                            </VBox>
+                                                        </VBox>
+
+                                                        <VBox visible="{= ${processDisplay>stageKind} === 'parallel' }" class="processFlowParallelStage">
+                                                            <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                                                                <Title text="{i18n>processParallelGroupLabel}" level="H6" />
+                                                                <ObjectStatus text="{= ${processDisplay>nodeCount} + ' ' + ${i18n>processParallelNodeCountSuffix} }" state="Information" />
+                                                            </HBox>
+                                                            <VBox items="{processDisplay>nodes}" class="processFlowParallelNodeStack" renderType="Bare">
+                                                                <items>
+                                                                    <HBox class="processFlowParallelNodeItem processFlowRectNodeMini" justifyContent="SpaceBetween">
+                                                                        <Text text="{processDisplay>nodeName}" />
+                                                                        <Text text="{processDisplay>assigneeRole}" />
+                                                                    </HBox>
+                                                                </items>
+                                                            </VBox>
+                                                        </VBox>
+
+                                                        <VBox visible="{= ${processDisplay>stageKind} === 'conditional' }" class="processFlowConditionalStage">
+                                                            <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom processFlowDecisionHeader">
+                                                                <HBox alignItems="Center">
+                                                                    <VBox class="processFlowDecisionDiamond">
+                                                                        <Text text="{i18n>processFlowDecisionLabel}" class="processFlowDecisionText" />
+                                                                    </VBox>
+                                                                </HBox>
+                                                                <ObjectStatus text="{= ${processDisplay>nodeCount} + ' ' + ${i18n>processParallelNodeCountSuffix} }" state="Warning" />
+                                                            </HBox>
+                                                            <HBox class="processFlowDecisionLead" alignItems="Center">
+                                                                <VBox class="processFlowDecisionLeadLine" />
+                                                            </HBox>
+                                                            <VBox items="{processDisplay>branches}" class="processFlowConditionalBranchStack" renderType="Bare">
+                                                                <items>
+                                                                    <VBox class="processFlowConditionalBranchItem sapUiTinyMarginBottom">
+                                                                        <customData>
+                                                                            <core:CustomData key="routekind" value="{= ${processDisplay>isDefault} ? 'no' : 'yes'}" writeToDom="true" />
+                                                                        </customData>
+                                                                        <Text text="{i18n>processBranchRouteYes}" class="processFlowRouteLineLabel processFlowRouteLineLabelYes" visible="{processDisplay>showSplitYes}" />
+                                                                        <Text text="{i18n>processBranchRouteNo}" class="processFlowRouteLineLabel processFlowRouteLineLabelNo" visible="{processDisplay>showSplitNo}" />
+                                                                        <HBox justifyContent="SpaceBetween" class="sapUiTinyMarginBottom">
+                                                                            <HBox alignItems="Center" class="processFlowBranchHeaderLeft">
+                                                                                <Text text="{i18n>processConditionalBranchLabel}" />
+                                                                            </HBox>
+                                                                            <ObjectStatus text="{processDisplay>conditionSummary}" state="Warning" />
+                                                                        </HBox>
+                                                                        <Text text="{parts:[{path:'processDisplay>mergeTargetId'},{path:'processDisplay>mergeTargetLabel'}], formatter: '.formatMergeTargetSummary'}" class="sapUiTinyMarginBottom" />
+                                                                        <VBox items="{processDisplay>nodes}" class="processFlowParallelNodeStack" renderType="Bare">
+                                                                            <items>
+                                                                                <HBox class="processFlowParallelNodeItem processFlowConditionalNodeItem processFlowRectNodeMini" justifyContent="SpaceBetween">
+                                                                                    <Text text="{processDisplay>nodeName}" />
+                                                                                    <Text text="{processDisplay>assigneeRole}" />
+                                                                                </HBox>
+                                                                            </items>
+                                                                        </VBox>
+                                                                    </VBox>
+                                                                </items>
+                                                            </VBox>
+                                                            <HBox alignItems="Center" class="processFlowMergeFooter sapUiTinyMarginTop">
+                                                                <VBox class="processFlowMergeDot" />
+                                                                <Text text="{i18n>processFlowMergeNode}" class="sapUiTinyMarginBegin processFlowMergeLabel" />
+                                                                <Text text="{parts:[{path:'processDisplay>branches/0/mergeTargetId'},{path:'processDisplay>branches/0/mergeTargetLabel'}], formatter: '.formatMergeTargetSummary'}" class="sapUiTinyMarginBegin processFlowMergeTarget" />
+                                                            </HBox>
+                                                        </VBox>
+                                                    </VBox>
+                                                </items>
+                                            </HBox>
+                                        </ScrollContainer>
+                                    </VBox>
+                                </content>
+                            </Panel>
+                        </VBox>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </content>
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Button text="{i18n>saveButton}" type="Emphasized" press="onSave" />
+                <Button text="{i18n>cancelButton}" press="onNavBack" />
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

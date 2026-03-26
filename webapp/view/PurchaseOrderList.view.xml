@@ -11,7 +11,8 @@
             </Toolbar>
         </subHeader>
         <content>
-            <Table id="poTable" class="supplierTable" items="{purchaseOrders>/purchaseOrders}">
+            <ScrollContainer horizontal="true" vertical="false" width="100%" class="poListScrollContainer">
+                <Table id="poTable" class="supplierTable poListTable" items="{purchaseOrders>/purchaseOrders}" fixedLayout="false" width="auto">
                 <columns>
                     <Column>
                         <Text text="{i18n>poId}" />
@@ -79,7 +80,8 @@
                         </cells>
                     </ColumnListItem>
                 </items>
-            </Table>
+                </Table>
+            </ScrollContainer>
         </content>
         <Dialog id="poDialog" title="{i18n>menuPurchaseOrders}" type="Standard">
             <content>

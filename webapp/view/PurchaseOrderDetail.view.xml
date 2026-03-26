@@ -4,6 +4,13 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <Page title="{i18n>purchaseOrderListTitle}" showNavButton="true" navButtonPress="onNavBack" class="poDetailPage">
+        <headerContent>
+            <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" visible="{ui>/canEditOrder}" />
+            <Button text="{i18n>poSubmitApprovalButton}" press="onSubmitApproval" type="Emphasized" visible="{ui>/canSubmit}" />
+            <Button text="{i18n>poApproveButton}" press="onApprove" type="Accept" visible="{ui>/canApprove}" />
+            <Button text="{i18n>poRejectButton}" press="onReject" type="Reject" visible="{ui>/canReject}" />
+            <Button text="{i18n>cancelButton}" press="onCancel" />
+        </headerContent>
         <content>
             <VBox class="poDetailLayout">
                 <HBox class="poDetailTopRow" wrap="Wrap" renderType="Bare">
@@ -135,13 +142,6 @@
                         </items>
                     </Table>
                 </Panel>
-                <HBox justifyContent="End" class="poDetailActionBar" renderType="Bare">
-                    <Button text="{i18n>saveButton}" press="onSave" type="Emphasized" class="sapUiTinyMarginEnd" visible="{ui>/canEditOrder}" />
-                    <Button text="{i18n>poSubmitApprovalButton}" press="onSubmitApproval" type="Emphasized" class="sapUiTinyMarginEnd" visible="{ui>/canSubmit}" />
-                    <Button text="{i18n>poApproveButton}" press="onApprove" type="Accept" class="sapUiTinyMarginEnd" visible="{ui>/canApprove}" />
-                    <Button text="{i18n>poRejectButton}" press="onReject" type="Reject" class="sapUiTinyMarginEnd" visible="{ui>/canReject}" />
-                    <Button text="{i18n>cancelButton}" press="onCancel" />
-                </HBox>
             </VBox>
         </content>
     </Page>
