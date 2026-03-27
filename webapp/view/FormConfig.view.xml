@@ -26,7 +26,7 @@
                     <Column hAlign="Center" width="10rem"><Text text="{i18n>actions}" /></Column>
                 </columns>
                 <items>
-                    <ColumnListItem type="Inactive">
+                    <ColumnListItem type="Active" press="onOpenFormConfigEditor">
                         <cells>
                             <Text text="{formConfigVM>id}" />
                             <Text text="{formConfigVM>name}" />

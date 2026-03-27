@@ -17,6 +17,7 @@
     "@openui5/sap.m": "^1.146.0",
     "@openui5/sap.ui.core": "^1.146.0",
     "@openui5/themelib_sap_fiori_3": "^1.146.0",
-    "@ui5/cli": "^4.0.49"
+    "@ui5/cli": "^4.0.49",
+    "ui5-middleware-simpleproxy": "^3.4.1"
   }
 }
