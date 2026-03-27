@@ -6,24 +6,63 @@
     <Page title="{i18n>processCategoriesTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
             <Text text="{i18n>processCategoriesListTitle}" class="sapUiTinyMarginBottom" />
-            <Table items="{process>/processCategories}">
+            <Table id="processCategoryTable" items="{processCategoryVM>/items}" mode="SingleSelectLeft">
+                <headerToolbar>
+                    <Toolbar>
+                        <ToolbarSpacer />
+                        <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddProcessCategory" type="Emphasized" />
+                        <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onEditSelected" />
+                        <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteSelected" />
+                    </Toolbar>
+                </headerToolbar>
                 <columns>
                     <Column><Text text="{i18n>processCategoryId}" /></Column>
                     <Column><Text text="{i18n>processCategoryName}" /></Column>
                     <Column><Text text="{i18n>processCategoryDescription}" /></Column>
                     <Column><Text text="{i18n>processOwner}" /></Column>
+                    <Column hAlign="Center" width="10rem"><Text text="{i18n>actions}" /></Column>
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem type="Inactive">
                         <cells>
-                            <Text text="{process>id}" />
-                            <Text text="{process>name}" />
-                            <Text text="{process>description}" />
-                            <Text text="{process>owner}" />
+                            <Text text="{processCategoryVM>id}" />
+                            <Text text="{processCategoryVM>name}" />
+                            <Text text="{processCategoryVM>description}" />
+                            <Text text="{processCategoryVM>owner}" />
+                            <HBox>
+                                <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onOpenProcessCategoryEditor" class="sapUiTinyMarginEnd" />
+                                <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteProcessCategory" />
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
         </VBox>
+
+        <dependents>
+            <Dialog id="processCategoryEditDialog" title="{i18n>processCategoryEditTitle}" contentWidth="640px" contentHeight="auto" draggable="true" resizable="true">
+                <content>
+                    <VBox class="sapUiContentPadding" width="100%">
+                        <Label text="{i18n>processCategoryId}" required="true" />
+                        <Input value="{processCategoryVM>/editorDraft/id}" placeholder="{i18n>processCategoryId}" />
+
+                        <Label text="{i18n>processCategoryName}" required="true" class="sapUiTinyMarginTop" />
+                        <Input value="{processCategoryVM>/editorDraft/name}" placeholder="{i18n>processCategoryName}" />
+
+                        <Label text="{i18n>processCategoryDescription}" class="sapUiTinyMarginTop" />
+                        <TextArea value="{processCategoryVM>/editorDraft/description}" rows="3" width="100%" placeholder="{i18n>processCategoryDescription}" />
+
+                        <Label text="{i18n>processOwner}" class="sapUiTinyMarginTop" />
+                        <Input value="{processCategoryVM>/editorDraft/owner}" placeholder="{i18n>processOwner}" />
+                    </VBox>
+                </content>
+                <beginButton>
+                    <Button text="{i18n>saveButton}" type="Emphasized" press="onSaveProcessCategoryDraft" />
+                </beginButton>
+                <endButton>
+                    <Button text="{i18n>cancelButton}" press="onCancelProcessCategoryDraft" />
+                </endButton>
+            </Dialog>
+        </dependents>
     </Page>
 </mvc:View>

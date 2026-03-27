@@ -6,28 +6,110 @@
     <Page title="{i18n>formConfigTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
             <Text text="{i18n>formConfigListTitle}" class="sapUiTinyMarginBottom" />
-            <Table items="{process>/formConfigs}">
+            <Table id="formConfigTable" items="{formConfigVM>/items}" mode="SingleSelectLeft">
+                <headerToolbar>
+                    <Toolbar>
+                        <ToolbarSpacer />
+                        <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddFormConfig" type="Emphasized" />
+                        <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onEditSelected" />
+                        <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteSelected" />
+                    </Toolbar>
+                </headerToolbar>
                 <columns>
                     <Column><Text text="{i18n>formId}" /></Column>
                     <Column><Text text="{i18n>formName}" /></Column>
+                    <Column><Text text="{i18n>formProcessCategory}" /></Column>
                     <Column><Text text="{i18n>formBusinessObject}" /></Column>
                     <Column><Text text="{i18n>processInitiatorRole}" /></Column>
                     <Column><Text text="{i18n>processApproverRole}" /></Column>
                     <Column><Text text="{i18n>formFields}" /></Column>
+                    <Column hAlign="Center" width="10rem"><Text text="{i18n>actions}" /></Column>
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem type="Inactive">
                         <cells>
-                            <Text text="{process>id}" />
-                            <Text text="{process>name}" />
-                            <Text text="{process>businessObject}" />
-                            <Text text="{process>initiatorRole}" />
-                            <Text text="{process>approverRole}" />
-                            <Text text="{= ${process>fields}.join(', ') }" />
+                            <Text text="{formConfigVM>id}" />
+                            <Text text="{formConfigVM>name}" />
+                            <Text text="{formConfigVM>categoryName}" />
+                            <Text text="{formConfigVM>businessObject}" />
+                            <Text text="{formConfigVM>initiatorRole}" />
+                            <Text text="{formConfigVM>approverRole}" />
+                            <Text text="{formConfigVM>fieldsText}" />
+                            <HBox>
+                                <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onOpenFormConfigEditor" class="sapUiTinyMarginEnd" />
+                                <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteFormConfig" />
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
         </VBox>
+
+        <dependents>
+            <Dialog id="formConfigEditDialog" title="{i18n>formConfigEditTitle}" contentWidth="640px" contentHeight="auto" draggable="true" resizable="true">
+                <content>
+                    <VBox class="sapUiContentPadding" width="100%">
+                        <Label text="{i18n>formId}" required="true" />
+                        <Input value="{formConfigVM>/editorDraft/id}" placeholder="{i18n>formId}" />
+
+                        <Label text="{i18n>formName}" required="true" class="sapUiTinyMarginTop" />
+                        <Input value="{formConfigVM>/editorDraft/name}" placeholder="{i18n>formName}" />
+
+                        <Label text="{i18n>formProcessCategory}" class="sapUiTinyMarginTop" />
+                        <ComboBox
+                            id="formProcessCategoryCombo"
+                            selectedKey="{formConfigVM>/editorDraft/categoryId}"
+                            items="{formConfigVM>/categoryOptions}"
+                            placeholder="{i18n>formCategoryPlaceholder}">
+                            <items>
+                                <core:Item key="{formConfigVM>key}" text="{formConfigVM>text}" />
+                            </items>
+                        </ComboBox>
+
+                        <Label text="{i18n>formBusinessObject}" class="sapUiTinyMarginTop" />
+                        <ComboBox
+                            id="formBusinessObjectCombo"
+                            value="{formConfigVM>/editorDraft/businessObject}"
+                            items="{formConfigVM>/businessObjectOptions}"
+                            placeholder="{i18n>formConfigSearchPlaceholder}">
+                            <items>
+                                <core:Item key="{formConfigVM>key}" text="{formConfigVM>text}" />
+                            </items>
+                        </ComboBox>
+
+                        <Label text="{i18n>processInitiatorRole}" class="sapUiTinyMarginTop" />
+                        <ComboBox
+                            id="formInitiatorRoleCombo"
+                            value="{formConfigVM>/editorDraft/initiatorRole}"
+                            items="{formConfigVM>/roleOptions}"
+                            placeholder="{i18n>formConfigSearchPlaceholder}">
+                            <items>
+                                <core:Item key="{formConfigVM>key}" text="{formConfigVM>text}" />
+                            </items>
+                        </ComboBox>
+
+                        <Label text="{i18n>processApproverRole}" class="sapUiTinyMarginTop" />
+                        <ComboBox
+                            id="formApproverRoleCombo"
+                            value="{formConfigVM>/editorDraft/approverRole}"
+                            items="{formConfigVM>/roleOptions}"
+                            placeholder="{i18n>formConfigSearchPlaceholder}">
+                            <items>
+                                <core:Item key="{formConfigVM>key}" text="{formConfigVM>text}" />
+                            </items>
+                        </ComboBox>
+
+                        <Label text="{i18n>formFields}" class="sapUiTinyMarginTop" />
+                        <TextArea value="{formConfigVM>/editorDraft/fieldsText}" rows="3" width="100%" placeholder="{i18n>formFieldsPlaceholder}" />
+                    </VBox>
+                </content>
+                <beginButton>
+                    <Button text="{i18n>saveButton}" type="Emphasized" press="onSaveFormConfigDraft" />
+                </beginButton>
+                <endButton>
+                    <Button text="{i18n>cancelButton}" press="onCancelFormConfigDraft" />
+                </endButton>
+            </Dialog>
+        </dependents>
     </Page>
 </mvc:View>

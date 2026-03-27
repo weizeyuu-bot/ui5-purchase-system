@@ -22,6 +22,9 @@
                                 </items>
                             </Select>
 
+                            <Label text="{i18n>formProcessCategory}" class="sapUiTinyMarginTop" />
+                            <Input value="{processDisplay>/editingModel/categoryName}" editable="false" />
+
                             <Label text="{i18n>processModelVersion}" class="sapUiTinyMarginTop" />
                             <Input value="{processDisplay>/editingModel/version}" editable="false" />
 

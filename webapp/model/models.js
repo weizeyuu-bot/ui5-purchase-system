@@ -212,6 +212,7 @@
                         approvalStatusText: "已审批",
                         approvalStatusState: "Success",
                         processInstanceId: "PI-PO-001",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user1",
                         creatorRole: "采购专员",
@@ -235,6 +236,7 @@
                         approvalStatusText: "已审批",
                         approvalStatusState: "Success",
                         processInstanceId: "PI-PO-002",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user5",
                         creatorRole: "采购专员",
@@ -258,6 +260,7 @@
                         approvalStatusText: "待采购经理审批",
                         approvalStatusState: "Warning",
                         processInstanceId: "PI-PO-003",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user1",
                         creatorRole: "采购专员",
@@ -281,6 +284,7 @@
                         approvalStatusText: "采购经理驳回",
                         approvalStatusState: "Error",
                         processInstanceId: "PI-PO-004",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user5",
                         creatorRole: "采购专员",
@@ -304,6 +308,7 @@
                         approvalStatusText: "草稿待提交",
                         approvalStatusState: "Information",
                         processInstanceId: "",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user1",
                         creatorRole: "采购专员",
@@ -327,6 +332,7 @@
                         approvalStatusText: "已审批",
                         approvalStatusState: "Success",
                         processInstanceId: "PI-PO-006",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user5",
                         creatorRole: "采购专员",
@@ -350,6 +356,7 @@
                         approvalStatusText: "已审批",
                         approvalStatusState: "Success",
                         processInstanceId: "PI-PO-007",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user1",
                         creatorRole: "采购专员",
@@ -373,6 +380,7 @@
                         approvalStatusText: "待采购经理审批",
                         approvalStatusState: "Warning",
                         processInstanceId: "PI-PO-008",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user5",
                         creatorRole: "采购专员",
@@ -396,6 +404,7 @@
                         approvalStatusText: "待采购经理审批",
                         approvalStatusState: "Warning",
                         processInstanceId: "PI-PO-009",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user1",
                         creatorRole: "采购专员",
@@ -419,6 +428,7 @@
                         approvalStatusText: "已审批",
                         approvalStatusState: "Success",
                         processInstanceId: "PI-PO-010",
+                        processModelId: "PM_PO_APPROVAL_V1",
                         processModelName: "采购订单审批流程",
                         createdBy: "user5",
                         creatorRole: "采购专员",
@@ -1187,10 +1197,10 @@
                     { id: "pc4", name: "报销流程", description: "用于财务报销、借款、差旅审批等配置", owner: "财务经理" }
                 ],
                 formConfigs: [
-                    { id: "F_PO_APPROVAL", name: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", fields: ["采购单号", "供应商", "物料明细", "订单金额", "价格匹配结果", "比价结论", "提交说明"] },
-                    { id: "F_EXPENSE_APPROVAL", name: "报销单表单", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", fields: ["金额", "类别", "说明", "附件"] },
-                    { id: "F_LEAVE_APPROVAL", name: "请假单表单", businessObject: "请假申请单", initiatorRole: "员工", approverRole: "部门经理", fields: ["开始时间", "结束时间", "请假类型", "原因"] },
-                    { id: "F_OUTBOUND_APPROVAL", name: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", fields: ["出库单号", "仓库", "物料明细", "发运说明"] }
+                    { id: "F_PO_APPROVAL", name: "采购订单审批表单", categoryId: "pc2", categoryName: "审批流程", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", fields: ["采购单号", "供应商", "物料明细", "订单金额", "价格匹配结果", "比价结论", "提交说明"] },
+                    { id: "F_EXPENSE_APPROVAL", name: "报销单表单", categoryId: "pc2", categoryName: "审批流程", businessObject: "费用报销单", initiatorRole: "员工", approverRole: "财务经理", fields: ["金额", "类别", "说明", "附件"] },
+                    { id: "F_LEAVE_APPROVAL", name: "请假单表单", categoryId: "pc2", categoryName: "审批流程", businessObject: "请假申请单", initiatorRole: "员工", approverRole: "部门经理", fields: ["开始时间", "结束时间", "请假类型", "原因"] },
+                    { id: "F_OUTBOUND_APPROVAL", name: "出库审批表单", categoryId: "pc3", categoryName: "出库流程", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", fields: ["出库单号", "仓库", "物料明细", "发运说明"] }
                 ],
                 processModels: [
                     { id: "PM_PO_APPROVAL_V1", name: "采购订单审批流程", categoryName: "审批流程", formId: "F_PO_APPROVAL", formName: "采购订单审批表单", businessObject: "采购订单", initiatorRole: "采购专员", approverRole: "采购经理", version: "1.0", nodeCount: 6, status: "PUBLISHED", description: "采购员创建采购订单后提交，系统自动流转至采购经理审批；当订单金额达到阈值时进入财务复核，否则走默认分支后结束。" },
@@ -1198,9 +1208,9 @@
                     { id: "PM_OUTBOUND_APPROVAL_V1", name: "出库审批模型", categoryName: "出库流程", formId: "F_OUTBOUND_APPROVAL", formName: "出库审批表单", businessObject: "出库单", initiatorRole: "仓库专员", approverRole: "仓储主管", version: "1.0", nodeCount: 3, status: "PUBLISHED", description: "用于仓储发货前的出库审核。" }
                 ],
                 deployments: [
-                    { id: "DEP-PO-001", modelName: "采购订单审批流程", environment: "生产环境", scope: "采购订单单据", deployTime: "2026-03-20 10:00", publishedBy: "admin", status: "SUCCESS" },
-                    { id: "DEP-EXP-002", modelName: "报销审批模型", environment: "测试环境", scope: "费用报销单", deployTime: "2026-03-22 13:20", publishedBy: "admin", status: "SUCCESS" },
-                    { id: "DEP-OUT-003", modelName: "出库审批模型", environment: "测试环境", scope: "出库单", deployTime: "2026-03-24 09:10", publishedBy: "admin", status: "FAILED" }
+                    { id: "DEP-PO-001", modelId: "PM_PO_APPROVAL_V1", modelName: "采购订单审批流程", formId: "F_PO_APPROVAL", formName: "采购订单审批表单", environment: "生产环境", scope: "采购订单单据", deployTime: "2026-03-20 10:00", publishedBy: "admin", status: "PUBLISHED" },
+                    { id: "DEP-EXP-002", modelId: "PM_EXPENSE_APPROVAL_V11", modelName: "报销审批模型", formId: "F_EXPENSE_APPROVAL", formName: "报销单表单", environment: "测试环境", scope: "费用报销单", deployTime: "2026-03-22 13:20", publishedBy: "admin", status: "PUBLISHED" },
+                    { id: "DEP-OUT-003", modelId: "PM_OUTBOUND_APPROVAL_V1", modelName: "出库审批模型", formId: "F_OUTBOUND_APPROVAL", formName: "出库审批表单", environment: "测试环境", scope: "出库单", deployTime: "2026-03-24 09:10", publishedBy: "admin", status: "CANCELLED" }
                 ],
                 processNodes: [
                     { modelId: "PM_PO_APPROVAL_V1", nodeId: "N1", nodeName: "采购员创建", nodeType: "发起节点", nodeAction: "创建采购订单并填写明细", assigneeRole: "采购专员", sla: "0.5" },
@@ -1218,10 +1228,10 @@
                     { modelId: "PM_OUTBOUND_APPROVAL_V1", nodeId: "N3", nodeName: "执行出库", nodeType: "执行节点", nodeAction: "完成拣货发运", assigneeRole: "仓库专员", sla: "0.5" }
                 ],
                 processInstances: [
-                    { instanceId: "PI-PO-003", modelName: "采购订单审批流程", businessId: "PO003", currentNode: "经理审批", initiator: "user1", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-08 14:30" },
-                    { instanceId: "PI-PO-008", modelName: "采购订单审批流程", businessId: "PO008", currentNode: "经理审批", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-17 08:40" },
-                    { instanceId: "PI-PO-004", modelName: "采购订单审批流程", businessId: "PO004", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已驳回", statusState: "Error", submittedAt: "2026-03-10 16:00" },
-                    { instanceId: "PI-PO-010", modelName: "采购订单审批流程", businessId: "PO010", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已完成", statusState: "Success", submittedAt: "2026-03-19 10:05" }
+                    { instanceId: "PI-PO-003", modelId: "PM_PO_APPROVAL_V1", modelName: "采购订单审批流程", businessId: "PO003", currentNode: "经理审批", initiator: "user1", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-08 14:30" },
+                    { instanceId: "PI-PO-008", modelId: "PM_PO_APPROVAL_V1", modelName: "采购订单审批流程", businessId: "PO008", currentNode: "经理审批", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "审批中", statusState: "Warning", submittedAt: "2026-03-17 08:40" },
+                    { instanceId: "PI-PO-004", modelId: "PM_PO_APPROVAL_V1", modelName: "采购订单审批流程", businessId: "PO004", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已驳回", statusState: "Error", submittedAt: "2026-03-10 16:00" },
+                    { instanceId: "PI-PO-010", modelId: "PM_PO_APPROVAL_V1", modelName: "采购订单审批流程", businessId: "PO010", currentNode: "流程结束", initiator: "user5", initiatorRole: "采购专员", currentHandler: "user2", statusText: "已完成", statusState: "Success", submittedAt: "2026-03-19 10:05" }
                 ]
             };
             return new JSONModel(oData);
@@ -1229,3 +1239,4 @@
 
     };
 });
+

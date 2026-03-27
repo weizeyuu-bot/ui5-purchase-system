@@ -73,7 +73,7 @@ sap.ui.define([
             var oDisplayModel = this.getView().getModel("processDisplay");
             oDisplayModel.setProperty("/isCreate", true);
             oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelAddTitle"));
-            oDisplayModel.setProperty("/editingModel", { id: "", name: "", formId: "", version: "1.0", status: "TESTING", description: "" });
+            oDisplayModel.setProperty("/editingModel", { id: "", name: "", formId: "", categoryId: "", categoryName: "", version: "1.0", status: "TESTING", description: "" });
             this._refreshConditionFieldOptions();
             this._setEditingNodes([], false);
         },
@@ -96,10 +96,15 @@ sap.ui.define([
             oDisplayModel.setProperty("/isCreate", false);
             oDisplayModel.setProperty("/editingSourceId", sModelId);
             oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelEditTitle"));
+            var oLinkedForm = (oProcessModel.getProperty("/formConfigs") || []).find(function (oForm) {
+                return oForm.id === oModelItem.formId;
+            }) || null;
             oDisplayModel.setProperty("/editingModel", {
                 id: oModelItem.id,
                 name: oModelItem.name,
                 formId: oModelItem.formId,
+                categoryId: oModelItem.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
+                categoryName: oModelItem.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
                 version: oModelItem.version,
                 status: oModelItem.status,
                 description: oModelItem.description || ""
@@ -216,6 +221,16 @@ sap.ui.define([
             var sFormId = oDisplayModel.getProperty("/editingModel/formId") || "";
             var aForms = this.getView().getModel("process").getProperty("/formConfigs") || [];
             return aForms.find(function (oForm) { return oForm.id === sFormId; }) || null;
+        },
+
+        _syncEditingModelFromLinkedForm: function () {
+            var oDisplayModel = this.getView().getModel("processDisplay");
+            var oEditingModel = Object.assign({}, oDisplayModel.getProperty("/editingModel") || {});
+            var oFormConfig = this._getEditingFormConfig();
+
+            oEditingModel.categoryId = oFormConfig ? (oFormConfig.categoryId || "") : "";
+            oEditingModel.categoryName = oFormConfig ? (oFormConfig.categoryName || "") : "";
+            oDisplayModel.setProperty("/editingModel", oEditingModel);
         },
 
         _refreshConditionFieldOptions: function () {
@@ -871,6 +886,7 @@ sap.ui.define([
         onFormChanged: function () {
             var oDisplayModel = this.getView().getModel("processDisplay");
             var aNodes = oDisplayModel.getProperty("/editingNodes") || [];
+            this._syncEditingModelFromLinkedForm();
             this._refreshConditionFieldOptions();
             this._setEditingNodes(aNodes, true);
         },
@@ -1000,6 +1016,7 @@ sap.ui.define([
 
         onSave: function () {
             var oDisplayModel = this.getView().getModel("processDisplay");
+            this._syncEditingModelFromLinkedForm();
             var oDraft = Object.assign({}, oDisplayModel.getProperty("/editingModel"));
             var aEditingNodes = this._autoAssignConditionalBranchIdentifiers(this._applyDefaultRolesToNodes(this._normalizeNodeIds(oDisplayModel.getProperty("/editingNodes") || []), false)).map(function (oNode, iIndex) {
                 return {
@@ -1089,7 +1106,11 @@ sap.ui.define([
             var aProcessModels = oProcessModel.getProperty("/processModels") || [];
             var aFormConfigs = oProcessModel.getProperty("/formConfigs") || [];
             var aNodes = oProcessModel.getProperty("/processNodes") || [];
+            var aDeployments = oProcessModel.getProperty("/deployments") || [];
+            var aProcessInstances = oProcessModel.getProperty("/processInstances") || [];
             var oLinkedForm = aFormConfigs.find(function (oForm) { return oForm.id === oDraft.formId; });
+            var sOldModelName = "";
+            var sOldModelId = bIsCreate ? "" : (sSourceId || "");
             oDraft.version = this._getNextAutoVersion(oDraft.version, bIsCreate);
             oDisplayModel.setProperty("/editingModel/version", oDraft.version);
 
@@ -1101,7 +1122,8 @@ sap.ui.define([
                 aProcessModels.push({
                     id: oDraft.id,
                     name: oDraft.name,
-                    categoryName: "审批流程",
+                    categoryId: oDraft.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
+                    categoryName: oDraft.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
                     formId: oDraft.formId,
                     formName: oLinkedForm ? oLinkedForm.name : "",
                     version: oDraft.version,
@@ -1127,10 +1149,13 @@ sap.ui.define([
                     MessageToast.show(this._getI18nText("processModelIdExists"));
                     return;
                 }
+                sOldModelName = aProcessModels[iIndex].name || "";
 
                 aProcessModels[iIndex] = Object.assign({}, aProcessModels[iIndex], {
                     id: oDraft.id,
                     name: oDraft.name,
+                    categoryId: oDraft.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
+                    categoryName: oDraft.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
                     formId: oDraft.formId,
                     formName: oLinkedForm ? oLinkedForm.name : aProcessModels[iIndex].formName,
                     version: oDraft.version,
@@ -1146,8 +1171,36 @@ sap.ui.define([
                 }));
             }
 
+            aDeployments = aDeployments.map(function (oDeployment) {
+                var bLinkedById = !!oDeployment.modelId && oDeployment.modelId === (bIsCreate ? oDraft.id : sSourceId);
+                var bLinkedByName = !oDeployment.modelId && !!sOldModelName && oDeployment.modelName === sOldModelName;
+                if (!bLinkedById && !bLinkedByName) {
+                    return oDeployment;
+                }
+                return Object.assign({}, oDeployment, {
+                    modelId: oDraft.id,
+                    modelName: oDraft.name,
+                    formId: oLinkedForm ? oLinkedForm.id : "",
+                    formName: oLinkedForm ? oLinkedForm.name : ""
+                });
+            });
+
+            aProcessInstances = aProcessInstances.map(function (oInstance) {
+                var bLinkedById = !!oInstance.modelId && !!sOldModelId && oInstance.modelId === sOldModelId;
+                var bLinkedByName = !oInstance.modelId && !!sOldModelName && oInstance.modelName === sOldModelName;
+                if (!bLinkedById && !bLinkedByName) {
+                    return oInstance;
+                }
+                return Object.assign({}, oInstance, {
+                    modelId: oDraft.id,
+                    modelName: oDraft.name
+                });
+            });
+
             oProcessModel.setProperty("/processModels", aProcessModels);
             oProcessModel.setProperty("/processNodes", aNodes);
+            oProcessModel.setProperty("/deployments", aDeployments);
+            oProcessModel.setProperty("/processInstances", aProcessInstances);
             MessageToast.show(this._getI18nText("saveSuccess"));
             this.onNavBack();
         },

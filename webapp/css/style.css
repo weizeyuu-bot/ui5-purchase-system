@@ -529,6 +529,92 @@
     color: #10395f;
 }
 
+.poApprovalTabs .sapMITBHead {
+    border-bottom: 1px solid #d9e5f2;
+}
+
+.poApprovalTabs .sapMITBContent {
+    padding: 0;
+}
+
+.poApprovalProgressWrap {
+    gap: 10px;
+}
+
+.poApprovalProgressBar {
+    height: 1.4rem;
+}
+
+.poApprovalFlowScroll {
+    width: 100%;
+}
+
+.poApprovalFlowLane {
+    min-width: max-content;
+    gap: 18px;
+    align-items: stretch;
+    padding: 2px 4px 6px;
+}
+
+.poApprovalFlowStep {
+    position: relative;
+    flex: 0 0 162px;
+    min-width: 162px;
+    padding: 10px;
+    border: 1px solid #dfe9f5;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+}
+
+.poApprovalFlowLane > .poApprovalFlowStep::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -15px;
+    width: 12px;
+    border-top: 2px solid #bfd2e8;
+    transform: translateY(-50%);
+}
+
+.poApprovalFlowLane > .poApprovalFlowStep::before {
+    content: "";
+    position: absolute;
+    top: calc(50% - 4px);
+    right: -17px;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #bfd2e8;
+}
+
+.poApprovalFlowLane > .poApprovalFlowStep:last-child::after,
+.poApprovalFlowLane > .poApprovalFlowStep:last-child::before {
+    display: none;
+}
+
+.poApprovalStepIcon {
+    color: #1f6fb2;
+}
+
+.poApprovalStepDetail {
+    color: #27425f;
+    font-size: 12px;
+}
+
+.poApprovalStepTime {
+    color: #6c7f95;
+    font-size: 11px;
+    margin-top: 2px;
+}
+
+@media (max-width: 900px) {
+    .poApprovalFlowStep {
+        flex-basis: 148px;
+        min-width: 148px;
+    }
+}
+
 .poLineItemsPanel {
     margin-top: 0;
 }

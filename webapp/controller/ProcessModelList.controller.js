@@ -49,6 +49,8 @@ sap.ui.define([
                 var oLastApprovalNode = aApprovalNodes.length ? aApprovalNodes[aApprovalNodes.length - 1] : null;
 
                 return Object.assign({}, oProcessModelItem, {
+                    categoryId: oProcessModelItem.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
+                    categoryName: oProcessModelItem.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
                     businessObject: (oLinkedForm && oLinkedForm.businessObject) || oProcessModelItem.businessObject,
                     initiatorRole: (oInitiatorNode && oInitiatorNode.assigneeRole) || (oLinkedForm && oLinkedForm.initiatorRole) || oProcessModelItem.initiatorRole,
                     approverRole: (oLastApprovalNode && oLastApprovalNode.assigneeRole) || (oLinkedForm && oLinkedForm.approverRole) || oProcessModelItem.approverRole,
@@ -247,10 +249,24 @@ sap.ui.define([
         _confirmDeleteModel: function (sModelId, sModelName) {
             var oProcessModel = this.getView().getModel("process");
             var bInUse = (oProcessModel.getProperty("/processInstances") || []).some(function (oInstance) {
+                if (oInstance.modelId) {
+                    return oInstance.modelId === sModelId;
+                }
                 return oInstance.modelName === sModelName;
             });
             if (bInUse) {
                 MessageToast.show(this._getI18nText("processModelDeleteBlocked"));
+                return;
+            }
+
+            var bLinkedByDeployment = (oProcessModel.getProperty("/deployments") || []).some(function (oDeployment) {
+                if (oDeployment.modelId) {
+                    return oDeployment.modelId === sModelId;
+                }
+                return oDeployment.modelName === sModelName;
+            });
+            if (bLinkedByDeployment) {
+                MessageToast.show(this._getI18nText("processModelDeleteBlockedByDeployment"));
                 return;
             }
 
@@ -460,6 +476,8 @@ sap.ui.define([
             var oLinkedForm = aFormConfigs.find(function (oForm) {
                 return oForm.id === oDraft.formId;
             });
+            var sCategoryId = oLinkedForm ? (oLinkedForm.categoryId || "") : "";
+            var sCategoryName = oLinkedForm ? (oLinkedForm.categoryName || "") : "";
 
             if (bIsCreate) {
                 if (aProcessModels.some(function (oItem) { return oItem.id === oDraft.id; })) {
@@ -469,7 +487,8 @@ sap.ui.define([
                 aProcessModels.push({
                     id: oDraft.id,
                     name: oDraft.name,
-                    categoryName: "审批流程",
+                    categoryId: sCategoryId,
+                    categoryName: sCategoryName,
                     formId: oDraft.formId,
                     formName: oLinkedForm ? oLinkedForm.name : "",
                     version: oDraft.version,
@@ -499,6 +518,8 @@ sap.ui.define([
                 aProcessModels[iIndex] = Object.assign({}, aProcessModels[iIndex], {
                     id: oDraft.id,
                     name: oDraft.name,
+                    categoryId: sCategoryId,
+                    categoryName: sCategoryName,
                     formId: oDraft.formId,
                     formName: oLinkedForm ? oLinkedForm.name : aProcessModels[iIndex].formName,
                     version: oDraft.version,

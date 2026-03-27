@@ -71,17 +71,47 @@
                         </Panel>
 
                         <Panel headerText="{i18n>poApprovalSection}" class="sapUiSmallMarginTop">
-                            <VBox class="sapUiSmallMargin">
-                                <ObjectStatus text="{purchaseOrders>approvalStatusText}" state="{purchaseOrders>approvalStatusState}" class="sapUiTinyMarginBottom" />
-                                <Text text="{= ${i18n>poProcessModel} + ': ' + ${purchaseOrders>processModelName}}" />
-                                <Text text="{= ${i18n>poCreatedBy} + ': ' + ${purchaseOrders>createdBy} + ' / ' + ${purchaseOrders>creatorRole}}" />
-                                <Text text="{= ${i18n>poSubmittedBy} + ': ' + (${purchaseOrders>submittedBy} || '-') }" />
-                                <Text text="{= ${i18n>poSubmittedAt} + ': ' + (${purchaseOrders>submittedAt} || '-') }" />
-                                <Text text="{= ${i18n>poCurrentApprover} + ': ' + ((${purchaseOrders>currentApprover} &amp;&amp; ${purchaseOrders>currentApproverRole}) ? ${purchaseOrders>currentApprover} + ' / ' + ${purchaseOrders>currentApproverRole} : '-') }" />
-                                <Text text="{= ${i18n>poApprovedBy} + ': ' + (${purchaseOrders>approvedBy} || '-') }" />
-                                <Text text="{= ${i18n>poApprovedAt} + ': ' + (${purchaseOrders>approvedAt} || '-') }" />
-                                <Text text="{= ${i18n>poApprovalComment} + ': ' + (${purchaseOrders>approvalComment} || '-') }" />
-                            </VBox>
+                            <IconTabBar expandable="false" class="poApprovalTabs">
+                                <items>
+                                    <IconTabFilter key="overview" icon="sap-icon://hint" text="{i18n>poApprovalTabOverview}">
+                                        <VBox class="sapUiSmallMargin">
+                                            <ObjectStatus text="{purchaseOrders>approvalStatusText}" state="{purchaseOrders>approvalStatusState}" class="sapUiTinyMarginBottom" />
+                                            <Text text="{= ${i18n>poProcessModel} + ': ' + ${purchaseOrders>processModelName}}" />
+                                            <Text text="{= ${i18n>poCreatedBy} + ': ' + ${purchaseOrders>createdBy} + ' / ' + ${purchaseOrders>creatorRole}}" />
+                                            <Text text="{= ${i18n>poSubmittedBy} + ': ' + (${purchaseOrders>submittedBy} || '-') }" />
+                                            <Text text="{= ${i18n>poSubmittedAt} + ': ' + (${purchaseOrders>submittedAt} || '-') }" />
+                                            <Text text="{= ${i18n>poCurrentApprover} + ': ' + ((${purchaseOrders>currentApprover} &amp;&amp; ${purchaseOrders>currentApproverRole}) ? ${purchaseOrders>currentApprover} + ' / ' + ${purchaseOrders>currentApproverRole} : '-') }" />
+                                            <Text text="{= ${i18n>poApprovedBy} + ': ' + (${purchaseOrders>approvedBy} || '-') }" />
+                                            <Text text="{= ${i18n>poApprovedAt} + ': ' + (${purchaseOrders>approvedAt} || '-') }" />
+                                            <Text text="{= ${i18n>poApprovalComment} + ': ' + (${purchaseOrders>approvalComment} || '-') }" />
+                                        </VBox>
+                                    </IconTabFilter>
+
+                                    <IconTabFilter key="progress" icon="sap-icon://process" text="{i18n>poApprovalTabProgress}">
+                                        <VBox class="sapUiSmallMargin poApprovalProgressWrap">
+                                            <ProgressIndicator
+                                                percentValue="{ui>/approvalProgressPercent}"
+                                                displayValue="{= ${ui>/approvalProgressPercent} + '%' }"
+                                                state="{ui>/approvalProgressState}"
+                                                class="poApprovalProgressBar sapUiTinyMarginBottom" />
+                                            <ScrollContainer horizontal="true" vertical="false" class="poApprovalFlowScroll">
+                                                <HBox class="poApprovalFlowLane" wrap="NoWrap" renderType="Bare" items="{ui>/approvalProgressItems}">
+                                                    <items>
+                                                        <VBox class="poApprovalFlowStep">
+                                                            <HBox alignItems="Center" class="sapUiTinyMarginBottom">
+                                                                <core:Icon src="{ui>icon}" class="poApprovalStepIcon sapUiTinyMarginEnd" />
+                                                                <ObjectStatus text="{ui>title}" state="{ui>state}" />
+                                                            </HBox>
+                                                            <Text text="{ui>detail}" class="poApprovalStepDetail" />
+                                                            <Text text="{ui>time}" class="poApprovalStepTime" />
+                                                        </VBox>
+                                                    </items>
+                                                </HBox>
+                                            </ScrollContainer>
+                                        </VBox>
+                                    </IconTabFilter>
+                                </items>
+                            </IconTabBar>
                         </Panel>
 
                         <HBox class="poMetricGrid" wrap="Wrap" renderType="Bare">

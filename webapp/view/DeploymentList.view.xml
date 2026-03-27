@@ -6,30 +6,111 @@
     <Page title="{i18n>deploymentManagementTitle}" showNavButton="true" navButtonPress="onNavBack">
         <VBox class="sapUiContentPadding" width="100%">
             <Text text="{i18n>deploymentListTitle}" class="sapUiTinyMarginBottom" />
-            <Table items="{process>/deployments}">
+            <Table id="deploymentTable" items="{deploymentDisplay>/items}" mode="SingleSelectLeft">
+                <headerToolbar>
+                    <Toolbar>
+                        <ToolbarSpacer />
+                        <Button text="{i18n>btnAdd}" icon="sap-icon://add" press="onAddDeployment" type="Emphasized" />
+                        <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onEditSelected" />
+                        <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteSelected" />
+                    </Toolbar>
+                </headerToolbar>
                 <columns>
                     <Column><Text text="{i18n>deploymentId}" /></Column>
+                    <Column><Text text="{i18n>processModelId}" /></Column>
                     <Column><Text text="{i18n>processModelName}" /></Column>
+                    <Column><Text text="{i18n>deploymentLinkedForm}" /></Column>
+                    <Column><Text text="{i18n>deploymentLinkedProcess}" /></Column>
                     <Column><Text text="{i18n>deploymentEnvironment}" /></Column>
-                    <Column><Text text="{i18n>deploymentScope}" /></Column>
                     <Column><Text text="{i18n>deploymentTime}" /></Column>
                     <Column><Text text="{i18n>publishedBy}" /></Column>
+                    <Column><Text text="{i18n>deploymentRelationStatus}" /></Column>
                     <Column><Text text="{i18n>status}" /></Column>
+                    <Column hAlign="Center" width="10rem"><Text text="{i18n>actions}" /></Column>
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem type="Inactive">
                         <cells>
-                            <Text text="{process>id}" />
-                            <Text text="{process>modelName}" />
-                            <Text text="{process>environment}" />
-                            <Text text="{process>scope}" />
-                            <Text text="{process>deployTime}" />
-                            <Text text="{process>publishedBy}" />
-                            <ObjectStatus text="{= ${process>status} === 'SUCCESS' ? ${i18n>deployStatusSuccess} : ${process>status} === 'FAILED' ? ${i18n>deployStatusFailed} : ${process>status} }" state="{= ${process>status} === 'SUCCESS' ? 'Success' : ${process>status} === 'FAILED' ? 'Error' : 'Information' }" />
+                            <Text text="{deploymentDisplay>id}" />
+                            <Text text="{deploymentDisplay>modelId}" />
+                            <Text text="{deploymentDisplay>modelName}" />
+                            <Text text="{deploymentDisplay>formName}" />
+                            <Text text="{deploymentDisplay>linkedProcess}" />
+                            <Text text="{deploymentDisplay>environment}" />
+                            <Text text="{deploymentDisplay>deployTime}" />
+                            <Text text="{deploymentDisplay>publishedBy}" />
+                            <ObjectStatus text="{deploymentDisplay>linkText}" state="{deploymentDisplay>linkState}" />
+                            <ObjectStatus text="{= ${deploymentDisplay>status} === 'PUBLISHED' ? '发布' : ${deploymentDisplay>status} === 'CANCELLED' ? '取消' : ${deploymentDisplay>status} }" state="{= ${deploymentDisplay>status} === 'PUBLISHED' ? 'Success' : ${deploymentDisplay>status} === 'CANCELLED' ? 'Warning' : 'Information' }" />
+                            <HBox>
+                                <Button text="{i18n>editButton}" icon="sap-icon://edit" press="onOpenDeploymentEditor" class="sapUiTinyMarginEnd" />
+                                <Button text="{i18n>deleteButton}" icon="sap-icon://delete" type="Reject" press="onDeleteDeployment" />
+                            </HBox>
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
         </VBox>
+
+        <dependents>
+            <Dialog id="deploymentEditDialog" title="{i18n>deploymentEditTitle}" contentWidth="640px" contentHeight="auto" draggable="true" resizable="true">
+                <content>
+                    <VBox class="sapUiContentPadding" width="100%">
+                        <Label text="{i18n>deploymentId}" required="true" />
+                        <Input value="{deploymentDisplay>/editorDraft/id}" placeholder="{i18n>deploymentId}" />
+
+                        <Label text="{i18n>processModelId}" required="true" class="sapUiTinyMarginTop" />
+                        <ComboBox
+                            id="deploymentModelCombo"
+                            selectedKey="{deploymentDisplay>/editorDraft/modelId}"
+                            items="{deploymentDisplay>/modelOptions}"
+                            placeholder="{i18n>formConfigSearchPlaceholder}"
+                            selectionChange="onDeploymentModelChanged">
+                            <items>
+                                <core:Item key="{deploymentDisplay>key}" text="{deploymentDisplay>text}" />
+                            </items>
+                        </ComboBox>
+
+                        <Label text="{i18n>processModelName}" class="sapUiTinyMarginTop" />
+                        <Input value="{deploymentDisplay>/editorDraft/modelName}" editable="false" />
+
+                        <Label text="{i18n>deploymentLinkedForm}" class="sapUiTinyMarginTop" />
+                        <Input value="{deploymentDisplay>/editorDraft/formName}" editable="false" />
+
+                        <Label text="{i18n>deploymentLinkedProcess}" class="sapUiTinyMarginTop" />
+                        <Input value="{deploymentDisplay>/editorDraft/linkedProcess}" editable="false" />
+
+                        <Label text="{i18n>deploymentEnvironment}" class="sapUiTinyMarginTop" />
+                        <Select selectedKey="{deploymentDisplay>/editorDraft/environment}" items="{deploymentDisplay>/environmentOptions}">
+                            <items>
+                                <core:Item key="{deploymentDisplay>key}" text="{deploymentDisplay>text}" />
+                            </items>
+                        </Select>
+
+                        <Label text="{i18n>deploymentTime}" class="sapUiTinyMarginTop" />
+                        <DateTimePicker
+                            value="{deploymentDisplay>/editorDraft/deployTime}"
+                            valueFormat="yyyy-MM-dd HH:mm"
+                            displayFormat="yyyy-MM-dd HH:mm"
+                            placeholder="{i18n>deploymentTimePlaceholder}" />
+
+                        <Label text="{i18n>publishedBy}" class="sapUiTinyMarginTop" />
+                        <Input value="{deploymentDisplay>/editorDraft/publishedBy}" editable="false" />
+
+                        <Label text="{i18n>status}" class="sapUiTinyMarginTop" />
+                        <Select selectedKey="{deploymentDisplay>/editorDraft/status}" items="{deploymentDisplay>/statusOptions}">
+                            <items>
+                                <core:Item key="{deploymentDisplay>key}" text="{deploymentDisplay>text}" />
+                            </items>
+                        </Select>
+                    </VBox>
+                </content>
+                <beginButton>
+                    <Button text="{i18n>saveButton}" type="Emphasized" press="onSaveDeploymentDraft" />
+                </beginButton>
+                <endButton>
+                    <Button text="{i18n>cancelButton}" press="onCancelDeploymentDraft" />
+                </endButton>
+            </Dialog>
+        </dependents>
     </Page>
 </mvc:View>

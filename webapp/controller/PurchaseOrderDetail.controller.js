@@ -24,7 +24,10 @@ sap.ui.define([
                 canEditOrder: false,
                 canSubmit: false,
                 canApprove: false,
-                canReject: false
+                canReject: false,
+                approvalProgressPercent: 0,
+                approvalProgressState: "None",
+                approvalProgressItems: []
             }), "ui");
             this._oRejectDialog = null;
             this._oRejectTextArea = null;
@@ -41,12 +44,61 @@ sap.ui.define([
             });
             if (oOrder) {
                 this._iOrderIndex = aOrders.indexOf(oOrder);
+                this._syncOrderProcessModelLink(this._iOrderIndex);
                 this.getView().bindElement({
                     path: "/purchaseOrders/" + this._iOrderIndex,
                     model: "purchaseOrders"
                 });
                 this._refreshActionState();
             }
+        },
+
+        _resolveProcessModelForOrder: function (oOrder) {
+            var aModels = this.getOwnerComponent().getModel("process").getProperty("/processModels") || [];
+            if (!aModels.length) {
+                return null;
+            }
+
+            if (oOrder && oOrder.processModelId) {
+                var oById = aModels.find(function (oItem) {
+                    return oItem.id === oOrder.processModelId;
+                });
+                if (oById) {
+                    return oById;
+                }
+            }
+
+            if (oOrder && oOrder.processModelName) {
+                var oByName = aModels.find(function (oItem) {
+                    return oItem.name === oOrder.processModelName;
+                });
+                if (oByName) {
+                    return oByName;
+                }
+            }
+
+            return aModels[0] || null;
+        },
+
+        _syncOrderProcessModelLink: function (iOrderIndex) {
+            if (typeof iOrderIndex !== "number" || iOrderIndex < 0) {
+                return;
+            }
+
+            var oModel = this.getView().getModel("purchaseOrders");
+            var sOrderPath = "/purchaseOrders/" + iOrderIndex;
+            var oOrder = oModel.getProperty(sOrderPath);
+            if (!oOrder) {
+                return;
+            }
+
+            var oLinkedModel = this._resolveProcessModelForOrder(oOrder);
+            if (!oLinkedModel) {
+                return;
+            }
+
+            oModel.setProperty(sOrderPath + "/processModelId", oLinkedModel.id);
+            oModel.setProperty(sOrderPath + "/processModelName", oLinkedModel.name);
         },
 
         onNavBack: function () {
@@ -157,6 +209,7 @@ sap.ui.define([
                     oModel.setProperty(sBasePath + "/approvedBy", "");
                     oModel.setProperty(sBasePath + "/approvedAt", "");
                     oModel.setProperty(sBasePath + "/approvalComment", "");
+                    that._syncOrderProcessModelLink(that._iOrderIndex);
                     if (!oModel.getProperty(sBasePath + "/processInstanceId")) {
                         oModel.setProperty(sBasePath + "/processInstanceId", "PI-PO-" + String(that._iOrderIndex + 1).padStart(3, "0"));
                     }
@@ -356,6 +409,80 @@ sap.ui.define([
                 canApprove: !!oOrder && sApprovalStatus === "SUBMITTED" && (bIsAdmin || (bIsProcurementManager && bIsAssignedApprover)),
                 canReject: !!oOrder && sApprovalStatus === "SUBMITTED" && (bIsAdmin || (bIsProcurementManager && bIsAssignedApprover))
             });
+
+            var oProgressData = this._buildApprovalProgressData(oOrder);
+            oUiModel.setProperty("/approvalProgressPercent", oProgressData.percent);
+            oUiModel.setProperty("/approvalProgressState", oProgressData.state);
+            oUiModel.setProperty("/approvalProgressItems", oProgressData.items);
+        },
+
+        _buildApprovalProgressData: function (oOrder) {
+            if (!oOrder) {
+                return {
+                    percent: 0,
+                    state: "None",
+                    items: []
+                };
+            }
+
+            var sStatus = oOrder.approvalStatus || "DRAFT";
+            var aStepStatesByStatus = {
+                DRAFT: ["Success", "Warning", "None", "None"],
+                SUBMITTED: ["Success", "Success", "Warning", "None"],
+                APPROVED: ["Success", "Success", "Success", "Success"],
+                REJECTED: ["Success", "Success", "Error", "Error"]
+            };
+            var mProgressByStatus = {
+                DRAFT: { percent: 25, state: "Information" },
+                SUBMITTED: { percent: 70, state: "Warning" },
+                APPROVED: { percent: 100, state: "Success" },
+                REJECTED: { percent: 100, state: "Error" }
+            };
+            var aStates = aStepStatesByStatus[sStatus] || aStepStatesByStatus.DRAFT;
+            var oProgress = mProgressByStatus[sStatus] || mProgressByStatus.DRAFT;
+            var sCreatorText = ((oOrder.createdBy || "-") + " / " + (oOrder.creatorRole || "-")).replace(/\s+$/, "");
+            var sSubmitter = oOrder.submittedBy || "-";
+            var sApprover = sStatus === "SUBMITTED"
+                ? ((oOrder.currentApprover || "-") + " / " + (oOrder.currentApproverRole || "-")).replace(/\s+$/, "")
+                : (oOrder.approvedBy || "-");
+            var sFinishText = sStatus === "APPROVED"
+                ? this._getText("poProgressResultApproved")
+                : (sStatus === "REJECTED" ? this._getText("poProgressResultRejected") : this._getText("poProgressResultPending"));
+
+            return {
+                percent: oProgress.percent,
+                state: oProgress.state,
+                items: [
+                    {
+                        title: this._getText("poProgressStepCreate"),
+                        detail: sCreatorText,
+                        time: oOrder.date || "-",
+                        state: aStates[0],
+                        icon: "sap-icon://employee"
+                    },
+                    {
+                        title: this._getText("poProgressStepSubmit"),
+                        detail: sSubmitter,
+                        time: oOrder.submittedAt || "-",
+                        state: aStates[1],
+                        icon: "sap-icon://paper-plane"
+                    },
+                    {
+                        title: this._getText("poProgressStepApprove"),
+                        detail: sApprover,
+                        time: oOrder.approvedAt || "-",
+                        state: aStates[2],
+                        icon: "sap-icon://task"
+                    },
+                    {
+                        title: this._getText("poProgressStepFinish"),
+                        detail: sFinishText,
+                        time: oOrder.approvedAt || "-",
+                        state: aStates[3],
+                        icon: "sap-icon://complete"
+                    }
+                ]
+            };
         },
 
         _getCurrentUserContext: function () {

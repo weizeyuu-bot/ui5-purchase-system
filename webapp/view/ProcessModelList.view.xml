@@ -18,7 +18,7 @@
                 <columns>
                     <Column><Text text="{i18n>processModelId}" /></Column>
                     <Column><Text text="{i18n>processModelName}" /></Column>
-                    <Column><Text text="{i18n>processBusinessObject}" /></Column>
+                    <Column><Text text="{i18n>deploymentLinkedForm}" /></Column>
                     <Column><Text text="{i18n>processInitiatorRole}" /></Column>
                     <Column><Text text="{i18n>processApproverRole}" /></Column>
                     <Column><Text text="{i18n>processModelVersion}" /></Column>
@@ -31,7 +31,7 @@
                         <cells>
                             <Text text="{processDisplay>id}" />
                             <Text text="{processDisplay>name}" />
-                            <Text text="{processDisplay>businessObject}" />
+                            <Text text="{processDisplay>formName}" />
                             <Text text="{processDisplay>initiatorRole}" />
                             <Text text="{processDisplay>approverRole}" />
                             <Text text="{processDisplay>version}" />
