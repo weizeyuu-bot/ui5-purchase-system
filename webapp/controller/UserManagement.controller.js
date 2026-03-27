@@ -51,9 +51,9 @@ sap.ui.define([
             this._refreshRoleUserCounts();
             this._initDefaultRoleSelection();
 
-            this.getOwnerComponent().getRouter()
-                .getRoute("RouteUserManagement")
-                .attachPatternMatched(this._onRouteMatched, this);
+            var oRouter = this.getOwnerComponent().getRouter();
+            oRouter.getRoute("RouteUserManagement").attachPatternMatched(this._onRouteMatched, this);
+            oRouter.getRoute("RouteUserManagementTab").attachPatternMatched(this._onRouteMatched, this);
 
             this._loadUsersFromApi();
         },

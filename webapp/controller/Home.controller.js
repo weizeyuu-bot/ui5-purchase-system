@@ -120,17 +120,17 @@ sap.ui.define([
 
         onNavigateToUserManagement: function () {
             this._setActiveMenuKey("users");
-            this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "users" });
+            this.getOwnerComponent().getRouter().navTo("RouteUserManagementTab", { tab: "users" });
         },
 
         onNavigateToRoleManagement: function () {
             this._setActiveMenuKey("roles");
-            this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "roles" });
+            this.getOwnerComponent().getRouter().navTo("RouteUserManagementTab", { tab: "roles" });
         },
 
         onNavigateToPermissionManagement: function () {
             this._setActiveMenuKey("permissionManagement");
-            this.getOwnerComponent().getRouter().navTo("RouteUserManagement", { tab: "permissions" });
+            this.getOwnerComponent().getRouter().navTo("RouteUserManagementTab", { tab: "permissions" });
         },
 
         onNavigateToQuoteManagement: function () {

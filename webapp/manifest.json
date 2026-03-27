@@ -179,7 +179,14 @@
         },
         {
           "name": "RouteUserManagement",
-          "pattern": "userManagement/:tab:",
+          "pattern": "userManagement",
+          "target": [
+            "TargetUserManagement"
+          ]
+        },
+        {
+          "name": "RouteUserManagementTab",
+          "pattern": "userManagement/tab/{tab}",
           "target": [
             "TargetUserManagement"
           ]

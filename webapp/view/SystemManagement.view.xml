@@ -12,7 +12,7 @@
 
                 <!-- System Status Summary -->
                 <Panel headerText="{i18n>systemStatus}" class="sapUiLargeMargin">
-                    <layout:Grid spacing="2" defaultSpan="L3 M6 S12">
+                    <layout:Grid hSpacing="1" vSpacing="1" defaultSpan="L3 M6 S12">
                         <VBox class="statusCard">
                             <Label text="{i18n>onlineUsers}" class="cardLabel" />
                             <Text text="{system>/onlineUsers}" class="statusNumber" />

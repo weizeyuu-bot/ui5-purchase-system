@@ -71,7 +71,7 @@
                             </Table>
 
                             <Panel headerText="{i18n>userStatistics}" class="sapUiMediumMarginTop">
-                                <layout:Grid spacing="2" defaultSpan="L3 M6 S12">
+                                <layout:Grid hSpacing="1" vSpacing="1" defaultSpan="L3 M6 S12">
                                     <VBox class="statItem">
                                         <Text text="{i18n>totalUsers}" class="statLabel" />
                                         <Text text="{users>/statistics/totalUsers}" class="statNumber" />
