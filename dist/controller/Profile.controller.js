@@ -1,2 +1,0 @@
-sap.ui.define(["sap/ui/core/mvc/Controller","sap/m/MessageToast"],function(e,t){"use strict";return e.extend("myapp.controller.Profile",{onNavBack:function(){this.getOwnerComponent().getRouter().navTo("RouteHome")},onSave:function(){t.show(this._getText("profileSaved"));this.onNavBack()},_getText:function(e){return this.getOwnerComponent().getModel("i18n").getResourceBundle().getText(e)}})});
-//# sourceMappingURL=Profile.controller.js.map
