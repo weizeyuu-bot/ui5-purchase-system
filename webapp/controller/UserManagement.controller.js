@@ -400,6 +400,16 @@ sap.ui.define([
                 return;
             }
 
+            if (oData.email && !this._isValidEmail(oData.email)) {
+                MessageToast.show(this._getText("userEmailInvalid"));
+                return;
+            }
+
+            if (oData.phone && !this._isValidPhone(oData.phone)) {
+                MessageToast.show(this._getText("userPhoneInvalid"));
+                return;
+            }
+
             if (!sBackendRole) {
                 MessageToast.show(this._getText("roleNotFound"));
                 return;
@@ -414,6 +424,9 @@ sap.ui.define([
                 oPayload = {
                     username: oData.username,
                     name: oData.username,
+                    email: (oData.email || "").trim() || undefined,
+                    phone: (oData.phone || "").trim() || undefined,
+                    department: (oData.department || "").trim() || undefined,
                     password: oData.password,
                     role: sBackendRole,
                     status: oData.status
@@ -444,6 +457,9 @@ sap.ui.define([
 
             oPayload = {
                 name: oData.username,
+                email: (oData.email || "").trim() || undefined,
+                phone: (oData.phone || "").trim() || undefined,
+                department: (oData.department || "").trim() || undefined,
                 role: sBackendRole,
                 status: oData.status
             };
@@ -504,12 +520,12 @@ sap.ui.define([
             return {
                 id: oApiUser.id,
                 username: oApiUser.username,
-                email: "-",
-                phone: "-",
+                email: oApiUser.email || "",
+                phone: oApiUser.phone || "",
                 registrationDate: sDate || this._todayString(),
                 status: oApiUser.status || "ACTIVE",
                 statusState: this._mapStatusToState(oApiUser.status),
-                department: "-",
+                department: oApiUser.department || "",
                 roleId: sRoleId,
                 roleName: sRoleName,
                 role: sRoleName,

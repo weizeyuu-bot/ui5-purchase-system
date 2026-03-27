@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+    "sap/m/MessageBox",
+    "myapp/model/apiClient",
+    "myapp/model/processApi"
+], function (Controller, JSONModel, MessageToast, MessageBox, apiClient, processApi) {
     "use strict";
 
     return Controller.extend("myapp.controller.ProcessModelList", {
@@ -11,15 +13,27 @@ sap.ui.define([
             var oModel = this.getOwnerComponent().getModel("process");
             if (oModel) {
                 this.getView().setModel(oModel, "process");
-                this._buildConfiguredProcessModels(oModel);
+                this._loadFromApi();
             }
 
             this.getOwnerComponent().getRouter().getRoute("RouteProcessModels").attachPatternMatched(function () {
-                var oProcessModel = this.getOwnerComponent().getModel("process");
-                if (oProcessModel) {
-                    this._buildConfiguredProcessModels(oProcessModel);
-                }
+                this._loadFromApi();
             }, this);
+        },
+
+        _loadFromApi: function () {
+            var oProcessModel = this.getOwnerComponent().getModel("process");
+            if (!oProcessModel) {
+                return;
+            }
+
+            processApi.refreshProcessModel(oProcessModel)
+                .then(function () {
+                    this._buildConfiguredProcessModels(oProcessModel);
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getI18nText("loadFailed")));
+                }.bind(this));
         },
 
         _buildConfiguredProcessModels: function (oProcessModel) {
@@ -282,21 +296,14 @@ sap.ui.define([
         },
 
         _deleteModelById: function (sModelId) {
-            var oProcessModel = this.getView().getModel("process");
-            var aProcessModels = oProcessModel.getProperty("/processModels") || [];
-            var aNodes = oProcessModel.getProperty("/processNodes") || [];
-
-            aProcessModels = aProcessModels.filter(function (oItem) {
-                return oItem.id !== sModelId;
-            });
-            aNodes = aNodes.filter(function (oNode) {
-                return oNode.modelId !== sModelId;
-            });
-
-            oProcessModel.setProperty("/processModels", aProcessModels);
-            oProcessModel.setProperty("/processNodes", aNodes);
-            this._buildConfiguredProcessModels(oProcessModel);
-            MessageToast.show(this._getI18nText("deleteSuccess"));
+            apiClient.request("/api/process/models/" + encodeURIComponent(sModelId), {
+                method: "DELETE"
+            }).then(function () {
+                MessageToast.show(this._getI18nText("deleteSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getI18nText("deleteFailed")));
+            }.bind(this));
         },
 
         onRowPress: function (oEvent) {

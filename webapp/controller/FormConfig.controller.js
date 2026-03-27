@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+    "sap/m/MessageBox",
+    "myapp/model/apiClient",
+    "myapp/model/processApi"
+], function (Controller, JSONModel, MessageToast, MessageBox, apiClient, processApi) {
     "use strict";
 
     return Controller.extend("myapp.controller.FormConfig", {
@@ -20,10 +22,25 @@ sap.ui.define([
                 businessObjectOptions: [],
                 roleOptions: []
             }), "formConfigVM");
-            this._syncEditableItemsFromModel();
-            this._refreshEditorOptions();
+            this._loadFromApi();
             this._sSavedSnapshot = this._getCurrentEditableSnapshot();
             this._initComboBoxFuzzyFilter();
+        },
+
+        _loadFromApi: function () {
+            var oProcessModel = this.getView().getModel("process");
+            if (!oProcessModel) {
+                return;
+            }
+            processApi.refreshProcessModel(oProcessModel)
+                .then(function () {
+                    this._syncEditableItemsFromModel();
+                    this._refreshEditorOptions();
+                    this._sSavedSnapshot = this._getCurrentEditableSnapshot();
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getText("loadFailed")));
+                }.bind(this));
         },
 
         _createEmptyDraft: function () {
@@ -209,6 +226,7 @@ sap.ui.define([
 
             var oVM = this.getView().getModel("formConfigVM");
             var aItems = oVM.getProperty("/items") || [];
+            var oItem = aItems[iIndex];
             MessageBox.confirm(this._getText("formConfigDeleteConfirm"), {
                 actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                 emphasizedAction: MessageBox.Action.CANCEL,
@@ -216,9 +234,9 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oVM.setProperty("/items", aItems);
+                    this._deleteFormById(oItem && oItem.originId);
                 }
+                .bind(this)
             });
         },
 
@@ -255,29 +273,14 @@ sap.ui.define([
 
         onSaveFormConfigDraft: function () {
             var oVM = this.getView().getModel("formConfigVM");
-            var aItems = oVM.getProperty("/items") || [];
-            var iEditingIndex = oVM.getProperty("/editingIndex");
             var oDraft = Object.assign({}, oVM.getProperty("/editorDraft") || this._createEmptyDraft());
-            var sDraftId = (oDraft.id || "").trim();
             var sDraftName = (oDraft.name || "").trim();
 
-            if (!sDraftId || !sDraftName) {
+            if (!sDraftName || !oDraft.categoryId) {
                 MessageToast.show(this._getText("formConfigRequired"));
                 return;
             }
 
-            var bDuplicateId = aItems.some(function (oItem, iIndex) {
-                if (iEditingIndex >= 0 && iIndex === iEditingIndex) {
-                    return false;
-                }
-                return ((oItem.id || "").trim().toUpperCase() === sDraftId.toUpperCase());
-            });
-            if (bDuplicateId) {
-                MessageToast.show(this._getText("formConfigIdDuplicate"));
-                return;
-            }
-
-            oDraft.id = sDraftId;
             oDraft.name = sDraftName;
             oDraft.categoryId = (oDraft.categoryId || "").trim();
             oDraft.categoryName = "";
@@ -292,15 +295,33 @@ sap.ui.define([
             oDraft.initiatorRole = (oDraft.initiatorRole || "").trim();
             oDraft.approverRole = (oDraft.approverRole || "").trim();
             oDraft.fieldsText = (oDraft.fieldsText || "").trim();
-            oDraft.originId = (oDraft.originId || sDraftId).trim();
 
-            if (iEditingIndex >= 0) {
-                aItems[iEditingIndex] = oDraft;
-            } else {
-                aItems.push(oDraft);
-            }
-            oVM.setProperty("/items", aItems);
-            this.byId("formConfigEditDialog").close();
+            var oPayload = {
+                name: oDraft.name,
+                categoryId: oDraft.categoryId,
+                schemaJson: processApi.buildFormSchemaJson(oDraft),
+                status: "ACTIVE"
+            };
+
+            var pRequest = oDraft.originId
+                ? apiClient.request("/api/process/forms/" + encodeURIComponent(oDraft.originId), {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                })
+                : apiClient.request("/api/process/forms", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                });
+
+            pRequest.then(function () {
+                this.byId("formConfigEditDialog").close();
+                MessageToast.show(this._getText("saveSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("saveFailed")));
+            }.bind(this));
         },
 
         onCancelFormConfigDraft: function () {
@@ -443,10 +464,26 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oVM.setProperty("/items", aItems);
+                    this._deleteFormById(aItems[iIndex] && aItems[iIndex].originId);
                 }
+                .bind(this)
             });
+        },
+
+        _deleteFormById: function (sId) {
+            if (!sId) {
+                MessageToast.show(this._getText("deleteFailed"));
+                return;
+            }
+
+            apiClient.request("/api/process/forms/" + encodeURIComponent(sId), {
+                method: "DELETE"
+            }).then(function () {
+                MessageToast.show(this._getText("deleteSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("deleteFailed")));
+            }.bind(this));
         },
 
         onSave: function () {

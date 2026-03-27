@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+    "sap/m/MessageBox",
+    "myapp/model/apiClient",
+    "myapp/model/processApi"
+], function (Controller, JSONModel, MessageToast, MessageBox, apiClient, processApi) {
     "use strict";
 
     return Controller.extend("myapp.controller.ProcessModelDetail", {
@@ -69,69 +71,76 @@ sap.ui.define([
         },
 
         _onCreateMatched: function () {
-            this._buildDisplayModel();
-            var oDisplayModel = this.getView().getModel("processDisplay");
-            oDisplayModel.setProperty("/isCreate", true);
-            oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelAddTitle"));
-            oDisplayModel.setProperty("/editingModel", { id: "", name: "", formId: "", categoryId: "", categoryName: "", version: "1.0", status: "TESTING", description: "" });
-            this._refreshConditionFieldOptions();
-            this._setEditingNodes([], false);
+            var oProcessModel = this.getView().getModel("process");
+            processApi.refreshProcessModel(oProcessModel)
+                .finally(function () {
+                    this._buildDisplayModel();
+                    var oDisplayModel = this.getView().getModel("processDisplay");
+                    oDisplayModel.setProperty("/isCreate", true);
+                    oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelAddTitle"));
+                    oDisplayModel.setProperty("/editingModel", { id: "", name: "", formId: "", categoryId: "", categoryName: "", version: "1.0", status: "TESTING", description: "" });
+                    this._refreshConditionFieldOptions();
+                    this._setEditingNodes([], false);
+                }.bind(this));
         },
 
         _onDetailMatched: function (oEvent) {
             var sModelId = oEvent.getParameter("arguments").modelId;
-            this._buildDisplayModel();
-            var oDisplayModel = this.getView().getModel("processDisplay");
             var oProcessModel = this.getView().getModel("process");
-            var aModels = oProcessModel.getProperty("/processModels") || [];
-            var aNodes = oProcessModel.getProperty("/processNodes") || [];
-            var oModelItem = aModels.find(function (oItem) { return oItem.id === sModelId; });
+            processApi.refreshProcessModel(oProcessModel)
+                .finally(function () {
+                    this._buildDisplayModel();
+                    var oDisplayModel = this.getView().getModel("processDisplay");
+                    var aModels = oProcessModel.getProperty("/processModels") || [];
+                    var aNodes = oProcessModel.getProperty("/processNodes") || [];
+                    var oModelItem = aModels.find(function (oItem) { return oItem.id === sModelId; });
 
-            if (!oModelItem) {
-                MessageToast.show(this._getI18nText("processModelNotFound"));
-                this.onNavBack();
-                return;
-            }
+                    if (!oModelItem) {
+                        MessageToast.show(this._getI18nText("processModelNotFound"));
+                        this.onNavBack();
+                        return;
+                    }
 
-            oDisplayModel.setProperty("/isCreate", false);
-            oDisplayModel.setProperty("/editingSourceId", sModelId);
-            oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelEditTitle"));
-            var oLinkedForm = (oProcessModel.getProperty("/formConfigs") || []).find(function (oForm) {
-                return oForm.id === oModelItem.formId;
-            }) || null;
-            oDisplayModel.setProperty("/editingModel", {
-                id: oModelItem.id,
-                name: oModelItem.name,
-                formId: oModelItem.formId,
-                categoryId: oModelItem.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
-                categoryName: oModelItem.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
-                version: oModelItem.version,
-                status: oModelItem.status,
-                description: oModelItem.description || ""
-            });
-            this._refreshConditionFieldOptions();
-            this._setEditingNodes((aNodes.filter(function (oNode) {
-                return oNode.modelId === sModelId;
-            }).map(function (oNode, iIndex) {
-                return {
-                    nodeId: oNode.nodeId,
-                    nodeName: oNode.nodeName,
-                    nodeType: oNode.nodeType,
-                    nodeAction: oNode.nodeAction,
-                    assigneeRole: oNode.assigneeRole,
-                    nodePolicy: oNode.nodePolicy || "REQUIRED",
-                    nodeParallelGroup: oNode.nodeParallelGroup || "",
-                    nodeBranchSet: oNode.nodeBranchSet || "",
-                    nodeBranchGroup: oNode.nodeBranchGroup || "",
-                    nodeBranchMergeTo: oNode.nodeBranchMergeTo || "",
-                    nodeConditionField: oNode.nodeConditionField || "",
-                    nodeConditionOperator: oNode.nodeConditionOperator || "",
-                    nodeConditionValue: oNode.nodeConditionValue || "",
-                    nodeConditionIsDefault: !!oNode.nodeConditionIsDefault,
-                    __originIndex: iIndex,
-                    sla: oNode.sla
-                };
-            })), false);
+                    oDisplayModel.setProperty("/isCreate", false);
+                    oDisplayModel.setProperty("/editingSourceId", sModelId);
+                    oDisplayModel.setProperty("/pageTitle", this._getI18nText("processModelEditTitle"));
+                    var oLinkedForm = (oProcessModel.getProperty("/formConfigs") || []).find(function (oForm) {
+                        return oForm.id === oModelItem.formId;
+                    }) || null;
+                    oDisplayModel.setProperty("/editingModel", {
+                        id: oModelItem.id,
+                        name: oModelItem.name,
+                        formId: oModelItem.formId,
+                        categoryId: oModelItem.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
+                        categoryName: oModelItem.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
+                        version: oModelItem.version,
+                        status: oModelItem.status,
+                        description: oModelItem.description || ""
+                    });
+                    this._refreshConditionFieldOptions();
+                    this._setEditingNodes((aNodes.filter(function (oNode) {
+                        return oNode.modelId === sModelId;
+                    }).map(function (oNode, iIndex) {
+                        return {
+                            nodeId: oNode.nodeId,
+                            nodeName: oNode.nodeName,
+                            nodeType: oNode.nodeType,
+                            nodeAction: oNode.nodeAction,
+                            assigneeRole: oNode.assigneeRole,
+                            nodePolicy: oNode.nodePolicy || "REQUIRED",
+                            nodeParallelGroup: oNode.nodeParallelGroup || "",
+                            nodeBranchSet: oNode.nodeBranchSet || "",
+                            nodeBranchGroup: oNode.nodeBranchGroup || "",
+                            nodeBranchMergeTo: oNode.nodeBranchMergeTo || "",
+                            nodeConditionField: oNode.nodeConditionField || "",
+                            nodeConditionOperator: oNode.nodeConditionOperator || "",
+                            nodeConditionValue: oNode.nodeConditionValue || "",
+                            nodeConditionIsDefault: !!oNode.nodeConditionIsDefault,
+                            __originIndex: iIndex,
+                            sla: oNode.sla
+                        };
+                    })), false);
+                }.bind(this));
         },
 
         _getI18nText: function (sKey, aArgs) {
@@ -1040,7 +1049,7 @@ sap.ui.define([
             var bIsCreate = !!oDisplayModel.getProperty("/isCreate");
             var sSourceId = oDisplayModel.getProperty("/editingSourceId");
 
-            if (!oDraft.id || !oDraft.name || !oDraft.formId) {
+            if (!oDraft.name || !oDraft.formId) {
                 MessageToast.show(this._getI18nText("processModelRequired"));
                 return;
             }
@@ -1103,106 +1112,51 @@ sap.ui.define([
             }
 
             var oProcessModel = this.getView().getModel("process");
-            var aProcessModels = oProcessModel.getProperty("/processModels") || [];
-            var aFormConfigs = oProcessModel.getProperty("/formConfigs") || [];
             var aNodes = oProcessModel.getProperty("/processNodes") || [];
-            var aDeployments = oProcessModel.getProperty("/deployments") || [];
-            var aProcessInstances = oProcessModel.getProperty("/processInstances") || [];
-            var oLinkedForm = aFormConfigs.find(function (oForm) { return oForm.id === oDraft.formId; });
-            var sOldModelName = "";
-            var sOldModelId = bIsCreate ? "" : (sSourceId || "");
             oDraft.version = this._getNextAutoVersion(oDraft.version, bIsCreate);
             oDisplayModel.setProperty("/editingModel/version", oDraft.version);
 
-            if (bIsCreate) {
-                if (aProcessModels.some(function (oItem) { return oItem.id === oDraft.id; })) {
-                    MessageToast.show(this._getI18nText("processModelIdExists"));
-                    return;
-                }
-                aProcessModels.push({
-                    id: oDraft.id,
-                    name: oDraft.name,
-                    categoryId: oDraft.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
-                    categoryName: oDraft.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
-                    formId: oDraft.formId,
-                    formName: oLinkedForm ? oLinkedForm.name : "",
-                    version: oDraft.version,
-                    status: oDraft.status || "TESTING",
-                    description: oDraft.description || "",
-                    businessObject: "",
-                    initiatorRole: "",
-                    approverRole: "",
-                    nodeCount: aEditingNodes.length
-                });
-                aNodes = aNodes.concat(aEditingNodes.map(function (oNode) {
-                    return Object.assign({}, oNode, { modelId: oDraft.id });
-                }));
-            } else {
-                var iIndex = aProcessModels.findIndex(function (oItem) {
-                    return oItem.id === sSourceId;
-                });
-                if (iIndex < 0) {
-                    MessageToast.show(this._getI18nText("processModelNotFound"));
-                    return;
-                }
-                if (oDraft.id !== sSourceId && aProcessModels.some(function (oItem) { return oItem.id === oDraft.id; })) {
-                    MessageToast.show(this._getI18nText("processModelIdExists"));
-                    return;
-                }
-                sOldModelName = aProcessModels[iIndex].name || "";
+            var oPayload = {
+                name: oDraft.name,
+                formId: oDraft.formId,
+                version: oDraft.version,
+                status: processApi.mapModelStatusToApi(oDraft.status)
+            };
 
-                aProcessModels[iIndex] = Object.assign({}, aProcessModels[iIndex], {
-                    id: oDraft.id,
-                    name: oDraft.name,
-                    categoryId: oDraft.categoryId || (oLinkedForm ? (oLinkedForm.categoryId || "") : ""),
-                    categoryName: oDraft.categoryName || (oLinkedForm ? (oLinkedForm.categoryName || "") : ""),
-                    formId: oDraft.formId,
-                    formName: oLinkedForm ? oLinkedForm.name : aProcessModels[iIndex].formName,
-                    version: oDraft.version,
-                    status: oDraft.status || aProcessModels[iIndex].status,
-                    description: oDraft.description || "",
-                    nodeCount: aEditingNodes.length
+            var pRequest = bIsCreate
+                ? apiClient.request("/api/process/models", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                })
+                : apiClient.request("/api/process/models/" + encodeURIComponent(sSourceId), {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
                 });
 
-                aNodes = aNodes.filter(function (oNode) {
-                    return oNode.modelId !== sSourceId;
+            pRequest.then(function (oSavedModel) {
+                var sTargetModelId = bIsCreate ? oSavedModel.id : sSourceId;
+                var aNextNodes = aNodes.filter(function (oNode) {
+                    return oNode.modelId !== sTargetModelId && oNode.modelId !== sSourceId;
                 }).concat(aEditingNodes.map(function (oNode) {
-                    return Object.assign({}, oNode, { modelId: oDraft.id });
+                    return Object.assign({}, oNode, { modelId: sTargetModelId });
                 }));
-            }
 
-            aDeployments = aDeployments.map(function (oDeployment) {
-                var bLinkedById = !!oDeployment.modelId && oDeployment.modelId === (bIsCreate ? oDraft.id : sSourceId);
-                var bLinkedByName = !oDeployment.modelId && !!sOldModelName && oDeployment.modelName === sOldModelName;
-                if (!bLinkedById && !bLinkedByName) {
-                    return oDeployment;
-                }
-                return Object.assign({}, oDeployment, {
-                    modelId: oDraft.id,
-                    modelName: oDraft.name,
-                    formId: oLinkedForm ? oLinkedForm.id : "",
-                    formName: oLinkedForm ? oLinkedForm.name : ""
-                });
-            });
+                oProcessModel.setProperty("/processNodes", aNextNodes);
 
-            aProcessInstances = aProcessInstances.map(function (oInstance) {
-                var bLinkedById = !!oInstance.modelId && !!sOldModelId && oInstance.modelId === sOldModelId;
-                var bLinkedByName = !oInstance.modelId && !!sOldModelName && oInstance.modelName === sOldModelName;
-                if (!bLinkedById && !bLinkedByName) {
-                    return oInstance;
-                }
-                return Object.assign({}, oInstance, {
-                    modelId: oDraft.id,
-                    modelName: oDraft.name
-                });
-            });
-
-            oProcessModel.setProperty("/processModels", aProcessModels);
-            oProcessModel.setProperty("/processNodes", aNodes);
-            oProcessModel.setProperty("/deployments", aDeployments);
-            oProcessModel.setProperty("/processInstances", aProcessInstances);
-            MessageToast.show(this._getI18nText("saveSuccess"));
-            this.onNavBack();
+                processApi.refreshProcessModel(oProcessModel)
+                    .then(function () {
+                        MessageToast.show(this._getI18nText("saveSuccess"));
+                        this.onNavBack();
+                    }.bind(this))
+                    .catch(function () {
+                        MessageToast.show(this._getI18nText("saveSuccess"));
+                        this.onNavBack();
+                    }.bind(this));
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getI18nText("saveFailed")));
+            }.bind(this));
         },
 
         onNavBack: function () {

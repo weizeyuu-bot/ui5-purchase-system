@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+    "sap/m/MessageBox",
+    "myapp/model/apiClient",
+    "myapp/model/processApi"
+], function (Controller, JSONModel, MessageToast, MessageBox, apiClient, processApi) {
     "use strict";
 
     return Controller.extend("myapp.controller.DeploymentList", {
@@ -29,11 +31,25 @@ sap.ui.define([
             }), "deploymentDisplay");
 
             this.getOwnerComponent().getRouter().getRoute("RouteProcessDeployments").attachPatternMatched(function () {
-                this._refreshEditorOptions();
-                this._refreshDeploymentRelations();
+                this._loadFromApi();
             }, this);
-            this._refreshEditorOptions();
-            this._refreshDeploymentRelations();
+            this._loadFromApi();
+        },
+
+        _loadFromApi: function () {
+            var oProcessModel = this.getView().getModel("process");
+            if (!oProcessModel) {
+                return;
+            }
+
+            processApi.refreshProcessModel(oProcessModel)
+                .then(function () {
+                    this._refreshEditorOptions();
+                    this._refreshDeploymentRelations();
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getText("loadFailed")));
+                }.bind(this));
         },
 
         _createEmptyDraft: function () {
@@ -67,6 +83,14 @@ sap.ui.define([
                 return true;
             }
             return /^\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}$/.test(sValue);
+        },
+
+        _toIsoDateTime: function (sValue) {
+            if (!sValue) {
+                return undefined;
+            }
+            var sNormalized = String(sValue).trim().replace(" ", "T") + ":00.000Z";
+            return sNormalized;
         },
 
         _getText: function (sKey) {
@@ -209,9 +233,7 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oDisplayModel.setProperty("/items", aItems);
-                    MessageToast.show(this._getText("deleteSuccess"));
+                    this._deleteDeploymentByItem(aItems[iIndex]);
                 }.bind(this)
             });
         },
@@ -282,12 +304,10 @@ sap.ui.define([
             }
 
             if (iEditingIndex >= 0) {
-                aItems[iEditingIndex] = oDraft;
+                this._saveDeploymentApi(oDraft, aItems[iEditingIndex]);
             } else {
-                aItems.push(oDraft);
+                this._saveDeploymentApi(oDraft, null);
             }
-            oDisplayModel.setProperty("/items", aItems);
-            this.byId("deploymentEditDialog").close();
         },
 
         onCancelDeploymentDraft: function () {
@@ -313,42 +333,56 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oDisplayModel.setProperty("/items", aItems);
-                    MessageToast.show(this._getText("deleteSuccess"));
+                    this._deleteDeploymentByItem(aItems[iIndex]);
                 }.bind(this)
             });
         },
 
-        onSave: function () {
-            var oProcessModel = this.getView().getModel("process");
-            var oDisplayModel = this.getView().getModel("deploymentDisplay");
-            var aItems = oDisplayModel.getProperty("/items") || [];
+        _saveDeploymentApi: function (oDraft, oOldItem) {
+            var oPayload = {
+                deploymentId: oDraft.id,
+                modelId: oDraft.modelId,
+                environment: oDraft.environment,
+                deployTime: this._toIsoDateTime(oDraft.deployTime),
+                publishedBy: oDraft.publishedBy,
+                status: oDraft.status || "PUBLISHED"
+            };
 
-            if (!aItems.length) {
-                MessageToast.show(this._getText("deploymentRequired"));
+            var pRequest = (oOldItem && oOldItem.backendId)
+                ? apiClient.request("/api/process/deployments/" + encodeURIComponent(oOldItem.backendId), {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                })
+                : apiClient.request("/api/process/deployments", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                });
+
+            pRequest.then(function () {
+                this.byId("deploymentEditDialog").close();
+                MessageToast.show(this._getText("saveSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("saveFailed")));
+            }.bind(this));
+        },
+
+        _deleteDeploymentByItem: function (oItem) {
+            if (!oItem || !oItem.backendId) {
+                MessageToast.show(this._getText("deleteFailed"));
                 return;
             }
 
-            var aSavedDeployments = aItems.map(function (oItem) {
-                return {
-                    id: (oItem.id || "").trim(),
-                    modelId: (oItem.modelId || "").trim(),
-                    modelName: (oItem.modelName || "").trim(),
-                    formId: (oItem.formId || "").trim(),
-                    formName: (oItem.formName || "").trim(),
-                    linkedProcess: (oItem.linkedProcess || "").trim(),
-                    environment: (oItem.environment || "").trim(),
-                    scope: (oItem.scope || "").trim(),
-                    deployTime: (oItem.deployTime || "").trim(),
-                    publishedBy: (oItem.publishedBy || "").trim(),
-                    status: (oItem.status || "PUBLISHED").trim()
-                };
-            }, this);
-
-            oProcessModel.setProperty("/deployments", aSavedDeployments);
-            this._refreshDeploymentRelations();
-            MessageToast.show(this._getText("saveSuccess"));
+            apiClient.request("/api/process/deployments/" + encodeURIComponent(oItem.backendId), {
+                method: "DELETE"
+            }).then(function () {
+                MessageToast.show(this._getText("deleteSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("deleteFailed")));
+            }.bind(this));
         },
 
         onNavBack: function () {

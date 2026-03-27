@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-    "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+    "sap/m/MessageBox",
+    "myapp/model/apiClient",
+    "myapp/model/processApi"
+], function (Controller, JSONModel, MessageToast, MessageBox, apiClient, processApi) {
     "use strict";
 
     return Controller.extend("myapp.controller.ProcessCategories", {
@@ -17,7 +19,7 @@ sap.ui.define([
                 editingIndex: -1,
                 editorDraft: this._createEmptyDraft()
             }), "processCategoryVM");
-            this._syncEditableItemsFromModel();
+            this._loadFromApi();
         },
 
         _createEmptyDraft: function () {
@@ -48,6 +50,20 @@ sap.ui.define([
                     owner: oItem.owner || ""
                 };
             }));
+        },
+
+        _loadFromApi: function () {
+            var oProcessModel = this.getView().getModel("process");
+            if (!oProcessModel) {
+                return;
+            }
+            processApi.refreshProcessModel(oProcessModel)
+                .then(function () {
+                    this._syncEditableItemsFromModel();
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getText("loadFailed")));
+                }.bind(this));
         },
 
         _getSelectedItemIndex: function () {
@@ -84,6 +100,7 @@ sap.ui.define([
 
             var oVM = this.getView().getModel("processCategoryVM");
             var aItems = oVM.getProperty("/items") || [];
+            var oItem = aItems[iIndex];
             MessageBox.confirm(this._getText("processCategoryDeleteConfirm"), {
                 actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
                 emphasizedAction: MessageBox.Action.CANCEL,
@@ -91,9 +108,7 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oVM.setProperty("/items", aItems);
-                    MessageToast.show(this._getText("deleteSuccess"));
+                    this._deleteById(oItem && oItem.originId);
                 }.bind(this)
             });
         },
@@ -128,38 +143,44 @@ sap.ui.define([
             var aItems = oVM.getProperty("/items") || [];
             var iEditingIndex = oVM.getProperty("/editingIndex");
             var oDraft = Object.assign({}, oVM.getProperty("/editorDraft") || this._createEmptyDraft());
-            var sDraftId = (oDraft.id || "").trim();
             var sDraftName = (oDraft.name || "").trim();
 
-            if (!sDraftId || !sDraftName) {
+            if (!sDraftName) {
                 MessageToast.show(this._getText("processCategoryRequired"));
                 return;
             }
 
-            var bDuplicateId = aItems.some(function (oItem, iIndex) {
-                if (iEditingIndex >= 0 && iIndex === iEditingIndex) {
-                    return false;
-                }
-                return ((oItem.id || "").trim().toUpperCase() === sDraftId.toUpperCase());
-            });
-            if (bDuplicateId) {
-                MessageToast.show(this._getText("processCategoryIdDuplicate"));
-                return;
-            }
-
-            oDraft.id = sDraftId;
+            oDraft.id = (oDraft.id || "").trim();
             oDraft.name = sDraftName;
             oDraft.description = (oDraft.description || "").trim();
             oDraft.owner = (oDraft.owner || "").trim();
-            oDraft.originId = (oDraft.originId || sDraftId).trim();
+            oDraft.originId = (oDraft.originId || "").trim();
 
-            if (iEditingIndex >= 0) {
-                aItems[iEditingIndex] = oDraft;
-            } else {
-                aItems.push(oDraft);
-            }
-            oVM.setProperty("/items", aItems);
-            this.byId("processCategoryEditDialog").close();
+            var oPayload = {
+                name: oDraft.name,
+                description: oDraft.description,
+                status: "ACTIVE"
+            };
+
+            var pRequest = oDraft.originId
+                ? apiClient.request("/api/process/categories/" + encodeURIComponent(oDraft.originId), {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                })
+                : apiClient.request("/api/process/categories", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(oPayload)
+                });
+
+            pRequest.then(function () {
+                this.byId("processCategoryEditDialog").close();
+                MessageToast.show(this._getText("saveSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("saveFailed")));
+            }.bind(this));
         },
 
         onCancelProcessCategoryDraft: function () {
@@ -184,31 +205,24 @@ sap.ui.define([
                     if (sAction !== MessageBox.Action.OK) {
                         return;
                     }
-                    aItems.splice(iIndex, 1);
-                    oVM.setProperty("/items", aItems);
-                    MessageToast.show(this._getText("deleteSuccess"));
+                    this._deleteById(aItems[iIndex] && aItems[iIndex].originId);
                 }.bind(this)
             });
         },
 
-        onSave: function () {
-            var oVM = this.getView().getModel("processCategoryVM");
-            var oProcessModel = this.getView().getModel("process");
-            var aItems = oVM.getProperty("/items") || [];
-
-            var aSavedCategories = aItems.map(function (oItem) {
-                return {
-                    id: (oItem.id || "").trim(),
-                    name: (oItem.name || "").trim(),
-                    description: (oItem.description || "").trim(),
-                    owner: (oItem.owner || "").trim()
-                };
-            });
-
-            oProcessModel.setProperty("/processCategories", aSavedCategories);
-            oProcessModel.refresh(true);
-            this._syncEditableItemsFromModel();
-            MessageToast.show(this._getText("saveSuccess"));
+        _deleteById: function (sId) {
+            if (!sId) {
+                MessageToast.show(this._getText("deleteFailed"));
+                return;
+            }
+            apiClient.request("/api/process/categories/" + encodeURIComponent(sId), {
+                method: "DELETE"
+            }).then(function () {
+                MessageToast.show(this._getText("deleteSuccess"));
+                this._loadFromApi();
+            }.bind(this)).catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("deleteFailed")));
+            }.bind(this));
         },
 
         onNavBack: function () {
