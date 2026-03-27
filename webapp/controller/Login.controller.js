@@ -1,8 +1,9 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/m/MessageToast",
-    "sap/ui/model/json/JSONModel"
-], function (Controller, MessageToast, JSONModel) {
+    "sap/ui/model/json/JSONModel",
+    "myapp/model/apiClient"
+], function (Controller, MessageToast, JSONModel, apiClient) {
     "use strict";
 
     return Controller.extend("myapp.controller.Login", {
@@ -10,7 +11,7 @@ sap.ui.define([
         onInit: function () {
             this.getView().setModel(new JSONModel({
                 username: "admin",
-                password: "admin",
+                password: "Admin@123456",
                 rememberMe: false
             }));
 
@@ -42,81 +43,45 @@ sap.ui.define([
             var oUserModel = this.getOwnerComponent().getModel("user");
             var oUsersManagementModel = this.getOwnerComponent().getModel("users");
 
-            // 先尝试后端校验，失败回退本地模型
-            fetch("/api/auth/login", {
+            apiClient.request("/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username: sUsername, password: sPassword })
+                body: JSON.stringify({ username: sUsername, password: sPassword }),
+                skipAuth: true
             })
-            .then(function (res) {
-                if (!res.ok) {
-                    throw new Error("后端登录接口返回错误：" + res.status + " " + res.statusText);
+            .then(function (oData) {
+                var oPayload = (oData && oData.data) ? oData.data : oData;
+                var oUserFromApi = (oPayload && oPayload.user) || (oData && oData.user) || { username: sUsername, name: sUsername };
+                var sToken = (oPayload && oPayload.accessToken) || (oData && oData.token) || "";
+
+                if (!sToken) {
+                    throw new Error(this._getText("loginFailed"));
                 }
-                return res.json();
-            })
-            .then(function (data) {
-                if (data && data.success) {
-                    // 成功：后端返回用户信息（建议仅返回 id/name/token）
-                    var sToken = data.token || "";
-                    var iExpiry = Date.now() + 30 * 60 * 1000; // 30 分钟有效期
-                    var oCurrentUser = this._enrichCurrentUser({
-                        username: data.user.username,
-                        name: data.user.name || data.user.username,
-                        token: sToken,
-                        tokenExpiry: iExpiry
-                    }, oUsersManagementModel);
-                    if (!oUserModel) {
-                        oUserModel = new JSONModel({ users: [], currentUser: oCurrentUser });
-                        this.getOwnerComponent().setModel(oUserModel, "user");
-                    } else {
-                        oUserModel.setProperty("/currentUser", oCurrentUser);
-                    }
-                    localStorage.setItem("currentUser", JSON.stringify(oCurrentUser));
-                    oView.getModel().setProperty("/password", "");
-                    this._navToHome();
-                } else {
-                    MessageToast.show(data.message || this._getText("loginFailed"));
-                    oView.getModel().setProperty("/password", "");
-                }
-            }.bind(this))
-            .catch(function (err) {
-                console.warn("后端登录失败，使用本地校验：", err);
-                // 没有后端环境时兜底本地校验
+
+                var oCurrentUser = this._enrichCurrentUser({
+                    username: oUserFromApi.username,
+                    name: oUserFromApi.name || oUserFromApi.username,
+                    role: oUserFromApi.role || "",
+                    status: oUserFromApi.status || "ACTIVE",
+                    token: sToken,
+                    tokenExpiry: Date.now() + 30 * 60 * 1000
+                }, oUsersManagementModel);
+
                 if (!oUserModel) {
-                    oUserModel = new JSONModel({
-                        users: [{ username: "admin", password: "admin", name: "Administrator" }],
-                        currentUser: null
-                    });
+                    oUserModel = new JSONModel({ users: [], currentUser: oCurrentUser });
                     this.getOwnerComponent().setModel(oUserModel, "user");
-                }
-
-                var aUsers = oUserModel.getProperty("/users") || [];
-                if (!aUsers.length) {
-                    aUsers = [{ username: "admin", password: "admin", name: "Administrator" }];
-                    oUserModel.setProperty("/users", aUsers);
-                }
-
-                var oUser = aUsers.find(function(user) {
-                    return user.username === sUsername;
-                });
-
-                if (!oUser) {
-                    MessageToast.show(this._getText("usernameNotFound"));
-                } else if (oUser.password !== sPassword) {
-                    MessageToast.show(this._getText("passwordIncorrect"));
                 } else {
-                    var oLocalUser = this._enrichCurrentUser(Object.assign({}, oUser, {
-                        token: "local-token-" + Math.random().toString(36).slice(2),
-                        tokenExpiry: Date.now() + 30 * 60 * 1000 // 30 分钟
-                    }), oUsersManagementModel);
-                    oUserModel.setProperty("/currentUser", oLocalUser);
-                    localStorage.setItem("currentUser", JSON.stringify(oLocalUser));
-                    oView.getModel().setProperty("/password", "");
-                    this._navToHome();
-                    return;
+                    oUserModel.setProperty("/currentUser", oCurrentUser);
                 }
+
+                localStorage.setItem("currentUser", JSON.stringify(oCurrentUser));
+                oView.getModel().setProperty("/password", "");
+                this._navToHome();
+            }.bind(this))
+            .catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("loginFailed")));
                 oView.getModel().setProperty("/password", "");
             }.bind(this));
         },

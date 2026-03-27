@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/Device",
     "sap/ui/core/routing/HashChanger",
     "sap/m/MessageToast",
-    "myapp/model/models"
-], function (UIComponent, Device, HashChanger, MessageToast, models) {
+    "myapp/model/models",
+    "myapp/model/apiClient"
+], function (UIComponent, Device, HashChanger, MessageToast, models, apiClient) {
     "use strict";
 
     return UIComponent.extend("myapp.Component", {
@@ -43,6 +44,7 @@ sap.ui.define([
 
             var oUserModel = models.createUserModel();
             this.setModel(oUserModel, "user");
+            this._configureApiClient();
             this._normalizeSessionState();
             this._attachSessionActivityListeners();
 
@@ -170,20 +172,19 @@ sap.ui.define([
             }
             localStorage.removeItem("currentUser");
         },
-
-        _isUserValid: function (oCurrentUser) {
-            if (!oCurrentUser || !oCurrentUser.username || !oCurrentUser.token) {
-                return false;
-            }
-            if (oCurrentUser.tokenExpiry && Number(oCurrentUser.tokenExpiry) < Date.now()) {
-                return false;
-            }
-            return true;
-        },
-
-        _refreshToken: function () {
-            var oUserModel = this.getModel("user");
-            var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+configureApiClient: function () {
+            var that = this;
+            apiClient.configure({
+                tokenProvider: function () {
+                    var oUserModel = that.getModel("user");
+                    var oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
+                    return oCurrentUser && oCurrentUser.token ? oCurrentUser.token : "";
+                },
+                tokenUpdater: function (sToken, oUser) {
+                    var oUserModel = that.getModel("user");
+                    var oCurrentUser = (oUserModel && oUserModel.getProperty("/currentUser")) || {};
+                    oCurrentUser.token = sToken;
+            return apiClient.refreshToken(ar oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
             if (!oCurrentUser || !oCurrentUser.token) {
                 return Promise.resolve(false);
             }
