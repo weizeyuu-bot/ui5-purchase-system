@@ -172,7 +172,8 @@ sap.ui.define([
             }
             localStorage.removeItem("currentUser");
         },
-configureApiClient: function () {
+
+        _configureApiClient: function () {
             var that = this;
             apiClient.configure({
                 tokenProvider: function () {
@@ -184,39 +185,28 @@ configureApiClient: function () {
                     var oUserModel = that.getModel("user");
                     var oCurrentUser = (oUserModel && oUserModel.getProperty("/currentUser")) || {};
                     oCurrentUser.token = sToken;
-            return apiClient.refreshToken(ar oCurrentUser = oUserModel && oUserModel.getProperty("/currentUser");
-            if (!oCurrentUser || !oCurrentUser.token) {
-                return Promise.resolve(false);
-            }
-
-            // 后端刷新令牌接口（可选，若无后端则不启用）
-            return fetch("/api/auth/refresh", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": "Bearer " + oCurrentUser.token
-                },
-                body: JSON.stringify({ username: oCurrentUser.username })
-            })
-            .then(function (res) {
-                if (!res.ok) {
-                    throw new Error("刷新 token 失败");
-                }
-                return res.json();
-            })
-            .then(function (data) {
-                if (data && data.success && data.token) {
-                    oCurrentUser.token = data.token;
+                    if (oUser) {
+                        oCurrentUser.username = oUser.username || oCurrentUser.username;
+                        oCurrentUser.name = oUser.name || oCurrentUser.name;
+                        oCurrentUser.role = oUser.role || oCurrentUser.role;
+                    }
                     oCurrentUser.tokenExpiry = Date.now() + 30 * 60 * 1000;
                     oUserModel.setProperty("/currentUser", oCurrentUser);
                     localStorage.setItem("currentUser", JSON.stringify(oCurrentUser));
-                    return true;
+                },
+                onUnauthorized: function () {
+                    that._clearCurrentUser();
+                    MessageToast.show("登录已过期，请重新登录");
+                    that.getRouter().navTo("RouteLogin", {}, true);
                 }
-                return false;
-            })
-            .catch(function () {
-                return false;
             });
+        },
+
+        _isUserValid: function (oCurrentUser) {
+            if (!oCurrentUser || !oCurrentUser.username || !oCurrentUser.token) {
+                return false;
+            }
+            return (oCurrentUser.tokenExpiry || 0) > Date.now();
         }
     });
 });
