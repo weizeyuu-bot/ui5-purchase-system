@@ -11,7 +11,8 @@ sap.ui.define([
     "sap/ui/layout/form/SimpleForm",
     "sap/ui/model/json/JSONModel",
     "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator"
+    "sap/ui/model/FilterOperator",
+    "myapp/model/apiClient"
 ], function (
     Controller,
     MessageToast,
@@ -25,7 +26,8 @@ sap.ui.define([
     SimpleForm,
     JSONModel,
     Filter,
-    FilterOperator
+    FilterOperator,
+    apiClient
 ) {
     "use strict";
 
@@ -52,6 +54,8 @@ sap.ui.define([
             this.getOwnerComponent().getRouter()
                 .getRoute("RouteUserManagement")
                 .attachPatternMatched(this._onRouteMatched, this);
+
+            this._loadUsersFromApi();
         },
 
         _onRouteMatched: function (oEvent) {
@@ -156,17 +160,21 @@ sap.ui.define([
                         return;
                     }
 
-                    var oUsersModel = that.getView().getModel("users");
-                    var aUsers = oUsersModel.getProperty("/registeredUsers") || [];
-                    var aNewUsers = aUsers.filter(function (oItem) {
-                        return oItem.username !== oUser.username;
-                    });
+                    if (!oUser.id) {
+                        MessageToast.show(that._getText("userNotFound"));
+                        return;
+                    }
 
-                    oUsersModel.setProperty("/registeredUsers", aNewUsers);
-                    that._refreshUserStatistics();
-                    that._refreshRoleUserCounts();
-                    that._refreshPermissionRows();
-                    MessageToast.show(that._getText("deleteSuccess"));
+                    apiClient.request("/api/users/" + encodeURIComponent(oUser.id), {
+                        method: "DELETE"
+                    })
+                    .then(function () {
+                        MessageToast.show(that._getText("deleteSuccess"));
+                        that._loadUsersFromApi();
+                    })
+                    .catch(function (oError) {
+                        MessageToast.show(apiClient.getErrorMessage(oError, that._getText("deleteFailed")));
+                    });
                 }
             });
         },
@@ -295,7 +303,9 @@ sap.ui.define([
             var bEditMode = sMode === "edit";
             var oDialogModel = new JSONModel({
                 mode: sMode,
+                id: bEditMode ? (oUser.id || "") : "",
                 username: bEditMode ? oUser.username : "",
+                password: "",
                 email: bEditMode ? (oUser.email || "") : "",
                 phone: bEditMode ? (oUser.phone || "") : "",
                 department: bEditMode ? (oUser.department || "") : "",
@@ -322,6 +332,12 @@ sap.ui.define([
                                 new Input({
                                     value: "{dialog>/username}",
                                     editable: "{= ${dialog>/mode} === 'add' }"
+                                }),
+                                new Label({ text: that._getText("password") }),
+                                new Input({
+                                    value: "{dialog>/password}",
+                                    type: "Password",
+                                    placeholder: "{= ${dialog>/mode} === 'add' ? '' : '******' }"
                                 }),
                                 new Label({ text: that._getText("userEmail") }),
                                 new Input({ value: "{dialog>/email}" }),
@@ -376,81 +392,145 @@ sap.ui.define([
         _onSaveDialogUser: function () {
             var oDialogModel = this._oUserDialog.getModel("dialog");
             var oData = Object.assign({}, oDialogModel.getData());
-            var oUsersModel = this.getView().getModel("users");
-            var aUsers = oUsersModel.getProperty("/registeredUsers") || [];
+            var sBackendRole = this._mapRoleIdToBackendRole(oData.roleId);
+            var oPayload;
 
-            if (!oData.username || !oData.email || !oData.phone || !oData.department || !oData.roleId || !oData.status) {
+            if (!oData.username || !oData.roleId || !oData.status) {
                 MessageToast.show(this._getText("userAllFieldsRequired"));
                 return;
             }
 
-            if (!this._isValidEmail(oData.email)) {
-                MessageToast.show(this._getText("userEmailInvalid"));
-                return;
-            }
-
-            if (!this._isValidPhone(oData.phone)) {
-                MessageToast.show(this._getText("userPhoneInvalid"));
-                return;
-            }
-
-            var sRoleName = this._getRoleNameById(oData.roleId);
-            if (!sRoleName) {
+            if (!sBackendRole) {
                 MessageToast.show(this._getText("roleNotFound"));
                 return;
             }
 
-            var iExistingIndex = aUsers.findIndex(function (oItem) {
-                return oItem.username === oData.username;
-            });
-
             if (oData.mode === "add") {
-                if (iExistingIndex > -1) {
-                    MessageToast.show(this._getText("usernameExists"));
+                if (!oData.password || String(oData.password).length < 6) {
+                    MessageToast.show(this._getText("passwordMinLength"));
                     return;
                 }
 
-                aUsers.unshift({
+                oPayload = {
                     username: oData.username,
-                    email: oData.email,
-                    phone: oData.phone,
-                    registrationDate: this._todayString(),
-                    status: oData.status,
-                    statusState: this._mapStatusToState(oData.status),
-                    department: oData.department,
-                    roleId: oData.roleId,
-                    roleName: sRoleName,
-                    role: sRoleName,
-                    lastLogin: "-",
-                    loginCount: 0,
-                    createdBy: this._getCurrentOperator()
-                });
-                MessageToast.show(this._getText("createSuccess"));
-            } else {
-                if (iExistingIndex < 0) {
-                    MessageToast.show(this._getText("userNotFound"));
-                    return;
-                }
+                    name: oData.username,
+                    password: oData.password,
+                    role: sBackendRole,
+                    status: oData.status
+                };
 
-                var oOld = aUsers[iExistingIndex];
-                aUsers[iExistingIndex] = Object.assign({}, oOld, {
-                    email: oData.email,
-                    phone: oData.phone,
-                    department: oData.department,
-                    roleId: oData.roleId,
-                    roleName: sRoleName,
-                    role: sRoleName,
-                    status: oData.status,
-                    statusState: this._mapStatusToState(oData.status)
-                });
-                MessageToast.show(this._getText("saveSuccess"));
+                apiClient.request("/api/users", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(oPayload)
+                })
+                .then(function () {
+                    MessageToast.show(this._getText("createSuccess"));
+                    this._oUserDialog.close();
+                    this._loadUsersFromApi();
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getText("createFailed")));
+                }.bind(this));
+                return;
             }
 
-            oUsersModel.setProperty("/registeredUsers", aUsers);
-            this._refreshUserStatistics();
-            this._refreshRoleUserCounts();
-            this._refreshPermissionRows();
-            this._oUserDialog.close();
+            if (!oData.id) {
+                MessageToast.show(this._getText("userNotFound"));
+                return;
+            }
+
+            oPayload = {
+                name: oData.username,
+                role: sBackendRole,
+                status: oData.status
+            };
+
+            if (oData.password && String(oData.password).length >= 6) {
+                oPayload.password = oData.password;
+            }
+
+            apiClient.request("/api/users/" + encodeURIComponent(oData.id), {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(oPayload)
+            })
+            .then(function () {
+                MessageToast.show(this._getText("saveSuccess"));
+                this._oUserDialog.close();
+                this._loadUsersFromApi();
+            }.bind(this))
+            .catch(function (oError) {
+                MessageToast.show(apiClient.getErrorMessage(oError, this._getText("saveFailed")));
+            }.bind(this));
+        },
+
+        _loadUsersFromApi: function () {
+            var oUsersModel = this.getView().getModel("users");
+            if (!oUsersModel) {
+                return;
+            }
+
+            apiClient.request("/api/users")
+                .then(function (aUsers) {
+                    var aMapped = (Array.isArray(aUsers) ? aUsers : []).map(function (oItem) {
+                        return this._toUiUser(oItem);
+                    }, this);
+
+                    oUsersModel.setProperty("/registeredUsers", aMapped);
+                    this._syncUserRoleData();
+                    this._refreshUserStatistics();
+                    this._refreshRoleUserCounts();
+                    this._refreshPermissionRows();
+                }.bind(this))
+                .catch(function (oError) {
+                    MessageToast.show(apiClient.getErrorMessage(oError, this._getText("loadFailed")));
+                }.bind(this));
+        },
+
+        _toUiUser: function (oApiUser) {
+            var sRoleId = this._mapBackendRoleToRoleId(oApiUser.role);
+            var sRoleName = this._getRoleNameById(sRoleId) || oApiUser.role || "";
+            var sDate = "";
+
+            if (oApiUser.createdAt) {
+                sDate = String(oApiUser.createdAt).slice(0, 10);
+            }
+
+            return {
+                id: oApiUser.id,
+                username: oApiUser.username,
+                email: "-",
+                phone: "-",
+                registrationDate: sDate || this._todayString(),
+                status: oApiUser.status || "ACTIVE",
+                statusState: this._mapStatusToState(oApiUser.status),
+                department: "-",
+                roleId: sRoleId,
+                roleName: sRoleName,
+                role: sRoleName,
+                lastLogin: "-",
+                loginCount: 0,
+                createdBy: this._getCurrentOperator()
+            };
+        },
+
+        _mapBackendRoleToRoleId: function (sRole) {
+            if (sRole === "ADMIN") {
+                return "ROLE_ADMIN";
+            }
+            return "ROLE_BUYER";
+        },
+
+        _mapRoleIdToBackendRole: function (sRoleId) {
+            if (sRoleId === "ROLE_ADMIN") {
+                return "ADMIN";
+            }
+            return "USER";
         },
 
         _openRoleDialog: function (sMode, oRole) {

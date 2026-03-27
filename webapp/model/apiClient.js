@@ -49,10 +49,6 @@ sap.ui.define([], function () {
             sMessage = oPayload;
         }
 
-        if (oResponse.status === 401) {
-            sMessage = "登录已过期，请重新登录";
-        }
-
         var oError = new Error(sMessage);
         oError.status = oResponse.status;
         oError.payload = oPayload;
